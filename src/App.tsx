@@ -11,7 +11,7 @@ import AboutPage from './pages/AboutPage';
 import AboutAssembleePage from './pages/about/AssembleePage';
 import AboutFrankPage from './pages/about/FrankPage';
 import AboutBranhamPage from './pages/about/BranhamPage';
-import AudioSermonsPage from './pages/sermons/AudioSermonsPage';
+import SermonsPage from './pages/sermons/SermonsPage';
 import VideoSermonsPage from './pages/sermons/VideoSermonsPage';
 import SermonViewPage from './pages/sermons/SermonVideoViewPage';
 import BooksPage from './pages/BooksPage';
@@ -45,7 +45,7 @@ function App() {
           <Route path="about/assemblee" element={<AboutAssembleePage />} />
           <Route path="about/frank" element={<AboutFrankPage />} />
           <Route path="about/branham" element={<AboutBranhamPage />} />
-          <Route path="audio" element={<AudioSermonsPage />} />
+          <Route path="sermons" element={<SermonsPage />} />
           <Route path="audio/:id" element={<AudioSermonView />} />
           <Route path="video" element={<VideoSermonsPage />} />
           <Route path="video/:id" element={<SermonViewPage />} />

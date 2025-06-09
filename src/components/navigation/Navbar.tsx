@@ -15,7 +15,7 @@ const Navbar = () => {
     {
       name: t('nav.mediatheque'),
       children: [
-        { name: t('nav.audio'), path: '/sermons/audio' },
+        { name: t('nav.audio'), path: '/sermons' },
         { name: t('nav.video'), path: '/sermons/video' },
         { name: t('nav.books'), path: '/books' },
       ]
