@@ -20,8 +20,8 @@ const BranhamPage = () => {
   return (
     <div>
       <PageHeader 
-        title="William Marrion Branham" 
-        subtitle="Découvrez le ministère de William Marrion Branham"
+        title="William Marrion Brahnam et le Temps de la Restauration" 
+        subtitle="l’accomplissement des Promesses de Dieu"
         backgroundImage="https://images.pexels.com/photos/2635393/pexels-photo-2635393.jpeg"
       />
       

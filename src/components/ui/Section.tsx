@@ -23,10 +23,10 @@ const Section = ({ title, shortDescription, content, mainImage, links }: Section
       <div className="prose prose-lg mb-12">
         {Array.isArray(shortDescription) ? (
           shortDescription.map((paragraph, index) => (
-            <p key={index} className="text-lg text-neutral-700 mb-6">{paragraph}</p>
+            <p key={index} className="text-lg text-neutral-700 mb-6" dangerouslySetInnerHTML={{ __html: paragraph }} />
           ))
         ) : (
-          <p className="text-lg text-neutral-700 mb-6">{shortDescription}</p>
+          <p className="text-lg text-neutral-700 mb-6" dangerouslySetInnerHTML={{ __html: shortDescription }} />
         )}
         {content && (
           <p className="text-lg text-neutral-700 mb-6">{content}</p>
@@ -46,13 +46,14 @@ const Section = ({ title, shortDescription, content, mainImage, links }: Section
           </div>
         )}
       </div>
+      
 
       {mainImage && (
         <div className="mt-12">
           <img 
             src={mainImage} 
             alt={title || t('common.sectionImage')} 
-            className="rounded-lg shadow-xl w-full max-w-3xl mx-auto"
+            className="rounded-lg shadow-xl w-full max-w-5xl mx-auto"
           />
         </div>
       )}
