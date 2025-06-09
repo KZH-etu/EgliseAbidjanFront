@@ -13,13 +13,13 @@ const Navbar = () => {
     { name: t('nav.home'), path: '/' },
     { name: t('nav.about'), path: '/about' },
     {
-      name: t('nav.sermons'),
+      name: t('nav.mediatheque'),
       children: [
-        { name: t('nav.audioSermons'), path: '/sermons/audio' },
-        { name: t('nav.videoSermons'), path: '/sermons/video' }
+        { name: t('nav.audio'), path: '/sermons/audio' },
+        { name: t('nav.video'), path: '/sermons/video' },
+        { name: t('nav.books'), path: '/books' },
       ]
     },
-    { name: t('nav.books'), path: '/books' },
     { name: t('nav.events'), path: '/events' },
     { name: t('nav.contact'), path: '/contact' },
   ];

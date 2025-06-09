@@ -1,35 +1,91 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
+
+// Layouts
+import MainLayout from './layouts/MainLayout';
+import AdminLayout from './layouts/AdminLayout';
+
+// Pages
+import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
+import AboutAssembleePage from './pages/about/AssembleePage';
+import AboutFrankPage from './pages/about/FrankPage';
+import AboutBranhamPage from './pages/about/BranhamPage';
+import AudioSermonsPage from './pages/sermons/AudioSermonsPage';
+import VideoSermonsPage from './pages/sermons/VideoSermonsPage';
+import SermonViewPage from './pages/sermons/SermonVideoViewPage';
+import BooksPage from './pages/BooksPage';
+import BookViewPage from './pages/BookViewPage';
+import EventsPage from './pages/EventsPage';
+import Contact from './pages/ContactPage';
+import WebRadioPage from './pages/WebRadioPage';
+import WebTVPage from './pages/WebTVPage';
+
+// Admin pages
+import AdminDashboard from './pages/admin/DashBoard'
+import AdminEntities from './pages/admin/DocumentsPage';
+import AdminDocumentVersion from './pages/admin/DocumentVersionPage';
+import AdminDocumentMedia from './pages/admin/DocumentMediaPage';
+import AdminTags from './pages/admin/TagsPage';
+import AdminEvents from './pages/admin/EventsPage';
+import AdminLanguage from './pages/admin/LanguagesPage';
+import AdminStreams from './pages/admin/StreamsPage';
+import AdminNewsletter from './pages/admin/NewsletterPage';
+import LoginPage from './pages/LoginPage';
+import AudioSermonView from './pages/sermons/AudioSermonViewPage';
+
+// Stores
+import { useDocumentStore } from './stores/useDocumentStore';
+import { useLanguageStore } from './stores/useLanguageStore';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const {hasFetched: hasFetchedEntities,fetchAll: fetchAllDocs} = useDocumentStore();
+  const {hasFetched: hasFetchedLanguages,fetchAll: fetchLangs}   = useLanguageStore();
 
+  useEffect(() => {
+    if(hasFetchedEntities) fetchLangs();
+    if(hasFetchedLanguages) fetchAllDocs();
+    // fetch all Global data
+  }, [fetchLangs, fetchAllDocs]);
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <AnimatePresence mode="wait">
+      <Routes>
+        {/* Main site routes */}
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="about" element={<AboutPage />} />
+          <Route path="about/assemblee" element={<AboutAssembleePage />} />
+          <Route path="about/frank" element={<AboutFrankPage />} />
+          <Route path="about/branham" element={<AboutBranhamPage />} />
+          <Route path="audio" element={<AudioSermonsPage />} />
+          <Route path="audio/:id" element={<AudioSermonView />} />
+          <Route path="video" element={<VideoSermonsPage />} />
+          <Route path="video/:id" element={<SermonViewPage />} />
+          <Route path="books" element={<BooksPage />} />
+          <Route path="books/:id" element={<BookViewPage />} />
+          <Route path="events" element={<EventsPage />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="webradio" element={<WebRadioPage />} />
+          <Route path="webtv" element={<WebTVPage />} />
+        </Route>
+
+        {/* Admin routes */}
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="document" element={<AdminEntities />} />
+          <Route path="documentVersion" element={<AdminDocumentVersion />} />
+          <Route path="documentMedia" element={<AdminDocumentMedia />} />
+          <Route path="tags" element={<AdminTags />} />
+          <Route path="events" element={<AdminEvents />} />
+          <Route path="language" element={<AdminLanguage />} />
+          <Route path="streams" element={<AdminStreams />} />
+          <Route path="newsletter" element={<AdminNewsletter />} />
+        </Route>
+      </Routes>
+    </AnimatePresence>
+  );
 }
 
-export default App
+export default App;

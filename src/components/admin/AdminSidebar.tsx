@@ -58,7 +58,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
           </NavLink>
           
           <NavLink
-            to="/admin/entities"
+            to="/admin/document"
             className={({ isActive }) => 
               `flex items-center py-3 px-4 rounded-md transition-colors ${
                 isActive 
@@ -73,7 +73,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
           </NavLink>
           
           <NavLink
-            to="/admin/mediaVersion"
+            to="/admin/documentVersion"
             className={({ isActive }) => 
               `flex items-center py-3 px-4 rounded-md transition-colors ${
                 isActive 
@@ -88,7 +88,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
           </NavLink>
 
           <NavLink
-            to="/admin/mediaSupport"
+            to="/admin/documentMedia"
             className={({ isActive }) => 
               `flex items-center py-3 px-4 rounded-md transition-colors ${
                 isActive 
@@ -130,21 +130,6 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
           >
             <Calendar size={18} className="mr-3" />
             <span>Événements</span>
-          </NavLink>
-          
-          <NavLink
-            to="/admin/streams"
-            className={({ isActive }) => 
-              `flex items-center py-3 px-4 rounded-md transition-colors ${
-                isActive  
-                  ? 'bg-primary-700 text-white' 
-                  : 'text-primary-100 hover:bg-primary-700 hover:text-white'
-              }`
-            }
-            onClick={() => window.innerWidth < 1024 && toggleSidebar()}
-          >
-            <Radio size={18} className="mr-3" />
-            <span>Streaming</span>
           </NavLink>
           
           <NavLink
