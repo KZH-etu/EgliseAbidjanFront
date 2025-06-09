@@ -212,35 +212,7 @@ const EntitiesPage = () => {
             <DocumentForm
               tags={tags}
               initialData={editingEntity || null}
-              onSubmit={async (entity) => {
-                setSubmitting(true);
-                try {
-                  // Nettoyage des sous-objets pour enlever les id
-                  const cleanMeta = (meta: any) => {
-                    if (!meta) return undefined;
-                    const { id, ...rest } = meta;
-                    return rest;
-                  };
-                  const { id, bookMeta, sermonMeta, eventMeta, ...editEntity } = entity;
-                  const payload = {
-                    ...editEntity,
-                    bookMeta: cleanMeta(bookMeta),
-                    sermonMeta: cleanMeta(sermonMeta),
-                    eventMeta: cleanMeta(eventMeta),
-                  };
-                  if (editingEntity) {
-                    await updateEntity(id, payload);
-                  } else {
-                    await addEntity(payload as CreateDocumentDto);
-                  }
-                  setShowForm(false);
-                  setEditingEntity(null);
-                } catch (err) {
-                  // Gérer l'erreur si besoin
-                } finally {
-                  setSubmitting(false);
-                }
-              }}
+              onSubmit={() => console.log('TODO')}
               onCancel={() => {
                 setShowForm(false);
                 setEditingEntity(null);
