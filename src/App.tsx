@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
-import { useEffect } from 'react';
 
 // Layouts
 import MainLayout from './layouts/MainLayout';
@@ -35,19 +34,7 @@ import AdminNewsletter from './pages/admin/NewsletterPage';
 import LoginPage from './pages/LoginPage';
 import AudioSermonView from './pages/sermons/AudioSermonViewPage';
 
-// Stores
-import { useDocumentStore } from './stores/useDocumentStore';
-import { useLanguageStore } from './stores/useLanguageStore';
-
 function App() {
-  const {hasFetched: hasFetchedEntities,fetchAll: fetchAllDocs} = useDocumentStore();
-  const {hasFetched: hasFetchedLanguages,fetchAll: fetchLangs}   = useLanguageStore();
-
-  useEffect(() => {
-    if(hasFetchedEntities) fetchLangs();
-    if(hasFetchedLanguages) fetchAllDocs();
-    // fetch all Global data
-  }, [fetchLangs, fetchAllDocs]);
   return (
     <AnimatePresence mode="wait">
       <Routes>
