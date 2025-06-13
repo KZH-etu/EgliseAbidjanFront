@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Menu, X, Radio, Tv } from 'lucide-react';
+import { Menu, X, Radio, Tv, Contact, CalendarDays, Headphones, Clapperboard, House, LibraryBig, TableOfContents } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import Logo from '../ui/Logo';
 import LanguageToggle from '../ui/LanguageToggle';
@@ -10,18 +10,25 @@ const Navbar = () => {
   const { t } = useTranslation();
 
   const navLinks = [
-    { name: t('nav.home'), path: '/' },
-    { name: t('nav.about'), path: '/about' },
+    { name: t('nav.home'), path: '/'},
+    { name: t('nav.about'), path: '/about'},
     {
       name: t('nav.mediatheque'),
       children: [
-        { name: t('nav.audio'), path: '/sermons' },
-        { name: t('nav.video'), path: '/sermons/video' },
-        { name: t('nav.books'), path: '/books' },
+        { name: t('nav.audio'), path: '/sermons', icon: <Headphones size={18} className="mr-1"/> },
+        { name: t('nav.video'), path: '/sermons/video', icon:<Clapperboard size={18} className="mr-1"/> },
+        { name: t('nav.books'), path: '/books', icon: <LibraryBig size={18} className="mr-1"/> },
       ]
     },
-    { name: t('nav.events'), path: '/events' },
-    { name: t('nav.contact'), path: '/contact' },
+    { name: t('nav.events'), path: '/events'},
+    { name: t('nav.contact'), path: '/contact'},
+    {
+      name: t('nav.directweb'),
+      children: [
+        { name: t('nav.webradio'), path: '/webradio', icon: <Radio size={18} className="mr-1" /> },
+        { name: t('nav.webtv'), path: '/webtv', icon: <Tv size={18} className="mr-1" /> },
+      ]
+    },
   ];
 
   return (
@@ -47,13 +54,15 @@ const Navbar = () => {
                         key={child.path}
                         to={child.path}
                         className={({ isActive }) => 
-                          `block px-4 py-2 text-base font-medium transition-colors duration-200 ${
+                          `flex items-center gap-5 px-4 py-2 text-base font-medium transition-colors duration-200 ${
                             isActive 
                               ? 'text-primary-600 bg-primary-50' 
                               : 'text-neutral-800 hover:text-primary-500 hover:bg-neutral-50'
                           }`
                         }
                       >
+                        {/* Ajout de l'icône si présente */}
+                        {child.icon}
                         {child.name}
                       </NavLink>
                     ))}
@@ -77,37 +86,6 @@ const Navbar = () => {
               </NavLink>
             )
           ))}
-
-          {/* Media Links */}
-          <div className="flex items-center space-x-4">
-            <NavLink
-              to="/webradio"
-              className={({ isActive }) => 
-                `flex items-center text-base font-medium transition-colors duration-200 ${
-                  isActive 
-                    ? 'text-primary-600' 
-                    : 'text-neutral-800 hover:text-primary-500'
-                }`
-              }
-            >
-              <Radio size={18} className="mr-1" />
-              <span>{t('nav.webradio')}</span>
-            </NavLink>
-            
-            <NavLink
-              to="/webtv"
-              className={({ isActive }) => 
-                `flex items-center text-base font-medium transition-colors duration-200 ${
-                  isActive 
-                    ? 'text-primary-600' 
-                    : 'text-neutral-800 hover:text-primary-500'
-                }`
-              }
-            >
-              <Tv size={18} className="mr-1" />
-              <span>{t('nav.webtv')}</span>
-            </NavLink>
-          </div>
 
           {/* Language Toggle */}
           <LanguageToggle />
@@ -144,12 +122,14 @@ const Navbar = () => {
                       key={child.path}
                       to={child.path}
                       className={({ isActive }) => 
-                        `block py-2 text-base font-medium transition-colors duration-200 ${
+                        `flex items-center gap-5 py-2 text-base font-medium transition-colors duration-200 ${
                           isActive ? 'text-primary-600' : 'text-neutral-800 hover:text-primary-500'
                         }`
                       }
                       onClick={() => setIsOpen(false)}
                     >
+                      {/* Ajout de l'icône si présente */}
+                      {child.icon}
                       {child.name}
                     </NavLink>
                   ))}
@@ -171,35 +151,6 @@ const Navbar = () => {
               </NavLink>
             )
           ))}
-
-          {/* Mobile Media Links */}
-          <div className="border-t border-neutral-200 pt-4 space-y-4">
-            <NavLink
-              to="/webradio"
-              className={({ isActive }) => 
-                `flex items-center py-2 text-base font-medium transition-colors duration-200 ${
-                  isActive ? 'text-primary-600' : 'text-neutral-800 hover:text-primary-500'
-                }`
-              }
-              onClick={() => setIsOpen(false)}
-            >
-              <Radio size={18} className="mr-2" />
-              <span>{t('nav.webradio')}</span>
-            </NavLink>
-            
-            <NavLink
-              to="/webtv"
-              className={({ isActive }) => 
-                `flex items-center py-2 text-base font-medium transition-colors duration-200 ${
-                  isActive ? 'text-primary-600' : 'text-neutral-800 hover:text-primary-500'
-                }`
-              }
-              onClick={() => setIsOpen(false)}
-            >
-              <Tv size={18} className="mr-2" />
-              <span>{t('nav.webtv')}</span>
-            </NavLink>
-          </div>
         </div>
       </div>
     </header>

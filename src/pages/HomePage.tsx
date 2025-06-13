@@ -12,7 +12,7 @@ import { MediaType } from "../api/types/document-media/document-media";
 
 const videos = [
   {
-    url: "https://static.s123-cdn-static-d.com/uploads/8356083/normal_64c6efbd7559b.mp4",
+    url: "https: static.s123-cdn-static-d.com/uploads/8356083/normal_64c6efbd7559b.mp4",
     titleByLang: {
       fr: "Culte du dimanche",
       en: "Sunday Service",
@@ -20,7 +20,7 @@ const videos = [
     }
   },
   {
-    url: "https://static.s123-cdn-static-d.com/uploads/8356083/normal_64c6efe7b6441.mp4",
+    url: "https: static.s123-cdn-static-d.com/uploads/8356083/normal_64c6efe7b6441.mp4",
     titleByLang: {
       fr: "Étude biblique",
       en: "Bible Study",
@@ -28,7 +28,7 @@ const videos = [
     }
   },
   {
-    url: "https://static.s123-cdn-static-d.com/uploads/8356083/normal_64c8d304a59fd.mp4",
+    url: "https: static.s123-cdn-static-d.com/uploads/8356083/normal_64c8d304a59fd.mp4",
     titleByLang: {
       fr: "Prière et adoration",
       en: "Prayer and Worship",
