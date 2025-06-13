@@ -315,12 +315,10 @@ export const mockAdminAboutSections = [
       },
       {
         lang: 'en',
-        title: '',
+        title: '1. God Watches Over His Word',
         description: [
-          "The New Testament begins and will conclude with the fulfillment of biblical prophecies, notably the coming of a forerunner messenger like John the Baptist, who prepared the way for Christ. The promise of a second Elijah, foretold in Malachi 4, is yet to be fully fulfilled before the 'great and dreadful day of the Lord.'",
-          "This promise was manifested in our time through the ministry of William Branham, recognized as a fulfillment of Elijah’s ministry. Supernatural events confirmed his divine commission, including a visible heavenly light in 1933 and 1950, witnessed and verified by experts and observers.",
-          "In the face of divisions and great confusion in modern churches, this ministry calls for a return to the original teachings of the apostles and prophets, centered on Jesus Christ, the cornerstone of the Church. Spiritual food is now being faithfully distributed according to God’s appointed time.",
-          "We are living in the final phase of the plan of salvation, where only true believers and the elect recognize the Word of God and His work. As in times past, religious leaders may reject these truths, but God always fulfills His promises according to His Word."
+          "The New Testament began with the faithful fulfillment of divine promises. What God has announced through the mouths of His prophets never remains a dead letter. Thus, the prophecies of Isaiah (40:3) and Malachi (3:1) about the voice crying out in the wilderness and preparing the way for the Lord were fulfilled in the ministry of <strong>John the Baptist</strong>, identified by Jesus as the Elijah promised for His first coming (Matthew 11:10; Mark 1:1-4). ",
+          "In the same way, the promise that <strong>Elie was to come before the 'great and dreadful day of the Lord'</strong> (Malachi 4:5) still remains valid for our time. Our Lord confirmed this prophecy in the New Testament: <strong>'Elijah must come first and restore all things'</strong> (Matthew 17:11)",
         ]
       },
       {
@@ -352,12 +350,10 @@ export const mockAdminAboutSections = [
       },
       {
         lang: 'en',
-        title: '',
+        title: '2. The Prophetic Ministry for Our Generation',
         description: [
-          "The New Testament begins and will conclude with the fulfillment of biblical prophecies, notably the coming of a forerunner messenger like John the Baptist, who prepared the way for Christ. The promise of a second Elijah, foretold in Malachi 4, is yet to be fully fulfilled before the 'great and dreadful day of the Lord.'",
-          "This promise was manifested in our time through the ministry of William Branham, recognized as a fulfillment of Elijah’s ministry. Supernatural events confirmed his divine commission, including a visible heavenly light in 1933 and 1950, witnessed and verified by experts and observers.",
-          "In the face of divisions and great confusion in modern churches, this ministry calls for a return to the original teachings of the apostles and prophets, centered on Jesus Christ, the cornerstone of the Church. Spiritual food is now being faithfully distributed according to God’s appointed time.",
-          "We are living in the final phase of the plan of salvation, where only true believers and the elect recognize the Word of God and His work. As in times past, religious leaders may reject these truths, but God always fulfills His promises according to His Word."
+          "In this prophetic line stands the ministry of <string>William Branham</strong>, whom we recognize as the fulfillment of this biblical promise. On June 11, 1933, during a baptism in the Ohio River, a supernatural light descended from heaven, and a divine voice declared:<strong>“As John the Baptist was sent to forerun the first coming of Christ, the message given to you will forerun the second coming of Christ.”</strong>",
+          "Many witnesses confirmed this event, and over the years, other supernatural signs followed. The most well-known is the photo taken in 1950 in Houston, where a <strong>celestial light appeared above William Branham’s head</strong>, later validated by FBI experts. These manifestations confirm what God has always done at key moments in salvation history: He accompanies <strong>His divine calls with visible signs.</strong>",
         ]
       },
       {
@@ -390,12 +386,11 @@ export const mockAdminAboutSections = [
       },
       {
         lang: 'en',
-        title: '',
+        title: '3. A Return to the Original Word',
         description: [
-          "The New Testament begins and will conclude with the fulfillment of biblical prophecies, notably the coming of a forerunner messenger like John the Baptist, who prepared the way for Christ. The promise of a second Elijah, foretold in Malachi 4, is yet to be fully fulfilled before the 'great and dreadful day of the Lord.'",
-          "This promise was manifested in our time through the ministry of William Branham, recognized as a fulfillment of Elijah’s ministry. Supernatural events confirmed his divine commission, including a visible heavenly light in 1933 and 1950, witnessed and verified by experts and observers.",
-          "In the face of divisions and great confusion in modern churches, this ministry calls for a return to the original teachings of the apostles and prophets, centered on Jesus Christ, the cornerstone of the Church. Spiritual food is now being faithfully distributed according to God’s appointed time.",
-          "We are living in the final phase of the plan of salvation, where only true believers and the elect recognize the Word of God and His work. As in times past, religious leaders may reject these truths, but God always fulfills His promises according to His Word."
+          "The purpose of this divine visitation is not to elevate a man, but to bring the Church back to <strong>the pure Word and apostolic foundation</strong>. God calls His people out of all religious confusion back to the teachings of the apostles and prophets, with Jesus Christ being <strong>the cornerstone</strong> (Ephesians 2:20).",
+          "God still speaks today. <strong>He sends His Word at the appointed time</strong> and distributes spiritual food to prepare the Bride of Christ for His return (Matthew 24:45).",
+          "<i>“Man shall not live by bread alone, but by every word that proceeds from the mouth of God.”</i> (Matthew 4:4)"
         ]
       },
       {
@@ -427,12 +422,10 @@ export const mockAdminAboutSections = [
       },
       {
         lang: 'en',
-        title: '',
+        title: '4. The Time of Restoration is Now',
         description: [
-          "The New Testament begins and will conclude with the fulfillment of biblical prophecies, notably the coming of a forerunner messenger like John the Baptist, who prepared the way for Christ. The promise of a second Elijah, foretold in Malachi 4, is yet to be fully fulfilled before the 'great and dreadful day of the Lord.'",
-          "This promise was manifested in our time through the ministry of William Branham, recognized as a fulfillment of Elijah’s ministry. Supernatural events confirmed his divine commission, including a visible heavenly light in 1933 and 1950, witnessed and verified by experts and observers.",
-          "In the face of divisions and great confusion in modern churches, this ministry calls for a return to the original teachings of the apostles and prophets, centered on Jesus Christ, the cornerstone of the Church. Spiritual food is now being faithfully distributed according to God’s appointed time.",
-          "We are living in the final phase of the plan of salvation, where only true believers and the elect recognize the Word of God and His work. As in times past, religious leaders may reject these truths, but God always fulfills His promises according to His Word."
+          "The apostle Peter declared after Pentecost that Jesus Christ must remain in heaven until <strong>the time of the restoration of all things</strong> (Acts 3:21). We believe that <strong>time has now come.</strong>",
+          "God never left His people in ignorance. In every generation, He sent commissioned men bearing a divine message. William Branham’s ministry—with its supernatural call and scriptural teaching—fits in this divine continuity."
         ]
       },
       {
@@ -466,12 +459,11 @@ export const mockAdminAboutSections = [
       },
       {
         lang: 'en',
-        title: '',
+        title: '5. A Church Prepared for the Rapture',
         description: [
-          "The New Testament begins and will conclude with the fulfillment of biblical prophecies, notably the coming of a forerunner messenger like John the Baptist, who prepared the way for Christ. The promise of a second Elijah, foretold in Malachi 4, is yet to be fully fulfilled before the 'great and dreadful day of the Lord.'",
-          "This promise was manifested in our time through the ministry of William Branham, recognized as a fulfillment of Elijah’s ministry. Supernatural events confirmed his divine commission, including a visible heavenly light in 1933 and 1950, witnessed and verified by experts and observers.",
-          "In the face of divisions and great confusion in modern churches, this ministry calls for a return to the original teachings of the apostles and prophets, centered on Jesus Christ, the cornerstone of the Church. Spiritual food is now being faithfully distributed according to God’s appointed time.",
-          "We are living in the final phase of the plan of salvation, where only true believers and the elect recognize the Word of God and His work. As in times past, religious leaders may reject these truths, but God always fulfills His promises according to His Word."
+          "We are in the time of <strong>the fulfillment of the plan of salvation</strong>. God is building His Church according to His eternal model, calling His people out of religious captivity <strong>to form one Body united in truth.</strong>",
+          "This message of restoration aims to prepare a Church without spot or wrinkle, faithful to the Word and ready for the glorious rapture.",
+          "<i>“Whoever is of God hears the words of God.”</i> (John 8:47)"
         ]
       },
       {
@@ -504,12 +496,10 @@ export const mockAdminAboutSections = [
       },
       {
         lang: 'en',
-        title: '',
+        title: '6. A Personal and Solemn Call',
         description: [
-          "The New Testament begins and will conclude with the fulfillment of biblical prophecies, notably the coming of a forerunner messenger like John the Baptist, who prepared the way for Christ. The promise of a second Elijah, foretold in Malachi 4, is yet to be fully fulfilled before the 'great and dreadful day of the Lord.'",
-          "This promise was manifested in our time through the ministry of William Branham, recognized as a fulfillment of Elijah’s ministry. Supernatural events confirmed his divine commission, including a visible heavenly light in 1933 and 1950, witnessed and verified by experts and observers.",
-          "In the face of divisions and great confusion in modern churches, this ministry calls for a return to the original teachings of the apostles and prophets, centered on Jesus Christ, the cornerstone of the Church. Spiritual food is now being faithfully distributed according to God’s appointed time.",
-          "We are living in the final phase of the plan of salvation, where only true believers and the elect recognize the Word of God and His work. As in times past, religious leaders may reject these truths, but God always fulfills His promises according to His Word."
+          "Today, <strong>God speaks to His people</strong>—not through a new religion, but by <strong>a return to the faith of the fathers</strong>. He invites to repentance, true faith, and separation from religious systems to live according to <strong>His perfect will.</strong>",
+          "<i>“All the promises of God in Him are Yes and Amen.”</i> (2 Corinthians 1:20)",
         ]
       },
       {

@@ -3,12 +3,13 @@ import { useLanguageStore } from "../stores/useUILanguageStore"
 interface NavTranslation {
   home: string,
   about: string,
-  sermons: string,
-  audioSermons: string,
-  videoSermons: string,
+  mediatheque: string,
+  audio: string,
+  video: string,
   books: string,
   events: string,
   contact: string,
+  directweb: string,
   webradio: string,
   webtv: string
 }
@@ -48,6 +49,7 @@ const translations : TranslationInterface = {
       books: 'Livres',
       events: 'Événements',
       contact: 'Contact',
+      directweb: 'Flux direct',
       webradio: 'WebRadio',
       webtv: 'WebTV'
     },
@@ -254,6 +256,7 @@ const translations : TranslationInterface = {
       books: 'Books',
       events: 'Events',
       contact: 'Contact',
+      directweb: 'Live Stream',
       webradio: 'WebRadio',
       webtv: 'WebTV'
     },
@@ -265,8 +268,8 @@ const translations : TranslationInterface = {
       },
       mission: {
         title: 'Our Mission',
-        description1: 'The Assembly of Abidjan is dedicated to the faithful proclamation of God\'s Word. Our mission is to edify believers in faith, share the message of salvation, and be a light in our community.',
-        description2: 'We believe in the authentic teaching of Scripture and strive to live according to biblical principles of faith, love, and service.',
+        description1: 'The Assembly of Abidjan is dedicated to the faithful proclamation of the Word of God. Our mission is to build up believers in the faith, to share the message of salvation, and to be a light in this lost world.',
+        description2: 'We believe in the authentic teaching of the Scriptures and strive to live according to the biblical principles of faith and love, patiently awaiting the return of the Lord Jesus Christ.',
         discoverHistory: 'Discover Our History',
         imageAlt: 'Assembly of Abidjan',
         quote: '"Faith comes by hearing, and hearing by the word of God."',
@@ -455,6 +458,7 @@ const translations : TranslationInterface = {
       books: 'Libros',
       events: 'Eventos',
       contact: 'Contacto',
+      directweb: 'En directo',
       webradio: 'WebRadio',
       webtv: 'WebTV'
     },
@@ -466,8 +470,8 @@ const translations : TranslationInterface = {
       },
       mission: {
         title: 'Nuestra Misión',
-        description1: 'La Asamblea de Abiyán está dedicada a la proclamación fiel de la Palabra de Dios. Nuestra misión es edificar a los creyentes en la fe, compartir el mensaje de salvación y ser una luz en nuestra comunidad.',
-        description2: 'Creemos en la enseñanza auténtica de las Escrituras y nos esforzamos por vivir según los principios bíblicos de fe, amor y servicio.',
+        description1: 'La Asamblea de Abiyán está dedicada a la proclamación fiel de la Palabra de Dios. Nuestra misión es edificar a los creyentes en la fe, compartir el mensaje de salvación y ser una luz en este mundo perdido.',
+        description2: 'Creemos en la enseñanza auténtica de las Escrituras y nos esforzamos por vivir conforme a los principios bíblicos de fe y amor, esperando pacientemente el regreso del Señor Jesucristo.',
         discoverHistory: 'Descubre Nuestra Historia',
         imageAlt: 'Asamblea de Abiyán',
         quote: '"La fe viene por el oír, y el oír por la palabra de Dios."',
