@@ -6,7 +6,7 @@ interface EventProps {
   title: string;
   date: string;
   location: string;
-  description: string | string[];
+  description?: string;
 }
 
 interface EventCardProps {
@@ -41,7 +41,7 @@ const EventCard = ({ event }: EventCardProps) => {
         
         <h3 className="text-xl font-bold mb-3">{event.title}</h3>
         
-        <p className="text-neutral-600 mb-4">{event.description}</p>
+        <p className="text-neutral-600 mb-4">{event.description || 'N/A'}</p>
         
         <div className="flex flex-col space-y-2 text-sm text-neutral-600">
           <div className="flex items-center">

@@ -3,11 +3,9 @@ export enum LanguageType {
   INTERNATIONAL = 'INTERNATIONAL',
 }
 
-export interface Language {
+export interface LanguageResponseDto {
   id: string;               // e.g. 'en', 'fr', 'es'
   name: string;             // 'English', 'Français', 'Español'
   type: LanguageType;
   countryOfOrigin?: string;
-  createdAt: Date;
-  updatedAt: Date;
 }

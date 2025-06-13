@@ -1,15 +1,16 @@
-import { Play, Calendar, Clock } from 'lucide-react';
+import { Play, Calendar} from 'lucide-react';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from '../../hooks/useTranslation';
+// import { useTranslation } from '../../hooks/useTranslation';
+import { MediaType } from '../../api/types/document-media/document-media';
 
 interface SermonProps {
   id: string;
   title: string;
   preacher: string;
   date: string;
-  type: string; // 'audio' or 'video'
+  type: MediaType;
   mediaUrl?: string;
 }
 
@@ -34,9 +35,9 @@ interface SermonCardProps {
 
 const SermonCard = ({ sermon }: SermonCardProps, currentLanguage?: String) => {
   const navigate = useNavigate();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [showPlayer, setShowPlayer] = useState(false);
-  const { t } = useTranslation();
+  // const [isPlaying, setIsPlaying] = useState(false);
+  // const [showPlayer, setShowPlayer] = useState(false);
+  // const { t } = useTranslation();
 
   const chooseLocale = () => {
     const currentLocale = locales.find(locale => locale.lang === currentLanguage);
@@ -66,7 +67,7 @@ const SermonCard = ({ sermon }: SermonCardProps, currentLanguage?: String) => {
       onClick={handleCardClick}
     >
       <div className="relative">
-        {sermon.type === 'video' ? (
+        {sermon.type === MediaType.VIDEO ? (
           // Video thumbnail
           <div className="aspect-video bg-neutral-900 flex items-center justify-center">
             {sermon.mediaUrl ? (

@@ -1,10 +1,10 @@
+import { MediaType } from "../document-media/document-media";
 import { DocumentVersion } from "../document-versions/document-versions";
 import { Tag } from "../tags/tags";
 
 // SERMONS
 
 export interface SermonMetadata {
-    id: string;         // same as Document.id
     preacher: string;
     preachedAt: Date;
     location?: string;
@@ -19,7 +19,6 @@ export enum EventType {
 };
 
 export interface EventMetadata {
-    id: string;         // same as Document.id
     type: EventType;
     startTime: Date;
     endTime?: Date;
@@ -29,7 +28,6 @@ export interface EventMetadata {
 // BOOKS
 
 export interface BookMetadata {
-    id: string;           // → equals parent Document.id
     author: string;
     publisher?: string;
     publishedAt?: Date;
@@ -59,4 +57,72 @@ export interface Document {
     eventMeta?: EventMetadata
 
     tags?: Tag[];
+}
+
+export interface SermonSummaryDto {
+    id: string;
+    title: string;
+    preacher: string;
+    date: string;
+    type: MediaType;
+    mediaUrl?: string;
+}
+
+export interface EventSummaryDto {
+    id: string;
+    title: string;
+    date: string;
+    location: string;
+    description?: string;
+}
+
+export interface DocumentMediaResponseDto {   //assumes the language AND media type have been provided in params
+    id: string;
+    globalTitle: string;
+    categories: DocumentCategory[];
+    bookMeta?: BookMetadata;
+    sermonMeta?: SermonMetadata;
+    eventMeta?: EventMetadata;
+    version: {
+        id: string;
+        languageId: string;
+        title: string;
+        description?: string;
+        mediaItem: {
+            id: string;
+            mediaType: MediaType;
+            url: string;
+        }
+    };
+    tags: {
+        id: string;
+        title: string;
+    }[];
+}
+
+export interface DocumentFullDto {
+    id: string;
+    globalTitle: string;
+    categories: DocumentCategory[];
+    versions: {
+        id: string;
+        languageId: string;
+        title: string;
+        description?: string;
+        mediaItems: {
+            id: string;
+            mediaType: MediaType;
+            url: string;
+        }[]
+    }[];
+    bookMeta?: BookMetadata;
+    sermonMeta?: SermonMetadata;
+    eventMeta?: EventMetadata;
+    tags: {
+        id: string;
+        translations: {
+            language: string;
+            title: string;
+        }[]
+    }[]
 }

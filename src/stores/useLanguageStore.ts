@@ -1,11 +1,11 @@
 import { create } from "zustand";
 import { CreateLanguageDto, UpdateLanguageDto } from "../api/types/languages/create-language.dto";
-import { Language } from "../api/types/languages/languages";
+import { LanguageResponseDto } from "../api/types/languages/languages";
 import * as API from "../api/languages"
 
 interface LanguageState {
-  items: Language[];
-  current?: Language;
+  items: LanguageResponseDto[];
+  current?: LanguageResponseDto;
   loading: boolean;
   error?: string;
   hasFetched?: boolean;
