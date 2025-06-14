@@ -1,12 +1,10 @@
 import { useMemo } from 'react';
-import { useDocumentStore } from '../stores/useDocumentStore';
 import { Document, DocumentCategory } from '../types/documents/documents';
+import { useDocuments } from './useDocuments';
 
 export function useSermons() {
   // pull the raw state from Zustand
-  const items = useDocumentStore((s) => s.items);
-  const loading = useDocumentStore((s) => s.loading);
-  const error = useDocumentStore((s) => s.error);
+  const {items, loading, error} = useDocuments();
 
   // memoize the filtered list so we only recompute when `items` changes
   const sermons = useMemo<Document[]>(

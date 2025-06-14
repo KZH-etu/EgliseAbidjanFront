@@ -11,11 +11,6 @@ import AboutPage from './pages/AboutPage';
 import AboutAssembleePage from './pages/about/AssembleePage';
 import AboutFrankPage from './pages/about/FrankPage';
 import AboutBranhamPage from './pages/about/BranhamPage';
-
-
-
-
-
 import EventsPage from './pages/EventsPage';
 import Contact from './pages/ContactPage';
 import WebRadioPage from './pages/WebRadioPage';
