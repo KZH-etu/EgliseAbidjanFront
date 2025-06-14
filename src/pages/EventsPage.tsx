@@ -4,7 +4,7 @@ import { useTranslation } from "../hooks/useTranslation";
 // import { useLanguageStore as useUILanguageStore } from "../stores/useUILanguageStore";
 import EventCard from "../components/events/EventCard";
 import { motion } from "framer-motion";
-import { EventSummaryDto } from "../api/types/documents/documents";
+import { EventSummaryDto } from "../types/documents/documents";
 
 interface EventsStore {
   events: EventSummaryDto[];

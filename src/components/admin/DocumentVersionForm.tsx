@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { Language } from '../../api/types/languages/languages';
-import { DocumentVersion } from '../../api/types/document-versions/document-versions';
+import { Language } from '../../types/languages/languages';
+import { DocumentVersion } from '../../types/document-versions/document-versions';
 
 interface Entity {
   id: string;

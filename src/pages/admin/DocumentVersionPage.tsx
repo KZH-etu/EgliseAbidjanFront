@@ -13,7 +13,7 @@ import { DocumentVersionForm } from '../../components/admin/DocumentVersionForm'
 import { useDocumentStore } from '../../stores/useDocumentStore';
 import { useVersionStore } from '../../stores/useVersionsStore';
 import { useLanguageStore } from '../../stores/useLanguageStore';
-import { DocumentVersion } from '../../api/types/document-versions/document-versions';
+import { DocumentVersion } from '../../types/document-versions/document-versions';
 
 const DocumentVersionPage = () => {
   const { 

@@ -1,35 +1,114 @@
-const AudioViewPage = () => {
-  const { docId, versionId } = useParams();
-  const { current: document, fetchOne: fetchDoc } = useDocumentStore();
-  const { items: allLangs, fetchAll: fetchLangs } = useLanguageStore();
+import React, { useEffect, useMemo, useState } from "react";
+import { DocumentFullDto, DocumentMediaResponseDto } from "../types/documents/documents";
+import { useParams } from "react-router-dom";
+import { useLanguageStore } from "../stores/useLanguageStore";
 
-  const [selectedVersionId, setSelectedVersionId] = useState(versionId);
+interface DocumentsStore {
+    current: DocumentFullDto;
+    mediaItems: DocumentMediaResponseDto[];
+    fetchOne: (id: string) => Promise<void>;
+    fetchMediaItems: () => Promise<void>;
+    loading: boolean;
+    error: string;
+}
 
-  useEffect(() => {
-    if (docId) fetchDoc(docId);
-    fetchLangs();
-  }, [docId, fetchDoc, fetchLangs]);
+interface Props {
+    store: DocumentsStore
+}
 
-  const currentVersion = useMemo(() => {
-    return (
-      document?.versions?.find((v) => v.id === selectedVersionId) ||
-      document?.versions?.[0]
-    );
-  }, [document, selectedVersionId]);
+const AudioViewPage: React.FC<Props> = ({store}) => {
 
-  const audioMediaUrl = useMemo(() => {
-    return currentVersion?.mediaItems?.find((m) => m.mediaType === 'AUDIO')?.url;
-  }, [currentVersion]);
+  // URL params
+    const { docId, versionId } = useParams<{
+    docId: string;
+    versionId: string;
+    }>();
 
-  if (!document) return <p>Loading...</p>;
+    // Store hooks
+    const {
+      current: document,
+      mediaItems,
+      fetchOne: fetchDoc,
+      fetchMediaItems,
+      loading: loadingDoc,
+      error: docError,
+    } = store;
+
+    const { items: allLangs, fetchAll: fetchLangs } = useLanguageStore();
+  
+    // Local state for UI
+    const [selectedVersionId, setSelectedVersionId] = useState(versionId);
+
+    // Fetch data
+    useEffect(() => {
+      if (docId) fetchDoc(docId);
+      fetchLangs();
+    }, [docId, fetchDoc, fetchLangs]);
+
+    const currentVersion = useMemo(() => {
+      return (
+          document.versions.find((v) => v.id === selectedVersionId) ||
+          document.versions?.[0]
+      );
+    }, [document, selectedVersionId]);
+
+    useEffect(() => {
+      fetchMediaItems();
+    }, [mediaItems, fetchMediaItems, currentVersion])
+
+      // Derive Audio Media
+    const audioMediaUrl = useMemo(() => {
+      return currentVersion?.mediaItems?.find((m) => m.mediaType === 'AUDIO')?.url;
+    }, [currentVersion]);
+
+    // Related audios
+    const relatedAudios = useMemo(() => {
+      if (!document) return [];
+      const preacher = document.sermonMeta?.preacher
+      const location = document.sermonMeta?.location || document.eventMeta?.location
+      const type = document.eventMeta?.type as string
+      const docTags = document.tags?.map((t) => t.id) || [];
+      return mediaItems.filter((d) => d.id !== document.id)
+        .filter((d) => {
+          const samePreacher = preacher && d.sermonMeta?.preacher === preacher;
+          const sameLocation = location && (d.sermonMeta?.location === location
+             || d.eventMeta?.location === location);
+          const sameType = type && d.eventMeta?.type as string === type
+          const sharedTag =
+            docTags.length > 0 &&
+            d.tags?.some((t) => docTags.includes(t.id));
+          return samePreacher || sameLocation || sameType || sharedTag;
+        });
+    }, [document, mediaItems]);
+
+    // 8) Render
+    if (loadingDoc) return <p>Loading document…</p>;
+    if (docError)   return <p>Error: {docError}</p>;
+    if (!document)  return <p>Document not found.</p>;
 
   return (
     <div>
-      <h1>{document.globalTitle}</h1>
-      <p>Preacher: {document.sermonMeta?.preacher ?? 'N/A'}</p>
+      {/* Header & Metadata */}
+        <h1>{document.globalTitle}</h1>
+        <p>
+          <strong>Preacher:</strong>{' '}
+          {document.sermonMeta?.preacher ?? 'N/A'}
+        </p>
+        <p>
+          <strong>Location:</strong>{' '}
+          { (document.sermonMeta?.location || document.eventMeta?.location) ?? 'N/A' }
+        </p>
+        <p>
+          <strong>Tags:</strong>{' '}
+          {document.tags?.map((t) => (
+            <span key={t.id}>{t.translations[0].title} </span>
+          )) ?? 'N/A'}
+        </p>
 
+          {/* Embedded Reader */}
       {audioMediaUrl && <audio controls src={audioMediaUrl} style={{ width: '100%' }} />}
 
+          {/* Version / Language selector */}
       <select
         value={currentVersion?.id}
         onChange={(e) => setSelectedVersionId(e.target.value)}
@@ -41,11 +120,20 @@ const AudioViewPage = () => {
         ))}
       </select>
 
-      {/* Related Audios (stub) */}
+      {/* Related Audios */}
       <section>
-        <h2>Related Audios</h2>
-        {/* Insert related logic here */}
-      </section>
+          <h2>Related Audios</h2>
+          {relatedAudios.length === 0 && <p>No related audios found.</p>}
+          <ul>
+            {relatedAudios.map((rel) => (
+              <li key={rel.id}>
+                <a href={`/media/text/${rel.id}/${rel.version.id}`}>
+                  {rel.globalTitle}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
     </div>
   );
 }

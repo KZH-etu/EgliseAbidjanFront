@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Document } from '../../api/types/documents/documents';
-import { DocumentVersion } from '../../api/types/document-versions/document-versions';
-import { DocumentMedia, MediaType } from '../../api/types/document-media/document-media';
+import { Document } from '../../types/documents/documents';
+import { DocumentVersion } from '../../types/document-versions/document-versions';
+import { DocumentMedia, MediaType } from '../../types/document-media/document-media';
 
 interface DocumentMediaFormProps {
   entities: Document[];

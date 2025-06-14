@@ -9,7 +9,7 @@ const NewsletterPage = () => {
     items: subscribers, 
     loading, 
     error, 
-    fetchAll: fetchSubscribers,
+    // fetchAll: fetchSubscribers,
     create: addSuscriber, 
     remove: deleteSuscriber
   } = useSubscriberStore();

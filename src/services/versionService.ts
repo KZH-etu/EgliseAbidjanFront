@@ -1,6 +1,6 @@
-import api from "./client";
-import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from "./types/document-versions/create-document-versions.dto";
-import { DocumentVersion } from "./types/document-versions/document-versions";
+import api from "./clientService";
+import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from "../types/document-versions/create-document-versions.dto";
+import { DocumentVersion } from "../types/document-versions/document-versions";
 
 export const fetchVersions = () => api.get<DocumentVersion[]>('/document-versions');
 export const fetchVersion = (id: string) => api.get<DocumentVersion>(`/document-versions/${id}`);

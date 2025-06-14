@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { CreateSubscriberDto, UpdateSubscriberDto } from "../api/types/subscribers/create-subscribers.dto";
-import { Subscriber } from "../api/types/subscribers/subscribers";
-import * as API from "../api/subscribers"
+import { CreateSubscriberDto, UpdateSubscriberDto } from "../types/subscribers/create-subscribers.dto";
+import { Subscriber } from "../types/subscribers/subscribers";
+import * as API from "../services/subscriberService"
 
 interface SubscriberState {
   items: Subscriber[];

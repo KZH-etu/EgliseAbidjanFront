@@ -1,6 +1,6 @@
-import { HomePageDto } from '../api/types/homepage';
+import { HomePageDto } from '../types/homepage';
 import { create } from 'zustand';
-import * as API from "../api/home"
+import * as API from "../services/home"
 
 interface HomeState {
   home?: HomePageDto;

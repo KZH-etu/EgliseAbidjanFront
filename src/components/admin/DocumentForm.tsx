@@ -1,9 +1,9 @@
 import { useForm, Controller } from 'react-hook-form';
 import { useEffect } from 'react';
 import TagSelector from '../ui/TagSelector';
-import { DocumentCategory, EventType } from '../../api/types/documents/documents';
-import { Tag } from '../../api/types/tags/tags';
-import { CreateDocumentDto, UpdateDocumentDto } from '../../api/types/documents/create-document.dto';
+import { DocumentCategory, EventType } from '../../types/documents/documents';
+import { Tag } from '../../types/tags/tags';
+import { CreateDocumentDto, UpdateDocumentDto } from '../../types/documents/create-document.dto';
 
 interface DocumentFormProps {
   tags: Tag[];

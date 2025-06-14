@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Plus, Edit2, Trash2, Save, X } from 'lucide-react';
 import { useTagStore } from '../../stores/useTagStore';
-import { Tag } from '../../api/types/tags/tags';
-import { CreateTagTranslationDto, LanguageEnum } from '../../api/types/tags/create-tag.dto';
+import { Tag } from '../../types/tags/tags';
+import { CreateTagTranslationDto, LanguageEnum } from '../../types/tags/create-tag.dto';
 
 const TagsPage = () => {
   const { 

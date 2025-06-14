@@ -1,6 +1,6 @@
-import api from "./client";
-import { CreateTagDto, UpdateTagDto } from "./types/tags/create-tag.dto";
-import { Tag } from "./types/tags/tags";
+import api from "./clientService";
+import { CreateTagDto, UpdateTagDto } from "../types/tags/create-tag.dto";
+import { Tag } from "../types/tags/tags";
 
 export const fetchTags = (lang?: string) => api.get<Tag[]>(`/tags${lang ? `?lang=${lang}` : ''}`);
 export const fetchTag = (id: string) => api.get<Tag>(`/tags/${id}`);

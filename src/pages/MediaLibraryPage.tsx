@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { DocumentCategory } from '../api/types/documents/documents';
+import { DocumentCategory } from '../types/documents/documents';
 import { useTagStore } from '../stores/useTagStore';
 import { useLanguageStore } from '../stores/useLanguageStore';
-import { DocumentMediaResponseDto } from '../api/types/documents/documents';
+import { DocumentMediaResponseDto } from '../types/documents/documents';
 
 
 interface Filters {

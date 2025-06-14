@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { CreateTagDto, UpdateTagDto } from "../api/types/tags/create-tag.dto";
-import { Tag } from "../api/types/tags/tags";
-import * as API from "../api/tags"
+import { CreateTagDto, UpdateTagDto } from "../types/tags/create-tag.dto";
+import { Tag } from "../types/tags/tags";
+import * as API from "../services/tagService"
 
 interface TagState {
   items: Tag[];

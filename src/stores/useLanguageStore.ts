@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { CreateLanguageDto, UpdateLanguageDto } from "../api/types/languages/create-language.dto";
-import { LanguageResponseDto } from "../api/types/languages/languages";
-import * as API from "../api/languages"
+import { CreateLanguageDto, UpdateLanguageDto } from "../types/languages/create-language.dto";
+import { LanguageResponseDto } from "../types/languages/languages";
+import * as API from "../services/languageService"
 
 interface LanguageState {
   items: LanguageResponseDto[];

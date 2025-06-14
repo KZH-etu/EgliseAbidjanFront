@@ -11,11 +11,11 @@ import AboutPage from './pages/AboutPage';
 import AboutAssembleePage from './pages/about/AssembleePage';
 import AboutFrankPage from './pages/about/FrankPage';
 import AboutBranhamPage from './pages/about/BranhamPage';
-import SermonsPage from './pages/sermons/SermonsPage';
-import VideoSermonsPage from './pages/sermons/VideoSermonsPage';
-import SermonViewPage from './pages/sermons/SermonVideoViewPage';
-import BooksPage from './pages/BooksPage';
-import BookViewPage from './pages/BookViewPage';
+
+
+
+
+
 import EventsPage from './pages/EventsPage';
 import Contact from './pages/ContactPage';
 import WebRadioPage from './pages/WebRadioPage';
@@ -32,7 +32,7 @@ import AdminLanguage from './pages/admin/LanguagesPage';
 import AdminStreams from './pages/admin/StreamsPage';
 import AdminNewsletter from './pages/admin/NewsletterPage';
 import LoginPage from './pages/LoginPage';
-import AudioSermonView from './pages/sermons/AudioSermonViewPage';
+
 
 function App() {
   return (
@@ -45,12 +45,6 @@ function App() {
           <Route path="about/assemblee" element={<AboutAssembleePage />} />
           <Route path="about/frank" element={<AboutFrankPage />} />
           <Route path="about/branham" element={<AboutBranhamPage />} />
-          <Route path="sermons" element={<SermonsPage />} />
-          <Route path="audio/:id" element={<AudioSermonView />} />
-          <Route path="video" element={<VideoSermonsPage />} />
-          <Route path="video/:id" element={<SermonViewPage />} />
-          <Route path="books" element={<BooksPage />} />
-          <Route path="books/:id" element={<BookViewPage />} />
           <Route path="events" element={<EventsPage />} />
           <Route path="contact" element={<Contact />} />
           <Route path="webradio" element={<WebRadioPage />} />

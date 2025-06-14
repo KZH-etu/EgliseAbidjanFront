@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { DocumentFullDto, DocumentMediaResponseDto } from '../api/types/documents/documents';
+import { DocumentFullDto, DocumentMediaResponseDto } from '../types/documents/documents';
 import { useLanguageStore } from '../stores/useLanguageStore';
 
 interface DocumentsStore {

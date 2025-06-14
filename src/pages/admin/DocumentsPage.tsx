@@ -12,8 +12,8 @@ import { motion } from 'framer-motion';
 import { DocumentForm } from '../../components/admin/DocumentForm';
 import { useDocumentStore } from '../../stores/useDocumentStore';
 import { useTagStore } from '../../stores/useTagStore';
-import { Document } from '../../api/types/documents/documents';
-import { CreateDocumentDto } from '../../api/types/documents/create-document.dto';
+import { Document } from '../../types/documents/documents';
+import { CreateDocumentDto } from '../../types/documents/create-document.dto';
 
 const EntitiesPage = () => {
   const { 

@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from "../api/types/document-versions/create-document-versions.dto";
-import { DocumentVersion } from "../api/types/document-versions/document-versions";
-import * as API from "../api/versions"
+import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from "../types/document-versions/create-document-versions.dto";
+import { DocumentVersion } from "../types/document-versions/document-versions";
+import * as API from "../services/versionService"
 
 
 interface VersionState {

@@ -1,6 +1,6 @@
-import { Subscriber } from "./types/subscribers/subscribers";
-import api from "./client";
-import { CreateSubscriberDto, UpdateSubscriberDto } from "./types/subscribers/create-subscribers.dto";
+import { Subscriber } from "../types/subscribers/subscribers";
+import api from "./clientService";
+import { CreateSubscriberDto, UpdateSubscriberDto } from "../types/subscribers/create-subscribers.dto";
 
 export const fetchSubscribers = () => api.get<Subscriber[]>('/subscribers');
 export const fetchSubscriber = (id: string) => api.get<Subscriber>(`/subscribers/${id}`);

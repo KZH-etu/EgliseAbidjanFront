@@ -9,7 +9,7 @@ import {
   Link as LinkIcon
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { DocumentMedia, MediaType } from '../../api/types/document-media/document-media';
+import { DocumentMedia, MediaType } from '../../types/document-media/document-media';
 import { useMediaStore } from '../../stores/useMediaStore';
 import { useVersionStore } from '../../stores/useVersionsStore';
 import { useDocumentStore } from '../../stores/useDocumentStore';

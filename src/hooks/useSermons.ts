@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useDocumentStore } from '../stores/useDocumentStore';
-import { Document, DocumentCategory } from '../api/types/documents/documents';
+import { Document, DocumentCategory } from '../types/documents/documents';
 
 export function useSermons() {
   // pull the raw state from Zustand
