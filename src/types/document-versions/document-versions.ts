@@ -1,4 +1,4 @@
-import { DocumentMedia } from "../document-media/document-media";
+import { DocumentMediaResponseDto } from "../document-media/document-media";
 
 export interface DocumentVersion {
     id: string;
@@ -8,5 +8,5 @@ export interface DocumentVersion {
     description?: string;       // translated description
     publishedAt?: Date;
 
-    mediaItems?: DocumentMedia[]
+    mediaItems?: DocumentMediaResponseDto[]
 }

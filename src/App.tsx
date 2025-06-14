@@ -11,11 +11,6 @@ import AboutPage from './pages/AboutPage';
 import AboutAssembleePage from './pages/about/AssembleePage';
 import AboutFrankPage from './pages/about/FrankPage';
 import AboutBranhamPage from './pages/about/BranhamPage';
-
-
-
-
-
 import EventsPage from './pages/EventsPage';
 import Contact from './pages/ContactPage';
 import WebRadioPage from './pages/WebRadioPage';
@@ -25,7 +20,7 @@ import WebTVPage from './pages/WebTVPage';
 import AdminDashboard from './pages/admin/DashBoard'
 import AdminEntities from './pages/admin/DocumentsPage';
 import AdminDocumentVersion from './pages/admin/DocumentVersionPage';
-import AdminDocumentMedia from './pages/admin/DocumentMediaPage';
+import DocumentMediaPage from './pages/admin/DocumentMediaPage';
 import AdminTags from './pages/admin/TagsPage';
 import AdminEvents from './pages/admin/EventsPage';
 import AdminLanguage from './pages/admin/LanguagesPage';
@@ -57,7 +52,7 @@ function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="document" element={<AdminEntities />} />
           <Route path="documentVersion" element={<AdminDocumentVersion />} />
-          <Route path="documentMedia" element={<AdminDocumentMedia />} />
+          <Route path="documentMedia" element={<DocumentMediaPage />} />
           <Route path="tags" element={<AdminTags />} />
           <Route path="events" element={<AdminEvents />} />
           <Route path="language" element={<AdminLanguage />} />

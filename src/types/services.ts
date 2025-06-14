@@ -1,7 +1,7 @@
 import { CreateDocumentMediaDto, UpdateDocumentMediaDto } from "./document-media/create-document-media.dto";
 import { DocumentMediaResponseDto } from "./document-media/document-media";
 import { CreateDocumentDto, UpdateDocumentDto } from "./documents/create-document.dto";
-import { Document } from "./documents/documents";
+import { Document, EventSummaryDto } from "./documents/documents";
 
 export interface IDocumentService {
     fetchDocuments(): Promise<Document[]>;
@@ -9,6 +9,7 @@ export interface IDocumentService {
     createDocument(body: CreateDocumentDto): Promise<void>;
     updateDocument(id: string, body: UpdateDocumentDto): Promise<void>;
     deleteDocument(id: string): Promise<void>;
+    fetchEvents(): Promise<EventSummaryDto[]>;
 }
 
 export interface IDocumentMediaService {

@@ -4,28 +4,17 @@ import { useTranslation } from "../hooks/useTranslation";
 // import { useLanguageStore as useUILanguageStore } from "../stores/useUILanguageStore";
 import EventCard from "../components/events/EventCard";
 import { motion } from "framer-motion";
-import { EventSummaryDto } from "../types/documents/documents";
+import { useDocuments } from "../hooks/useDocuments";
 
-interface EventsStore {
-  events: EventSummaryDto[];
-  loading: boolean;
-  error?: string;
-  hasFetched: boolean;
-  fetchEvents: () => Promise<void>;
-}
 
-interface Props {
-  store: EventsStore
-}
+const EventsPage = () => {
 
-const EventsPage: React.FC<Props> = ({ store }) => {
-
-  const { events, loading, error, fetchEvents } = store;
+  const { events, loadingEvents, errorEvents, loadEvents } = useDocuments();
   // const { currentLanguage } = useUILanguageStore();
   const { t } = useTranslation();
 
   useEffect(() => {
-    fetchEvents();
+    loadEvents();
   }, []);
 
   return (
@@ -38,12 +27,12 @@ const EventsPage: React.FC<Props> = ({ store }) => {
       
       <section className="py-16">
         <div className="container-custom">
-          {loading ? (
+          {loadingEvents ? (
             <div className="flex justify-center">
               <div className="w-16 h-16 border-t-4 border-primary-500 border-solid rounded-full animate-spin"></div>
             </div>
-          ) : error ? (
-            <div className="text-center text-error">{error}</div>
+          ) : errorEvents ? (
+            <div className="text-center text-error">{errorEvents}</div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {events.map((event) => (
