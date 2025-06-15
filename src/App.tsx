@@ -17,9 +17,8 @@ import WebRadioPage from './pages/WebRadioPage';
 import WebTVPage from './pages/WebTVPage';
 
 // Admin pages
-import AdminDashboard from './pages/admin/DashBoard'
-import AdminEntities from './pages/admin/DocumentsPage';
-import AdminDocumentVersion from './pages/admin/DocumentVersionPage';
+// import AdminDashboard from './pages/admin/DashBoard'
+// import AdminEntities from './pages/admin/DocumentsPage';
 import DocumentMediaPage from './pages/admin/DocumentMediaPage';
 import AdminTags from './pages/admin/TagsPage';
 import AdminEvents from './pages/admin/EventsPage';
@@ -49,9 +48,9 @@ function App() {
         {/* Admin routes */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="document" element={<AdminEntities />} />
-          <Route path="documentVersion" element={<AdminDocumentVersion />} />
+          {/* <Route index element={<AdminDashboard />} /> */}
+          {/* <Route path="document" element={<AdminEntities />} /> */}
+          {/* <Route path="documentVersion" element={<AdminDocumentVersion />} /> */}
           <Route path="documentMedia" element={<DocumentMediaPage />} />
           <Route path="tags" element={<AdminTags />} />
           <Route path="events" element={<AdminEvents />} />
