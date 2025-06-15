@@ -4,8 +4,7 @@ import {
   Home, 
   Book, 
   FileText, 
-  Calendar, 
-  Radio, 
+  Calendar,
   MessageSquare, 
   LogOut, 
   Tag,
@@ -73,7 +72,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
           </NavLink>
           
           <NavLink
-            to="/admin/documentVersion"
+            to="/admin/doc-version"
             className={({ isActive }) => 
               `flex items-center py-3 px-4 rounded-md transition-colors ${
                 isActive 
@@ -84,11 +83,11 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
             onClick={() => window.innerWidth < 1024 && toggleSidebar()}
           >
             <FileText size={18} className="mr-3" />
-            <span>Version des média</span>
+            <span>Versions de documents</span>
           </NavLink>
 
           <NavLink
-            to="/admin/documentMedia"
+            to="/admin/doc-media"
             className={({ isActive }) => 
               `flex items-center py-3 px-4 rounded-md transition-colors ${
                 isActive 
@@ -99,7 +98,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
             onClick={() => window.innerWidth < 1024 && toggleSidebar()}
           >
             <Activity size={18} className="mr-3" />
-            <span>Nature des média</span>
+            <span>Supports médias</span>
           </NavLink>
           
           <NavLink

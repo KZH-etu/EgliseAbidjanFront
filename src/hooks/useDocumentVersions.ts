@@ -1,0 +1,47 @@
+import { useState, useEffect, useCallback } from 'react';
+import { useServices } from '../providers/serviceProvider';
+import { DocumentVersionResponseDto } from '../types/document-versions/document-versions';
+import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from '../types/document-versions/create-document-versions.dto';
+
+export function useDocumentVersions() {
+    const { documentVersionsService } = useServices();
+    const [items, setItems] = useState<DocumentVersionResponseDto[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string|null>(null);
+
+    const loadVersions = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await documentVersionsService.fetchAllVersions();
+      setItems(data);
+    } catch (e: any) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+    useEffect(() => {
+        loadVersions();
+    }, [loadVersions]);
+
+    const remove = useCallback(async (id: string) => {
+    await documentVersionsService.deleteVersion(id);
+    // optionally refresh list:
+    await loadVersions();
+    }, [loadVersions]);
+
+    const add = useCallback(async (body: CreateDocumentVersionDto) => {
+    await documentVersionsService.createVersion(body);
+    await loadVersions();
+    }, [loadVersions]);
+
+    const patch = useCallback(async (id: string, body: UpdateDocumentVersionDto) => {
+    await documentVersionsService.updateVersion(id, body);
+    await loadVersions();
+    }, [loadVersions]);
+
+  return { items, loadVersions, loading, add, patch, remove, error };
+}

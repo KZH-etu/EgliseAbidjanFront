@@ -14,7 +14,7 @@ export function useDocumentMedia() {
     setError(null);
 
     try {
-      const data = await documentMediaService.fetchMedia();
+      const data = await documentMediaService.fetchAllMedia();
       setItems(data);
     } catch (e: any) {
       setError(e.message);
@@ -24,7 +24,7 @@ export function useDocumentMedia() {
   }, []);
 
     useEffect(() => {
-        loadMedia
+        loadMedia();
     }, [loadMedia]);
 
     const remove = useCallback(async (id: string) => {

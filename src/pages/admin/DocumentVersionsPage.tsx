@@ -1,48 +1,61 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Edit2, Trash2, Plus, Save, X } from 'lucide-react';
-import { MediaType } from '../../types/document-media/document-media';
-import { CreateDocumentMediaDto, UpdateDocumentMediaDto } from '../../types/document-media/create-document-media.dto';
-import { useDocumentMedia } from '../../hooks/useDocumentMedia';
+import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from '../../types/document-versions/create-document-versions.dto';
+import { useDocumentVersions } from '../../hooks/useDocumentVersions';
+import { useLanguages } from '../../hooks/useLanguages';
 
-const mediaTypeOptions: MediaType[] = [MediaType.AUDIO, MediaType.TEXT, MediaType.VIDEO]
-const orderFields = ['id', 'documentVersionId', 'createdAt', 'updatedAt'] as const;
+
+const orderFields = ['id', 'documentId', 'title', 'createdAt', 'updatedAt'] as const;
 
 type OrderField = typeof orderFields[number];
 
 type OrderDirection = 'asc' | 'desc';
 
-export default function DocumentMediaPage() {
+export default function DocumentVersionsPage() {
   const {
     items,
-    loadMedia,
+    loadVersions,
     // loading,
     add,
     patch,
     remove,
     error,
-  } = useDocumentMedia();
+  } = useDocumentVersions();
+
+  const {
+    languageSummaries,
+    loadLanguageSummaries,
+  } = useLanguages();
 
   const [search, setSearch] = useState('');
-  const [selectedTypes, setSelectedTypes] = useState<MediaType[]>([]);
   const [orderBy, setOrderBy] = useState<OrderField>('updatedAt');
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]); // this state uses language IDs
   const [orderDir, setOrderDir] = useState<OrderDirection>('desc');
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState<Partial<CreateDocumentMediaDto>>({});
+  const [form, setForm] = useState<Partial<CreateDocumentVersionDto>>({});
   const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
-    loadMedia();
-  }, [loadMedia]);
+    loadLanguageSummaries();
+    loadVersions();
+  }, [loadVersions, loadLanguageSummaries]);
+
+  const selectedLanguageNames = useMemo(()=> {
+    return selectedLanguages.map(langId => 
+      languageSummaries.find(lang => lang.id === langId)?.name || ''
+    );
+  }, [languageSummaries, selectedLanguages])
 
   const handleSearchFilterSort = () => {
     return items
       .filter(item =>
-        [item.id, item.documentVersionId, item.url].some(field =>
+        [item.id, item.documentId, item.title].some(field =>
           field.toLowerCase().includes(search.toLowerCase())
         )
       )
       .filter(item =>
-        selectedTypes.length ? selectedTypes.includes(item.mediaType) : true
+        //here, we have to convert the languageId to the language name to match the selected languages
+        selectedLanguages.length ? selectedLanguageNames.includes(item.language) : true
       )
       .sort((a, b) => {
         const aValue = a[orderBy];
@@ -59,12 +72,12 @@ export default function DocumentMediaPage() {
   };
 
   const handleSubmit = async () => {
-    if (!form.documentVersionId || !form.mediaType || !form.url) return;
+    if (!form.documentId || !form.title || !form.languageId) return;
     if (editingId) {
-      await patch(editingId, form as UpdateDocumentMediaDto);
+      await patch(editingId, form as UpdateDocumentVersionDto);
       setEditingId(null);
     } else if (isCreating) {
-    await add(form as CreateDocumentMediaDto);
+    await add(form as CreateDocumentVersionDto);
     setIsCreating(false);
   }
     setForm({});
@@ -74,7 +87,7 @@ export default function DocumentMediaPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Gestion des DocumentMedia</h1>
+      <h1 className="text-2xl font-bold">Gestion des Versions de Documents</h1>
 
       {error && <div className="text-red-500">{error}</div>}
 
@@ -84,23 +97,23 @@ export default function DocumentMediaPage() {
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="form-input"
-          placeholder="Search by id, docId, url"
+          placeholder="Search by id, docId, title"
           id='search'
         />
 
         <div className="flex gap-2">
-          {mediaTypeOptions.map(type => (
-            <label key={type} className="flex items-center gap-1">
+          {languageSummaries.map(lang => (
+            <label key={lang.id} className="flex items-center gap-1">
               <input
                 type="checkbox"
-                checked={selectedTypes.includes(type)}
+                checked={selectedLanguages.includes(lang.id)}
                 onChange={e => {
-                  setSelectedTypes(current =>
-                    e.target.checked ? [...current, type] : current.filter(t => t !== type)
+                  setSelectedLanguages(current =>
+                    e.target.checked ? [...current, lang.id] : current.filter(t => t !== lang.id)
                   );
                 }}
               />
-              {type}
+              {lang.name}
             </label>
           ))}
         </div>
@@ -135,27 +148,27 @@ export default function DocumentMediaPage() {
           <div className="flex gap-2 mb-2">
             <input
               className="form-input"
-              placeholder="documentVersionId"
-              value={form.documentVersionId || ''}
-              onChange={e => setForm(f => ({ ...f, documentVersionId: e.target.value }))}
-              id="documentVersionId"
+              placeholder="documentId"
+              value={form.documentId || ''}
+              onChange={e => setForm(f => ({ ...f, documentId: e.target.value }))}
+              id="documentId"
             />
             <input
               className="form-input"
-              placeholder="URL"
-              value={form.url || ''}
-              onChange={e => setForm(f => ({ ...f, url: e.target.value }))}
-              id="url" 
+              placeholder="Titre"
+              value={form.title || ''}
+              onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+              id="title" 
             />
             <select
               className="form-select"
-              value={form.mediaType || ''}
-              onChange={e => setForm(f => ({ ...f, mediaType: e.target.value as MediaType }))}
-              id="mediaType"
+              value={form.languageId || ''}
+              onChange={e => setForm(f => ({ ...f, languageId: e.target.value }))}
+              id="languageId"
             >
-              <option value="">Type</option>
-              {mediaTypeOptions.map(type => (
-                <option key={type} value={type}>{type}</option>
+              <option value="">Language</option>
+              {languageSummaries.map(lang => (
+                <option key={lang.id} value={lang.id}>{lang.name}</option>
               ))}
             </select>
           </div>
@@ -171,9 +184,9 @@ export default function DocumentMediaPage() {
         <thead>
           <tr className="text-left">
             <th>ID</th>
-            <th>DocumentVersionId</th>
-            <th>MediaType</th>
-            <th>URL</th>
+            <th>DocumentId</th>
+            <th>Title</th>
+            <th>Language</th>
             <th>CreatedAt</th>
             <th>UpdatedAt</th>
             <th>Actions</th>
@@ -183,18 +196,18 @@ export default function DocumentMediaPage() {
           {filtered.map(item => (
             <tr key={item.id} className="border-t">
               <td>{item.id}</td>
-              <td>{item.documentVersionId}</td>
-              <td>{item.mediaType}</td>
-              <td className="truncate max-w-xs">{item.url}</td>
+              <td>{item.documentId}</td>
+              <td>{item.title}</td>
+              <td>{item.language}</td>
               <td>{new Date(item.createdAt).toLocaleString()}</td>
               <td>{new Date(item.updatedAt).toLocaleString()}</td>
               <td className="flex gap-2">
                 <button onClick={() => {
                   setEditingId(item.id);
                   setForm({
-                    documentVersionId: item.documentVersionId,
-                    mediaType: item.mediaType,
-                    url: item.url,
+                    documentId: item.documentId,
+                    languageId: languageSummaries.find(lang => lang.name === item.language)?.id || '',
+                    title: item.title,
                   });
                 }} className="text-blue-600 hover:text-blue-800">
                   <Edit2 size={16} />

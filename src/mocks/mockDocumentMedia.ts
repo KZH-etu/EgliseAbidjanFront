@@ -1,6 +1,6 @@
 import { DocumentMediaResponseDto, MediaType } from "../types/document-media/document-media";
 
-export const mockDocumentMedia: DocumentMediaResponseDto[] = [
+const mockDocumentMedia: DocumentMediaResponseDto[] = [
   {
     id: 'dm1',
     documentVersionId: 'ver1',
@@ -50,3 +50,5 @@ export const mockDocumentMedia: DocumentMediaResponseDto[] = [
     updatedAt: new Date('2025-06-01T07:35:00Z'),
   }
 ];
+
+export default mockDocumentMedia;

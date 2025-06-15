@@ -1,12 +1,9 @@
-import { DocumentMediaResponseDto } from "../document-media/document-media";
 
-export interface DocumentVersion {
+export interface DocumentVersionResponseDto {
     id: string;
     documentId: string;         // Foreign Key -> document
-    languageId: string;          // Foreign Key -> language
-    title: string;             // translated title
-    description?: string;       // translated description
-    publishedAt?: Date;
-
-    mediaItems?: DocumentMediaResponseDto[]
+    language: string;          // language.name ("Anglais", "Français", etc.)
+    title: string;             // translated title of the document
+    createdAt: Date;       // date of creation
+    updatedAt: Date;       // date of last update
 }

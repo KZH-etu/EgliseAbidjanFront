@@ -1,12 +1,16 @@
 import React, { createContext, ReactNode, useContext } from 'react';
-import { IDocumentMediaService, IDocumentService } from '../types/services';
+import { IDocumentMediaService, IDocumentService, IDocumentVersionService, ILanguageService } from '../types/services';
 // import { DocumentService } from '../services/documentService';
-import { mockDocuments } from '../mocks/mockDocuments';
-import { mockDocumentMedia } from '../mocks/mockDocumentMedia';
+import mockDocuments from '../mocks/mockDocuments';
+import mockDocumentMedia from '../mocks/mockDocumentMedia';
+import mockDocumentVersions from '../mocks/mockDocumentVersions';
+import { mockLanguageSummaries } from '../mocks/mockLanguages';
 
 interface Services {
   documentService: IDocumentService;
   documentMediaService: IDocumentMediaService;
+  documentVersionsService: IDocumentVersionService;
+  languageService: ILanguageService;
 }
 
 // const defaultServices: Services = {
@@ -23,12 +27,24 @@ const mockServices: Services = {
     fetchEvents: async () => [],
   },
   documentMediaService: {
-    fetchMedia: async () => (mockDocumentMedia),
+    fetchAllMedia: async () => (mockDocumentMedia),
     fetchMediaItem: async () => (mockDocumentMedia[0]), // Return the first media item as a mock
+    fetchMediaByVersion: async () => (mockDocumentMedia),
     createMedia: async () => {},
     updateMedia: async () => {},
     deleteMedia: async () => {},
-  }
+  },
+  documentVersionsService: {
+    fetchAllVersions: async () => (mockDocumentVersions),
+    fetchVersion: async () => ({} as any), // Return an empty object as a mock
+    fetchVersionsByDocument: async () => (mockDocumentVersions),
+    createVersion: async () => {},
+    updateVersion: async () => {},
+    deleteVersion: async () => {},
+  },
+  languageService: {
+    fetchLanguageSummaries: async () => (mockLanguageSummaries),
+  },
 };
 
 const ServiceContext = createContext<Services>(mockServices);

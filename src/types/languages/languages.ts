@@ -9,3 +9,8 @@ export interface LanguageResponseDto {
   type: LanguageType;
   countryOfOrigin?: string;
 }
+
+export interface LanguageSummaryDto {
+  id: string; 
+  name: string; 
+}

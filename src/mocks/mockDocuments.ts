@@ -23,7 +23,7 @@ const tag2: Tag = {
   ]
 };
 
-export const mockDocuments: Document[] = [
+const mockDocuments: Document[] = [
   {
     id: 'doc1',
     globalTitle: 'Walking in Faith',
@@ -140,3 +140,5 @@ export const mockDocuments: Document[] = [
     tags: [tag1]
   }
 ];
+
+export default mockDocuments;
