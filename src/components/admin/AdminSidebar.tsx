@@ -57,7 +57,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
           </NavLink>
           
           <NavLink
-            to="/admin/document"
+            to="/admin/documents"
             className={({ isActive }) => 
               `flex items-center py-3 px-4 rounded-md transition-colors ${
                 isActive 
@@ -68,11 +68,11 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
             onClick={() => window.innerWidth < 1024 && toggleSidebar()}
           >
             <Book size={18} className="mr-3" />
-            <span>Entités</span>
+            <span>Documents</span>
           </NavLink>
           
           <NavLink
-            to="/admin/doc-version"
+            to="/admin/doc-versions"
             className={({ isActive }) => 
               `flex items-center py-3 px-4 rounded-md transition-colors ${
                 isActive 

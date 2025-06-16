@@ -18,7 +18,7 @@ import WebTVPage from './pages/WebTVPage';
 
 // Admin pages
 // import AdminDashboard from './pages/admin/DashBoard'
-// import AdminEntities from './pages/admin/DocumentsPage';
+import DocumentsPage from './pages/admin/DocumentsPage';
 import DocumentVersionsPage from './pages/admin/DocumentVersionsPage';
 import DocumentMediaPage from './pages/admin/DocumentMediaPage';
 import AdminTags from './pages/admin/TagsPage';
@@ -50,8 +50,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/admin" element={<AdminLayout />}>
           {/* <Route index element={<AdminDashboard />} /> */}
-          {/* <Route path="document" element={<AdminEntities />} /> */}
-          <Route path="doc-version" element={<DocumentVersionsPage />} />
+          <Route path="documents" element={<DocumentsPage />} />
+          <Route path="doc-versions" element={<DocumentVersionsPage />} />
           <Route path="doc-media" element={<DocumentMediaPage />} />
           <Route path="tags" element={<AdminTags />} />
           <Route path="events" element={<AdminEvents />} />

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useServices } from '../providers/serviceProvider';
 import { DocumentMediaResponseDto } from '../types/document-media/document-media';
 import { CreateDocumentMediaDto, UpdateDocumentMediaDto } from '../types/document-media/create-document-media.dto';
@@ -43,5 +43,8 @@ export function useDocumentMedia() {
     await loadMedia();
     }, [loadMedia]);
 
-  return { items, loadMedia, loading, add, patch, remove, error };
+    const memoizedMedia = useMemo(()=> ({ items, loadMedia, loading, add,
+       patch, remove, error }), [items, loadMedia, loading, add, patch, remove, error]);
+
+    return memoizedMedia;
 }

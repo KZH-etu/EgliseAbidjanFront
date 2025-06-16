@@ -1,6 +1,7 @@
 import { MediaType } from "../document-media/document-media";
-import { DocumentVersion } from "../document-versions/document-versions";
-import { Tag } from "../tags/tags";
+import { DocumentVersionResponseDto } from "../document-versions/document-versions";
+import { LanguageSummaryDto } from "../languages/languages";
+import { TagResponseDto, TagSummaryDto } from "../tags/tags";
 
 // SERMONS
 
@@ -51,12 +52,12 @@ export interface Document {
 
     //can choose to 'include' these fields in return statements
     categories?: DocumentCategory[]
-    versions?: DocumentVersion[]
+    versions?: DocumentVersionResponseDto[]
     bookMeta?: BookMetadata
     sermonMeta?: SermonMetadata
     eventMeta?: EventMetadata
 
-    tags?: Tag[];
+    tags?: TagResponseDto[];
 }
 
 export interface SermonSummaryDto {
@@ -125,4 +126,22 @@ export interface DocumentFullDto {
             title: string;
         }[]
     }[]
+}
+
+export interface DocumentResponseDto {
+    id: string;
+    globalTitle: string;
+    createdAt: Date;
+    updatedAt: Date;
+    categories: DocumentCategory[];
+    tags: TagSummaryDto[];
+    availableLanguages: LanguageSummaryDto[];
+    docVersionIds: string[];
+}
+
+export interface DocumentMetaResponseDto {
+    id: string;
+    bookMeta?: BookMetadata;
+    sermonMeta?: SermonMetadata;
+    eventMeta?: EventMetadata;
 }

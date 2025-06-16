@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Document, EventSummaryDto } from '../types/documents/documents';
+import { DocumentResponseDto, EventSummaryDto } from '../types/documents/documents';
 import { useServices } from '../providers/serviceProvider';
 import { CreateDocumentDto, UpdateDocumentDto } from '../types/documents/create-document.dto';
 
 export function useDocuments() {
 
     const { documentService } = useServices();
-    const [docs, setDocs] = useState<Document[]>([]);
+    const [docs, setDocs] = useState<DocumentResponseDto[]>([]);
     const [events, setEvents] = useState<EventSummaryDto[]>([]);
     const [loadingDocs, setLoadingDocs] = useState(true);
     const [loadingEvents, setLoadingEvents] = useState(true);
@@ -63,7 +63,12 @@ export function useDocuments() {
     await loadEvents();
     }, [loadDocs, loadEvents]);
 
-    const memoizedDocs = useMemo(() => ({docs, loadingDocs, errorDocs,
+    const fetchMetaByDocument = useCallback(async (documentId: string) => {
+      const meta = await documentService.fetchMetaByDocument(documentId);
+      return meta;
+    }, [documentService]);
+
+    const memoizedDocs = useMemo(() => ({docs, loadingDocs, errorDocs, fetchMetaByDocument,
       loadDocs, add, patch, remove}), [docs, loadingDocs, errorDocs, loadDocs, add, patch, remove]);
 
     const memoizedEvents = useMemo(() => ({events, loadingEvents, errorEvents,

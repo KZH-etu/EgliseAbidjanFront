@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useServices } from '../providers/serviceProvider';
 import { DocumentVersionResponseDto } from '../types/document-versions/document-versions';
 import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from '../types/document-versions/create-document-versions.dto';
@@ -43,5 +43,14 @@ export function useDocumentVersions() {
     await loadVersions();
     }, [loadVersions]);
 
-  return { items, loadVersions, loading, add, patch, remove, error };
+    const searchVersions = useCallback(async (query: string) => {
+      const searchedVersions = await documentVersionsService.searchVersions(query);
+      return searchedVersions;
+    }, [documentVersionsService]);
+
+    const memoizedVersions = useMemo(() => ({ items, loadVersions, loading, add,
+       patch, remove, searchVersions, error }), [items, loadVersions, loading,
+        searchVersions, add, patch, remove, error]);
+
+   return memoizedVersions;
 }

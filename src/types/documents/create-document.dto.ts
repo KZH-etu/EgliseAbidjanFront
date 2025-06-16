@@ -1,7 +1,7 @@
 import { DocumentCategory, EventType } from "./documents";
 
 export interface CreateBookMetadataDto {
-    author: string;
+    author?: string;
     publisher?: string;
     publishedAt?: Date;
     isbn?: string;
@@ -9,25 +9,29 @@ export interface CreateBookMetadataDto {
 }
 
 export interface CreateSermonMetadataDto {
-    preacher: string;
-    preachedAt: Date;
+    preacher?: string;
+    preachedAt?: Date;
+    topic?: string;
     location?: string;
 }
 
 export interface CreateEventMetadataDto {
-    type: EventType;
-    startTime: Date;
+    type?: EventType;
+    startTime?: Date;
+    theme?: string;
     endTime?: Date;
     location?: string;
 }
 
 export interface CreateDocumentDto {
     globalTitle: string;
-    categories?: DocumentCategory[];
-    tagIds?: string[];
+    categories: DocumentCategory[]; //if empty, then no category is set
+    tagIds: string[];  // array of tag IDs, can be empty if no tags are set
+    // optional metadata
     bookMeta?: CreateBookMetadataDto;
     sermonMeta?: CreateSermonMetadataDto;
     eventMeta?: CreateEventMetadataDto;
+    docVersionIds: string[]; // array of document version IDs, can be empty if no versions are set
 }
 
 export interface UpdateDocumentDto {
@@ -37,4 +41,5 @@ export interface UpdateDocumentDto {
     bookMeta?: CreateBookMetadataDto;
     sermonMeta?: CreateSermonMetadataDto;
     eventMeta?: CreateEventMetadataDto;
+    docVersionId: string[];
 }

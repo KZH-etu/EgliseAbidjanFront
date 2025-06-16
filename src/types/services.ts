@@ -3,15 +3,17 @@ import { DocumentMediaResponseDto } from "./document-media/document-media";
 import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from "./document-versions/create-document-versions.dto";
 import { DocumentVersionResponseDto } from "./document-versions/document-versions";
 import { CreateDocumentDto, UpdateDocumentDto } from "./documents/create-document.dto";
-import { Document, EventSummaryDto } from "./documents/documents";
+import { DocumentMetaResponseDto, DocumentResponseDto, EventSummaryDto } from "./documents/documents";
 import { LanguageSummaryDto } from "./languages/languages";
+import { TagSummaryDto } from "./tags/tags";
 
 export interface IDocumentService {
-    fetchDocuments(): Promise<Document[]>;
-    fetchDocument(id: string): Promise<Document>;
+    fetchDocuments(): Promise<DocumentResponseDto[]>;
+    fetchDocument(id: string): Promise<DocumentResponseDto>;
     createDocument(body: CreateDocumentDto): Promise<void>;
     updateDocument(id: string, body: UpdateDocumentDto): Promise<void>;
     deleteDocument(id: string): Promise<void>;
+    fetchMetaByDocument(documentId: string): Promise<DocumentMetaResponseDto>;
     fetchEvents(): Promise<EventSummaryDto[]>;
 }
 
@@ -31,8 +33,14 @@ export interface IDocumentVersionService {
     createVersion(body: CreateDocumentVersionDto): Promise<void>;
     updateVersion(id: string, body: UpdateDocumentVersionDto): Promise<void>;
     deleteVersion(id: string): Promise<void>;
+    searchVersions(query: string): Promise<DocumentVersionResponseDto[]>;
 }
 
 export interface ILanguageService {
     fetchLanguageSummaries(): Promise<LanguageSummaryDto[]>
+}
+
+export interface ITagService {
+    fetchTags(): Promise<TagSummaryDto[]>;
+    searchTags(query: string): Promise<TagSummaryDto[]>;
 }
