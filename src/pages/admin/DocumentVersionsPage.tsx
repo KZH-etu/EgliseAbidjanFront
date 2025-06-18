@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Edit2, Trash2, Plus, Save, X } from 'lucide-react';
-import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from '../../types/document-versions/create-document-versions.dto';
+import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from "../../types/document-versions";
 import { useDocumentVersions } from '../../hooks/useDocumentVersions';
 import { useLanguages } from '../../hooks/useLanguages';
 
@@ -23,8 +23,8 @@ export default function DocumentVersionsPage() {
   } = useDocumentVersions();
 
   const {
-    languageSummaries,
-    loadLanguageSummaries,
+    languages,
+    loadLanguages,
   } = useLanguages();
 
   const [search, setSearch] = useState('');
@@ -36,15 +36,15 @@ export default function DocumentVersionsPage() {
   const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
-    loadLanguageSummaries();
+    loadLanguages();
     loadVersions();
-  }, [loadVersions, loadLanguageSummaries]);
+  }, [loadVersions, loadLanguages]);
 
   const selectedLanguageNames = useMemo(()=> {
     return selectedLanguages.map(langId => 
-      languageSummaries.find(lang => lang.id === langId)?.name || ''
+      languages.find(lang => lang.id === langId)?.name || ''
     );
-  }, [languageSummaries, selectedLanguages])
+  }, [languages, selectedLanguages])
 
   const handleSearchFilterSort = () => {
     return items
@@ -102,7 +102,7 @@ export default function DocumentVersionsPage() {
         />
 
         <div className="flex gap-2">
-          {languageSummaries.map(lang => (
+          {languages.map(lang => (
             <label key={lang.id} className="flex items-center gap-1">
               <input
                 type="checkbox"
@@ -167,7 +167,7 @@ export default function DocumentVersionsPage() {
               id="languageId"
             >
               <option value="">Language</option>
-              {languageSummaries.map(lang => (
+              {languages.map(lang => (
                 <option key={lang.id} value={lang.id}>{lang.name}</option>
               ))}
             </select>
@@ -206,7 +206,7 @@ export default function DocumentVersionsPage() {
                   setEditingId(item.id);
                   setForm({
                     documentId: item.documentId,
-                    languageId: languageSummaries.find(lang => lang.name === item.language)?.id || '',
+                    languageId: languages.find(lang => lang.name === item.language)?.id || '',
                     title: item.title,
                   });
                 }} className="text-blue-600 hover:text-blue-800">

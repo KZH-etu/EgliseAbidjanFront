@@ -1,11 +1,26 @@
-import { CreateDocumentMediaDto, UpdateDocumentMediaDto } from "./document-media/create-document-media.dto";
-import { DocumentMediaResponseDto } from "./document-media/document-media";
-import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from "./document-versions/create-document-versions.dto";
-import { DocumentVersionResponseDto } from "./document-versions/document-versions";
-import { CreateDocumentDto, UpdateDocumentDto } from "./documents/create-document.dto";
-import { DocumentMetaResponseDto, DocumentResponseDto, EventSummaryDto } from "./documents/documents";
-import { LanguageSummaryDto } from "./languages/languages";
-import { TagSummaryDto } from "./tags/tags";
+// Importing necessary DTOs and interfaces for the services
+import { CreateDocumentMediaDto, UpdateDocumentMediaDto } from "./document-media";
+import { DocumentMediaResponseDto } from "./document-media";
+import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from "./document-versions";
+import { DocumentVersionResponseDto } from "./document-versions";
+import { CreateDocumentDto, UpdateDocumentDto } from "./documents";
+import { DocumentMetaResponseDto, DocumentResponseDto, EventSummaryDto } from "./documents";
+import { CreateLanguageDto, UpdateLanguageDto } from "./languages";
+import { LanguageResponseDto, LanguageSummaryDto } from "./languages";
+import { MediaLibraryItemDto, MediaLibraryItemViewDto } from "./mediaLibrary";
+import { CreateTagDto } from "./tags";
+import { TagResponseDto, TagSummaryDto } from "./tags";
+
+// Type Definitions for Services
+
+export interface Services {
+  documentService: IDocumentService;
+  documentMediaService: IDocumentMediaService;
+  documentVersionsService: IDocumentVersionService;
+  languageService: ILanguageService;
+  tagService: ITagService;
+  mediaLibraryService: IMediaLibraryService;
+}
 
 export interface IDocumentService {
     fetchDocuments(): Promise<DocumentResponseDto[]>;
@@ -37,10 +52,24 @@ export interface IDocumentVersionService {
 }
 
 export interface ILanguageService {
-    fetchLanguageSummaries(): Promise<LanguageSummaryDto[]>
+    fetchLanguageSummaries(): Promise<LanguageSummaryDto[]>;
+    fetchLanguages(): Promise<LanguageResponseDto[]>;
+    createLanguage(body: CreateLanguageDto): Promise<void>;
+    updateLanguage(id: string, body: UpdateLanguageDto): Promise<void>;
+    deleteLanguage(id: string): Promise<void>;
 }
 
 export interface ITagService {
-    fetchTags(): Promise<TagSummaryDto[]>;
+    fetchTagSummaries(): Promise<TagSummaryDto[]>;
+    fetchTags(): Promise<TagResponseDto[]>;
     searchTags(query: string): Promise<TagSummaryDto[]>;
+    createTag(body: CreateTagDto): Promise<void>;
+    updateTag(id: string, body: CreateTagDto): Promise<void>;
+    deleteTag(id: string): Promise<void>;
+}
+
+export interface IMediaLibraryService {
+    fetchItems(): Promise<MediaLibraryItemDto[]>;
+    fetchView(id: string, languageId: string, type: string ): Promise<MediaLibraryItemViewDto>;
+        // type can be 'audio', 'video', or 'text'
 }

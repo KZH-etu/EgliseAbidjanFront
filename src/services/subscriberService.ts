@@ -1,9 +1,11 @@
-import { Subscriber } from "../types/subscribers/subscribers";
+import { SubscriberResponseDto } from "../types/subscribers";
 import api from "./clientService";
-import { CreateSubscriberDto, UpdateSubscriberDto } from "../types/subscribers/create-subscribers.dto";
+import { CreateSubscriberDto, UpdateSubscriberDto } from "../types/subscribers";
 
-export const fetchSubscribers = () => api.get<Subscriber[]>('/subscribers');
-export const fetchSubscriber = (id: string) => api.get<Subscriber>(`/subscribers/${id}`);
-export const createSubscriber = (body: CreateSubscriberDto) => api.post<Subscriber>('/subscribers', body);
-export const updateSubscriber = (id: string, body: UpdateSubscriberDto) => api.patch<Subscriber>(`/subscribers/${id}`, body);
+// get rid of this along with store. replace with hooks
+
+export const fetchSubscribers = () => api.get<SubscriberResponseDto[]>('/subscribers');
+export const fetchSubscriber = (id: string) => api.get<SubscriberResponseDto>(`/subscribers/${id}`);
+export const createSubscriber = (body: CreateSubscriberDto) => api.post<SubscriberResponseDto>('/subscribers', body);
+export const updateSubscriber = (id: string, body: UpdateSubscriberDto) => api.patch<SubscriberResponseDto>(`/subscribers/${id}`, body);
 export const deleteSubscriber = (id: string) => api.delete(`/subscribers/${id}`);

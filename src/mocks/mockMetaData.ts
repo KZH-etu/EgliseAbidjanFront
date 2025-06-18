@@ -1,5 +1,5 @@
-import { DocumentMetaResponseDto } from '../types/documents/documents';
-import { EventType } from '../types/documents/documents';
+import { DocumentMetaResponseDto } from '../types/documents';
+import { EventType } from '../types/documents';
 
 const mockMetaData: DocumentMetaResponseDto[] = [
   {

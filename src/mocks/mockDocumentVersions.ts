@@ -1,70 +1,85 @@
-import { DocumentVersionResponseDto } from "../types/document-versions/document-versions";
+import { DocumentVersionResponseDto } from "../types/document-versions";
 
-// Example mock data for DocumentVersionResponseDto
+// Consistent with mockDocuments, mockLanguages, and mockDocumentMedia
 const mockDocumentVersions: DocumentVersionResponseDto[] = [
+  // doc1: Walking in Faith (English, French)
   {
-    id: '1gdzygu54322v',
-    documentId: 'doc-001',
+    id: 'v1',
+    documentId: 'doc1',
+    language: 'English',
+    title: 'Walking in Faith',
+    createdAt: new Date('2025-03-10T09:00:00Z'),
+    updatedAt: new Date('2025-03-12T15:00:00Z'),
+  },
+  {
+    id: 'v2',
+    documentId: 'doc1',
     language: 'Français',
-    title: 'Titre en Français',
-    createdAt: new Date('2024-01-01T10:00:00Z'),
-    updatedAt: new Date('2024-01-02T12:00:00Z'),
+    title: 'Marcher dans la Foi',
+    createdAt: new Date('2025-03-11T09:10:00Z'),
+    updatedAt: new Date('2025-03-12T15:10:00Z'),
+  },
+
+  // doc2: Sunday Sermon Series (English)
+  {
+    id: 'v1',
+    documentId: 'doc2',
+    language: 'English',
+    title: 'Sunday Sermon Series',
+    createdAt: new Date('2025-04-01T10:30:00Z'),
+    updatedAt: new Date('2025-04-02T11:45:00Z'),
+  },
+
+  // doc3: Annual Prayer Meeting (English)
+  {
+    id: 'v1',
+    documentId: 'doc3',
+    language: 'English',
+    title: 'Annual Prayer Meeting',
+    createdAt: new Date('2025-05-05T08:00:00Z'),
+    updatedAt: new Date('2025-05-06T09:15:00Z'),
   },
   {
-    id: '2vdgguRTD263',
-    documentId: 'doc-002',
-    language: 'Anglais',
-    title: 'Title in English',
-    createdAt: new Date('2024-02-01T09:30:00Z'),
-    updatedAt: new Date('2024-02-03T15:45:00Z'),
+    id: 'v2',
+    documentId: 'doc3',
+    language: 'Français',
+    title: 'Réunion Annuelle de Prière',
+    createdAt: new Date('2025-05-05T08:10:00Z'),
+    updatedAt: new Date('2025-05-06T09:20:00Z'),
   },
   {
-    id: '3zgdvvzbdkzbz',
-    documentId: 'doc-003',
-    language: 'Espagnol',
-    title: 'Título en Español',
-    createdAt: new Date('2024-03-10T08:15:00Z'),
-    updatedAt: new Date('2024-03-12T11:20:00Z'),
+    id: 'v3',
+    documentId: 'doc3',
+    language: 'Español',
+    title: 'Reunión Anual de Oración',
+    createdAt: new Date('2025-05-05T08:20:00Z'),
+    updatedAt: new Date('2025-05-06T09:25:00Z'),
+  },
+
+  // doc4: Faith & Fellowship (English, French, Spanish)
+  {
+    id: 'v1',
+    documentId: 'doc4',
+    language: 'English',
+    title: 'Faith & Fellowship',
+    createdAt: new Date('2025-06-01T07:00:00Z'),
+    updatedAt: new Date('2025-06-02T12:00:00Z'),
   },
   {
-    id: '4effefzgf',
-    documentId: 'doc-004',
-    language: 'Allemand',
-    title: 'Titel auf Deutsch',
-    createdAt: new Date('2024-04-05T14:00:00Z'),
-    updatedAt: new Date('2024-04-06T16:30:00Z'),
+    id: 'v2',
+    documentId: 'doc4',
+    language: 'Français',
+    title: 'Foi et Communion',
+    createdAt: new Date('2025-06-01T07:10:00Z'),
+    updatedAt: new Date('2025-06-02T12:10:00Z'),
   },
   {
-    id: '5efeee',
-    documentId: 'doc-005',
-    language: 'Italien',
-    title: 'Titolo in Italiano',
-    createdAt: new Date('2024-05-12T11:45:00Z'),
-    updatedAt: new Date('2024-05-13T13:50:00Z'),
-  },
-  {
-    id: '6iehzgyzc69b',
-    documentId: 'doc-006',
-    language: 'Portugais',
-    title: 'Título em Português',
-    createdAt: new Date('2024-06-18T07:20:00Z'),
-    updatedAt: new Date('2024-06-19T09:25:00Z'),
-  },
-  {
-    id: '7YCH51781ffef',
-    documentId: 'doc-007',
-    language: 'Néerlandais',
-    title: 'Titel in het Nederlands',
-    createdAt: new Date('2024-07-22T17:10:00Z'),
-    updatedAt: new Date('2024-07-23T18:15:00Z'),
-  },
-  {
-    id: '8YYFYH645vdzdd',
-    documentId: 'doc-008',
-    language: 'Russe',
-    title: 'Заголовок на русском',
-    createdAt: new Date('2024-08-30T12:00:00Z'),
-    updatedAt: new Date('2024-08-31T14:05:00Z'),
+    id: 'v3',
+    documentId: 'doc4',
+    language: 'Español',
+    title: 'Fe y Comunión',
+    createdAt: new Date('2025-06-01T07:20:00Z'),
+    updatedAt: new Date('2025-06-02T12:20:00Z'),
   },
 ];
 

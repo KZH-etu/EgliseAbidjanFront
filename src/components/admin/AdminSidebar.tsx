@@ -147,7 +147,7 @@ const AdminSidebar = ({ isOpen, toggleSidebar }: AdminSidebarProps) => {
           </NavLink>
 
           <NavLink
-            to="/admin/language"
+            to="/admin/languages"
             className={({ isActive }) => 
               `flex items-center py-3 px-4 rounded-md transition-colors ${
                 isActive 

@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { DocumentCategory } from '../types/documents/documents';
-import { useTagStore } from '../stores/useTagStore';
-import { useLanguageStore } from '../stores/useLanguageStore';
-import { DocumentMediaResponseDto } from '../types/documents/documents';
+import { DocumentCategory } from '../types/documents';
+import { useTags } from '../hooks/useTags';
+import { useLanguages } from '../hooks/useLanguages';
+import { useMediaLibrary } from '../hooks/useMediaLibrary';
+import { TagSummaryDto } from '../types/tags';
 
 
 interface Filters {
@@ -16,12 +17,13 @@ interface Filters {
   languageId: string;
 }
 
-
-export const MediaLibraryPage = () => {
+const MediaLibraryPage = () => {
   const params = useParams<{ type?: string }>();  // 'text' | 'audio' | 'video'
-  //here, i will add a store that returns media of the mediaItemDto shape to be used here
-  const { items: allTags, fetchAll: fetchTags,    hasFetched: tagsFetched }    = useTagStore();
-  const { items: langs,   fetchAll: fetchLangs,  hasFetched: langsFetched }   = useLanguageStore();
+  const [tags, setTags] = useState<TagSummaryDto[]>([]);
+  // here, i will add a store that returns media of the mediaItemDto shape to be used here
+  const { fetchTagSummaries } = useTags();
+  const { languages, loadLanguages } = useLanguages();
+  const { items, loadItems } = useMediaLibrary();
   const type = params.type as 'text' | 'audio' | 'video' | undefined;
 
   const [filters, setFilters] = useState<Filters>({
@@ -33,53 +35,62 @@ export const MediaLibraryPage = () => {
     languageId: '',
   });
 
+  const navigate = useNavigate();
+
   // Load master data once
   useEffect(() => {
-    if (!tagsFetched) fetchTags();
-    if (!langsFetched) fetchLangs();
-  }, [tagsFetched, langsFetched, fetchTags, fetchLangs]);
-
-  //mock version of mediaItems
-  const mediaItems: DocumentMediaResponseDto[] = []
+    loadItems();
+    loadLanguages();
+    fetchTagSummaries().then((fetchedTags) => {
+      setTags(fetchedTags);
+    });
+  }, [fetchTagSummaries, loadLanguages, loadItems]);
 
   // Apply filters
   const filtered = useMemo(() => {
-    return mediaItems.filter((item) => {
-        // globalTitle / version-title search
-        if (filters.search && !item.version.title.toLowerCase().includes(filters.search.toLowerCase())) {
+    return Array.isArray(items)
+      ? items.filter((item) => {
+          // globalTitle / version-title search
+          if (
+            filters.search &&
+            !item.title.toLowerCase().includes(filters.search.toLowerCase())
+          ) {
             return false;
-        }
-        // tag filter
-        if (filters.tags.length) {
-            const docTags = item.tags.map(t => t.id);
+          }
+          // tag filter
+          if (filters.tags.length) {
+            const docTags = item.tags.map((t) => t.id);
             if (!filters.tags.every((tid) => docTags.includes(tid))) return false;
-        }
-        // category
-        if (filters.categories.length > 0) {
+          }
+          // category
+          if (filters.categories.length > 0) {
             const hasIntersection = filters.categories.some((sel) =>
-            item.categories.includes(sel),
+              item.categories.includes(sel)
             );
             if (!hasIntersection) {
-            return false;
+              return false;
             }
-        }
-        // language
-        if (filters.languageId && item.version.languageId !== filters.languageId) {
+          }
+          // language
+          if (filters.languageId && item.language.id !== filters.languageId) {
             return false;
-        }
-        // example: author filter for text
-        if (type === 'text' && filters.author) {
-            const author = item.bookMeta?.author ?? '';
-            if (!author.toLowerCase().includes(filters.author.toLowerCase())) return false;
-        }
-        // example: preacher filter for audio
-        if (type === 'audio' && filters.preacher) {
-            const preacher = item.sermonMeta?.preacher ?? '';
-            if (!preacher.toLowerCase().includes(filters.preacher.toLowerCase())) return false;
-        }
-        return true;
-    });
-  }, [mediaItems, filters, type]);
+          }
+          // example: author filter for text
+          if (type === 'text' && filters.author) {
+            const authorFilter = filters.author.toLowerCase();
+            const keyPersons = item.keyPersons?.map((p) => p.toLowerCase()) || [];
+            if (!keyPersons.some((person) => person.includes(authorFilter))) return false;
+          }
+          // example: preacher filter for audio
+          if (type === 'audio' && filters.preacher) {
+            const preacherFilter = filters.preacher.toLowerCase();
+            const keyPersons = item.keyPersons?.map((p) => p.toLowerCase()) || [];
+            if (!keyPersons.some((person) => person.includes(preacherFilter))) return false;
+          }
+          return true;
+        })
+      : [];
+  }, [items, filters, type]);
 
   // Handlers
   const handleChange = (e: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>) => {
@@ -114,9 +125,10 @@ export const MediaLibraryPage = () => {
           value={filters.search}
           onChange={handleChange}
         />
+        {/* Language selector: clients can choose between all available languages */}
         <select name="languageId" value={filters.languageId} onChange={handleChange}>
           <option value="">All Languages</option>
-          {langs.map((l) => (
+          {languages.map((l) => (
             <option key={l.id} value={l.id}>{l.name}</option>
           ))}
         </select>
@@ -136,14 +148,14 @@ export const MediaLibraryPage = () => {
         </div>
 
         <div>
-          {allTags.map((t) => (
+          {tags.map((t) => (
             <label key={t.id}>
               <input
                 type="checkbox"
                 checked={filters.tags.includes(t.id)}
                 onChange={() => toggleTag(t.id)}
               />
-              {t.translations.find(tr => tr.language==='en')?.title}
+              {t.title || t.id}
             </label>
           ))}
         </div>
@@ -166,18 +178,59 @@ export const MediaLibraryPage = () => {
       </section>
 
       {/* Results */}
-      {mediaItems.length===0 && <p>No items of type "{type}" found.</p>}
-      {filtered.map((item) => (
-        <div key={item.version.mediaItem.id} style={{ margin: 12, border: '1px solid #ccc', padding: 8 }}>
-          {/* type-specific display */}
-          {type==='text' && <p>PDF: <a href={item.version.mediaItem.url} target="_blank">Download</a></p>}
-          {type==='audio' && <audio controls src={item.version.mediaItem.url} preload="metadata" />}
-          {type==='video' && <iframe src={item.version.mediaItem.url} title={item.version.title} />}
-          <h3>{item.version.title}</h3>
-          <p>Version: {item.version.title}</p>
-          {/* add other attrbutes here */}
-        </div>
-      ))}
+      {filtered.length === 0 && <p>No items of type "{type}" found.</p>}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
+        {filtered.map((item) => (
+          <div
+            key={item.mediaId}
+            style={{
+              border: "1px solid #ccc",
+              borderRadius: 8,
+              padding: 16,
+              width: 320,
+              background: "#fafbfc",
+              boxShadow: "0 1px 4px rgba(0,0,0,0.04)",
+              cursor: "pointer"
+            }}
+            onClick={() => navigate(`/library/view/${item.id}/${item.language.id}/${type}`)}
+            title="View details"
+          >
+            <h3 style={{ margin: "0 0 8px 0" }}>{item.title}</h3>
+            {item.description && (
+              <p style={{ margin: "0 0 8px 0", color: "#555" }}>{item.description}</p>
+            )}
+            <div style={{ fontSize: 14, marginBottom: 8 }}>
+              <strong>Categories:</strong>{" "}
+              {item.categories.map((cat) => (
+                <span key={cat} style={{ marginRight: 6 }}>{cat}</span>
+              ))}
+            </div>
+            <div style={{ fontSize: 14, marginBottom: 8 }}>
+              <strong>Language:</strong> {item.language.name}
+            </div>
+            {item.keyPersons.length > 0 && (
+              <div style={{ fontSize: 14, marginBottom: 8 }}>
+                <strong>Key Persons:</strong> {item.keyPersons.join(", ")}
+              </div>
+            )}
+            <div style={{ fontSize: 14, marginBottom: 8 }}>
+              <strong>Tags:</strong>{" "}
+              {item.tags.length > 0
+                ? item.tags.map((t) => (
+                    <span key={t.id} style={{ marginRight: 4 }}>{t.title}</span>
+                  ))
+                : <span style={{ color: "#aaa" }}>None</span>}
+            </div>
+            <div style={{ fontSize: 14, marginBottom: 8 }}>
+              <strong>Media Type:</strong> {item.mediaType}
+            </div>
+            <div style={{ fontSize: 12, color: "#888" }}>
+              <strong>Media ID:</strong> {item.mediaId}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
+ export default MediaLibraryPage;

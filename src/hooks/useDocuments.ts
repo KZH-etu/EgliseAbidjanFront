@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { DocumentResponseDto, EventSummaryDto } from '../types/documents/documents';
+import { DocumentResponseDto, EventSummaryDto } from '../types/documents';
 import { useServices } from '../providers/serviceProvider';
-import { CreateDocumentDto, UpdateDocumentDto } from '../types/documents/create-document.dto';
+import { CreateDocumentDto, UpdateDocumentDto } from "../types/documents";
 
 export function useDocuments() {
 
@@ -43,25 +43,25 @@ export function useDocuments() {
     useEffect(() => {
       loadDocs();
       loadEvents();
-    }, [loadDocs, loadEvents]);
+    }, [loadDocs, loadEvents, documentService]);
 
     const remove = useCallback(async (id: string) => {
     await documentService.deleteDocument(id);
     await loadDocs();
     await loadEvents();
-    }, [loadDocs, loadEvents]);
+    }, [loadDocs, loadEvents, documentService]);
 
     const add = useCallback(async (body: CreateDocumentDto) => {
     await documentService.createDocument(body);
     await loadDocs();
     await loadEvents();
-    }, [loadDocs, loadEvents]);
+    }, [loadDocs, loadEvents, documentService]);
 
     const patch = useCallback(async (id: string, body: UpdateDocumentDto) => {
     await documentService.updateDocument(id, body);
     await loadDocs();
     await loadEvents();
-    }, [loadDocs, loadEvents]);
+    }, [loadDocs, loadEvents, documentService]);
 
     const fetchMetaByDocument = useCallback(async (documentId: string) => {
       const meta = await documentService.fetchMetaByDocument(documentId);

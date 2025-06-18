@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 // import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import { useTranslation } from '../../hooks/useTranslation';
-import { MediaType } from '../../types/document-media/document-media';
+import { MediaType } from '../../types/document-media';
 
 interface SermonProps {
   id: string;

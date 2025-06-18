@@ -3,7 +3,7 @@ import { Link, useNavigate} from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import PageHeader from '../components/ui/PageHeader';
 import { useTranslation } from '../hooks/useTranslation';
-import { mockAdminAboutSections } from '../lib/mockAdminData';
+import { mockAdminAboutSections } from '../mocks/mockAdminData';
 import { useLanguageStore } from '../stores/useUILanguageStore';
 
 const AboutPage = () => {

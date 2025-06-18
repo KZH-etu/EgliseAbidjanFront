@@ -14,3 +14,14 @@ export interface LanguageSummaryDto {
   id: string; 
   name: string; 
 }
+export interface CreateLanguageDto {
+    name: string;
+    type?: LanguageType;
+    countryOfOrigin?: string;
+}
+
+export interface UpdateLanguageDto {
+    name?: string;
+    type?: LanguageType;
+    countryOfOrigin?: string;
+}

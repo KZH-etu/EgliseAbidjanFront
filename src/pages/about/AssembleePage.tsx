@@ -1,7 +1,7 @@
 import PageHeader from "../../components/ui/PageHeader";
 import Section from "../../components/ui/Section";
 import { useTranslation } from "../../hooks/useTranslation";
-import { mockAdminAboutSections } from "../../lib/mockAdminData";
+import { mockAdminAboutSections } from "../../mocks/mockAdminData";
 import { useLanguageStore } from "../../stores/useUILanguageStore";
 
 const AssembleePage = () => {

@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Edit2, Trash2, Plus, Save, X } from 'lucide-react';
-import { CreateDocumentDto, UpdateDocumentDto } from '../../types/documents/create-document.dto';
+import { CreateDocumentDto, UpdateDocumentDto } from "../../types/documents";
 import { useLanguages } from '../../hooks/useLanguages';
 import { useDocuments } from '../../hooks/useDocuments';
-import { DocumentCategory, DocumentMetaResponseDto, EventType } from '../../types/documents/documents';
-import { TagSummaryDto } from '../../types/tags/tags';
+import { DocumentCategory, DocumentMetaResponseDto, EventType } from '../../types/documents';
+import { TagSummaryDto } from '../../types/tags';
 import { useTags } from '../../hooks/useTags';
-import { DocumentVersionResponseDto } from '../../types/document-versions/document-versions';
+import { DocumentVersionResponseDto } from '../../types/document-versions';
 import { useDocumentVersions } from '../../hooks/useDocumentVersions';
 
 
@@ -28,8 +28,8 @@ export default function DocumentsPage() {
   } = useDocuments();
 
   const {
-    languageSummaries,
-    loadLanguageSummaries,
+    languages,
+    loadLanguages,
   } = useLanguages();
 
   const {
@@ -56,9 +56,9 @@ export default function DocumentsPage() {
 
 
   useEffect(() => {
-    loadLanguageSummaries();
+    loadLanguages();
     loadDocs();
-  }, [loadDocs, loadLanguageSummaries]);
+  }, [loadDocs, loadLanguages]);
 
   useEffect(() => {
       if (tagInput.trim() === '') {
@@ -183,7 +183,7 @@ export default function DocumentsPage() {
         />
 
         <div className="flex gap-2">
-          {languageSummaries.map(lang => (
+          {languages.map(lang => (
             <label key={lang.id} className="flex items-center gap-1">
               <input
                 type="checkbox"
@@ -260,15 +260,17 @@ export default function DocumentsPage() {
             </div>
             {/*Tags */}
             <div className="w-full mb-2">
-              <label className="block font-semibold mb-1">Tags</label>
-              <input
+              <label className="block font-semibold mb-1">
+                <input
                 className="form-input w-full"
                 placeholder="Start typing tag name or id..."
                 value={tagInput}
                 onChange={e => setTagInput(e.target.value)}
                 id="tagInput"
                 autoComplete="off"
-              />
+                />
+                Tags
+              </label>
               {/* Suggestions dropdown */}
               {tagInput && tagSuggestions.length > 0 && (
                 <div className="bg-white border rounded shadow mt-1 max-h-40 overflow-auto z-10 absolute">
@@ -298,7 +300,7 @@ export default function DocumentsPage() {
               {/* Selected tags */}
               <div className="flex flex-wrap gap-2 mt-2">
                 {(form.tagIds || []).map(tagId => {
-                  const tag = tagSuggestions.find(t => t.id === tagId) || { id: tagId, title: "undefined" };
+                  const tag = tagSuggestions.find(t => t.id === tagId) || { id: tagId, title: tagId };
                   return (
                     <span
                       key={tagId}
@@ -604,7 +606,7 @@ export default function DocumentsPage() {
                 {item.tags && item.tags.length > 0 ? (
                   item.tags.map(tag => (
                     <span key={tag.id} className="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded mr-1">
-                      {tag.title || "undefined"}
+                      {tag.id}
                     </span>
                   ))
                 ) : (

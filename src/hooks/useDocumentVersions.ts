@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useServices } from '../providers/serviceProvider';
-import { DocumentVersionResponseDto } from '../types/document-versions/document-versions';
-import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from '../types/document-versions/create-document-versions.dto';
+import { DocumentVersionResponseDto } from '../types/document-versions';
+import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from "../types/document-versions";
 
 export function useDocumentVersions() {
     const { documentVersionsService } = useServices();
@@ -25,23 +25,23 @@ export function useDocumentVersions() {
 
     useEffect(() => {
         loadVersions();
-    }, [loadVersions]);
+    }, [loadVersions, documentVersionsService]);
 
     const remove = useCallback(async (id: string) => {
     await documentVersionsService.deleteVersion(id);
     // optionally refresh list:
     await loadVersions();
-    }, [loadVersions]);
+    }, [loadVersions, documentVersionsService]);
 
     const add = useCallback(async (body: CreateDocumentVersionDto) => {
     await documentVersionsService.createVersion(body);
     await loadVersions();
-    }, [loadVersions]);
+    }, [loadVersions, documentVersionsService]);
 
     const patch = useCallback(async (id: string, body: UpdateDocumentVersionDto) => {
     await documentVersionsService.updateVersion(id, body);
     await loadVersions();
-    }, [loadVersions]);
+    }, [loadVersions, documentVersionsService]);
 
     const searchVersions = useCallback(async (query: string) => {
       const searchedVersions = await documentVersionsService.searchVersions(query);

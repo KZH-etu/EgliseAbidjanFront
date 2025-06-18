@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Menu, X, Radio, Tv, Contact, CalendarDays, Headphones, Clapperboard, House, LibraryBig, TableOfContents } from 'lucide-react';
+import { Menu, X, Radio, Tv, Headphones, Clapperboard, LibraryBig } from 'lucide-react';
 import { useTranslation } from '../../hooks/useTranslation';
 import Logo from '../ui/Logo';
 import LanguageToggle from '../ui/LanguageToggle';
@@ -14,10 +14,11 @@ const Navbar = () => {
     { name: t('nav.about'), path: '/about'},
     {
       name: t('nav.mediatheque'),
+      path: '/library',
       children: [
-        { name: t('nav.audio'), path: '/sermons', icon: <Headphones size={18} className="mr-1"/> },
-        { name: t('nav.video'), path: '/sermons/video', icon:<Clapperboard size={18} className="mr-1"/> },
-        { name: t('nav.books'), path: '/books', icon: <LibraryBig size={18} className="mr-1"/> },
+        { name: t('nav.audio'), path: '/library/audio', icon: <Headphones size={18} className="mr-1"/> },
+        { name: t('nav.video'), path: '/library/video', icon:<Clapperboard size={18} className="mr-1"/> },
+        { name: t('nav.text'), path: '/library/text', icon: <LibraryBig size={18} className="mr-1"/> },
       ]
     },
     { name: t('nav.events'), path: '/events'},

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Edit2, Trash2, Plus, Save, X } from 'lucide-react';
-import { MediaType } from '../../types/document-media/document-media';
-import { CreateDocumentMediaDto, UpdateDocumentMediaDto } from '../../types/document-media/create-document-media.dto';
+import { MediaType } from '../../types/document-media';
+import { CreateDocumentMediaDto, UpdateDocumentMediaDto } from "../../types/document-media";
 import { useDocumentMedia } from '../../hooks/useDocumentMedia';
 
 const mediaTypeOptions: MediaType[] = [MediaType.AUDIO, MediaType.TEXT, MediaType.VIDEO]

@@ -1,24 +1,10 @@
-// src/mocks/mockDocuments.ts
-import { DocumentCategory, DocumentResponseDto } from '../types/documents/documents';
+import { DocumentCategory, DocumentResponseDto } from '../types/documents';
 import { mockTags } from './mockTags';
-import { LanguageSummaryDto } from '../types/languages/languages';
+import { LanguageSummaryDto } from '../types/languages';
 
-// Example Tags
-
-
-// Example Languages
-const langEn: LanguageSummaryDto = {
-  id: 'en',
-  name: 'English'
-};
-const langFr: LanguageSummaryDto = {
-  id: 'fr',
-  name: 'Français'
-};
-const langEs: LanguageSummaryDto = {
-  id: 'es',
-  name: 'Español'
-};
+const langEn: LanguageSummaryDto = { id: 'en', name: 'English' };
+const langFr: LanguageSummaryDto = { id: 'fr', name: 'Français' };
+const langEs: LanguageSummaryDto = { id: 'es', name: 'Español' };
 
 const mockDocuments: DocumentResponseDto[] = [
   {
