@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { DocumentsByLanguageResponseDto, SermonStatsDto, UserMessageResponseDto } from "../../types/dashboard";
+import { ArrowUp, ArrowDown, PlayCircle, Users, Book, Globe, Video, Mic, FileText } from "lucide-react";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale/fr";
 import { MediaType } from "../../types/document-media";
 import { EventSummaryDto } from "../../types/documents";
 
@@ -100,90 +103,237 @@ const DashBoard: React.FC = () => {
     fetchFeedback().then(setFeedback);
   }, []);
 
-  return (
-    <div style={{ padding: 24 }}>
-      <h1>Admin Dashboard</h1>
-      {/* Quick Actions */}
-      <section style={{ marginBottom: 24 }}>
-        <h2>Quick Actions</h2>
-        <button>Add Sermon</button>
-        <button>Add Event</button>
-        <button>Add Document</button>
-      </section>
+  // Stat cards for the grid
+  const statCards = [
+    {
+      title: "Sermons",
+      value: sermonStats?.total ?? 0,
+      change: "+5%",
+      increasing: true,
+      color: "bg-primary-100 text-primary-700",
+      icon: Mic,
+    },
+    {
+      title: "Documents",
+      value: docs?.totalDocs ?? 0,
+      change: "+2%",
+      increasing: true,
+      color: "bg-blue-100 text-blue-700",
+      icon: Book,
+    },
+    {
+      title: "Abonnés Newsletter",
+      value: newsletter?.subscribers ?? 0,
+      change: "+1%",
+      increasing: true,
+      color: "bg-green-100 text-green-700",
+      icon: Users,
+    },
+    {
+      title: "Streams",
+      value: streaming?.totalStreams ?? 0,
+      change: streaming?.online ? "+3%" : "0%",
+      increasing: !!streaming?.online,
+      color: "bg-orange-100 text-orange-700",
+      icon: PlayCircle,
+    },
+  ];
 
-      {/* Sermons */}
-      <section style={{ marginBottom: 24 }}>
-        <h2>Sermons</h2>
-        {sermonStats && (
-          <div>
-            <div>Total Sermons: {sermonStats.total}</div>
-            <div>
-              By Type: Video {sermonStats.byType.video}, Audio {sermonStats.byType.audio}, Text {sermonStats.byType.text}
-            </div>
-            <div>
-              <strong>Recent Sermons:</strong>
-              <ul>
-                {sermonStats.recent.map((s) => (
-                  <li key={s.id}>
-                    {s.title} ({s.type}) <button>Edit</button>
-                  </li>
-                ))}
-              </ul>
+  return (
+    <div className="p-6 space-y-6">
+      <h1 className="text-2xl font-bold text-neutral-800">Tableau de Bord</h1>
+      {/* Quick Actions */}
+      <div className="flex flex-wrap gap-4 mb-4">
+        <a
+          href="/admin/sermons/new"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg shadow hover:bg-primary-700 transition-colors"
+        >
+          <PlayCircle size={18} />
+          Nouveau Sermon
+        </a>
+        <a
+          href="/admin/events/new"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition-colors"
+        >
+          <Users size={18} />
+          Nouvel Événement
+        </a>
+        <a
+          href="/admin/documents/new"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 transition-colors"
+        >
+          <Book size={18} />
+          Nouveau Document
+        </a>
+        <a
+          href="/admin/newsletter"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg shadow hover:bg-orange-600 transition-colors"
+        >
+          <Globe size={18} />
+          Newsletter
+        </a>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {statCards.map((stat, index) => (
+          <div key={index} className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-neutral-500">{stat.title}</p>
+                <h3 className="text-3xl font-bold mt-2">{stat.value}</h3>
+                <div className="flex items-center mt-2">
+                  {stat.increasing ? (
+                    <ArrowUp size={16} className="text-green-500 mr-1" />
+                  ) : stat.change !== '0%' ? (
+                    <ArrowDown size={16} className="text-red-500 mr-1" />
+                  ) : null}
+                  <span className={stat.increasing ? 'text-green-500' : stat.change === '0%' ? 'text-neutral-500' : 'text-red-500'}>
+                    {stat.change}
+                  </span>
+                </div>
+              </div>
+              <div className={`p-3 rounded-full ${stat.color}`}>
+                <stat.icon size={24} />
+              </div>
             </div>
           </div>
-        )}
-      </section>
+        ))}
+      </div>
 
-      {/* Events */}
-      <section style={{ marginBottom: 24 }}>
-        <h2>Upcoming Events</h2>
-        <ul>
-          {events.map((e) => (
-            <li key={e.id}>
-              {e.title} - {e.date}
-            </li>
-          ))}
-        </ul>
-      </section>
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Recent Sermons */}
+        <div className="bg-white rounded-lg shadow-sm lg:col-span-2">
+          <div className="p-6 border-b border-neutral-200">
+            <h2 className="text-lg font-bold">Sermons Récents</h2>
+            {sermonStats && (
+              <div className="mt-2 flex flex-wrap gap-4 text-sm text-neutral-600">
+                <div>
+                  <span className="font-medium">Total Sermons:</span> {sermonStats.total}
+                </div>
+                <div>
+                  <span className="font-medium">Par Type:</span>
+                  <span className="ml-2">
+                    <Video size={16} className="inline text-primary-500 mr-1" />
+                    {sermonStats.byType.video}
+                  </span>
+                  <span className="ml-2">
+                    <Mic size={16} className="inline text-primary-500 mr-1" />
+                    {sermonStats.byType.audio}
+                  </span>
+                  <span className="ml-2">
+                    <FileText size={16} className="inline text-primary-500 mr-1" />
+                    {sermonStats.byType.text}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="p-6">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-neutral-200">
+                  <th className="text-left pb-3 font-medium text-neutral-500">Titre</th>
+                  <th className="text-left pb-3 font-medium text-neutral-500 hidden md:table-cell">Prédicateur</th>
+                  <th className="text-left pb-3 font-medium text-neutral-500">Date</th>
+                  <th className="text-right pb-3 font-medium text-neutral-500">Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sermonStats?.recent.map((sermon) => (
+                  <tr key={sermon.id} className="border-b border-neutral-100 hover:bg-neutral-50">
+                    <td className="py-4 font-medium">{sermon.title}</td>
+                    <td className="py-4 text-neutral-600 hidden md:table-cell">{sermon.preacher}</td>
+                    <td className="py-4 text-neutral-600">
+                      {format(new Date(sermon.date), 'dd MMM', { locale: fr })}
+                    </td>
+                    <td className="py-4 text-right text-neutral-600">
+                      {sermon.type === MediaType.VIDEO && <Video size={18} className="inline mr-1 text-primary-500" />}
+                      {sermon.type === MediaType.AUDIO && <Mic size={18} className="inline mr-1 text-primary-500" />}
+                      {sermon.type === MediaType.TEXT && <FileText size={18} className="inline mr-1 text-primary-500" />}
+                      <span className="capitalize">{sermon.type}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>  
 
-      {/* Newsletter */}
-      <section style={{ marginBottom: 24 }}>
-        <h2>Newsletter</h2>
-        {newsletter && <div>Subscribers: {newsletter.subscribers}</div>}
-      </section>
+        {/* Upcoming Events */}
+        <div className="bg-white rounded-lg shadow-sm">
+          <div className="p-6 border-b border-neutral-200">
+            <h2 className="text-lg font-bold">Événements à Venir</h2>
+          </div>
+          <div className="p-6">
+            <ul className="space-y-6">
+              {events.map((event) => (
+                <li key={event.id} className="flex items-start space-x-4">
+                  <div className="bg-primary-100 text-primary-700 rounded-lg p-3 text-center flex-shrink-0 w-14">
+                    <span className="block text-xs">
+                      {format(new Date(event.date), 'MMM', { locale: fr })}
+                    </span>
+                    <span className="block text-lg font-bold">
+                      {format(new Date(event.date), 'dd')}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="font-medium">{event.title}</h3>
+                    <p className="text-sm text-neutral-500">
+                      {format(new Date(event.date), 'HH:mm')} • {event.location}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
-      {/* Streaming Stats */}
-      <section style={{ marginBottom: 24 }}>
-        <h2>Streaming Stats</h2>
-        {streaming ? (
-          streaming.online ? (
-            <div>
-              <div>Current Viewers: {streaming.currentViewers}</div>
-              <div>Total Streams Broadcasted: {streaming.totalStreams}</div>
-            </div>
-          ) : (
-            <div>Stream is currently <strong>offline</strong>.</div>
-          )
-        ) : (
-          <div>Loading...</div>
-        )}
-      </section>
+        <div className="bg-white rounded-lg shadow-sm">
+          <div className="p-6 border-b border-neutral-200">
+            <h2 className="text-lg font-bold">Newsletter</h2>
+          </div>
+          <div className="p-6">
+            {newsletter ? (
+              <div className="flex flex-col items-center gap-4">
+                <div className="bg-orange-100 text-orange-700 rounded-lg p-3 text-center flex-shrink-0 w-full">
+                  <Globe size={28} className="mx-auto mb-1" />
+                  <span className="block text-lg font-bold">{newsletter.subscribers}</span>
+                  <span className="block text-xs">abonnés</span>
+                </div>
+                <div className="flex flex-col justify-center items-center">
+                  <p className="text-neutral-700 font-medium">Nombre d'abonnés à la newsletter</p>
+                  <a
+                    href="/admin/newsletter"
+                    className="inline-block mt-2 px-4 py-2 bg-orange-500 text-white rounded-lg shadow hover:bg-orange-600 transition-colors text-sm"
+                  >
+                    Gérer la Newsletter
+                  </a>
+                </div>
+              </div>
+            ) : (
+              <div className="text-neutral-500">Chargement…</div>
+            )}
+          </div>
+        </div>  
+      </div>
 
       {/* Document Management */}
-      <section style={{ marginBottom: 24 }}>
-        <h2>Document Management</h2>
-        {docs && <div>Total Uploaded Documents: {docs.totalDocs}</div>}
-      </section>
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <h2 className="text-xl font-bold mb-6">Gestion des Documents</h2>
+        {docs && <div className="text-lg">Total Uploaded Documents: <span className="font-bold">{docs.totalDocs}</span></div>}
+      </div>
 
       {/* System Health */}
-      <section style={{ marginBottom: 24 }}>
-        <h2>System Health</h2>
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <h2 className="text-xl font-bold mb-6">Santé du Système</h2>
         {systemHealth && (
           <div>
-            <div>Server Status: {systemHealth.serverStatus}</div>
+            <div className="mb-2">Server Status: <span className="font-bold">{systemHealth.serverStatus}</span></div>
             <div>
               <strong>Error Logs:</strong>
-              <ul>
+              <ul className="list-disc ml-6 mt-2 text-sm text-neutral-600">
                 {systemHealth.errorLogs.map((log) => (
                   <li key={log.id}>{log.message}</li>
                 ))}
@@ -191,33 +341,35 @@ const DashBoard: React.FC = () => {
             </div>
           </div>
         )}
-      </section>
+      </div>
 
       {/* Localization/Language Stats */}
-      <section style={{ marginBottom: 24 }}>
-        <h2>Localization / Language Stats</h2>
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <h2 className="text-xl font-bold mb-6">Statistiques de Localisation</h2>
         {localization && (
-          <div>
+          <div className="flex flex-wrap gap-4">
             {localization.data.map((lang) => (
-              <div key={lang.languageId}>
-                {lang.languageId.toUpperCase()}: {lang.documentsNumber} items
+              <div key={lang.languageId} className="bg-neutral-50 rounded-lg p-4 flex-1 min-w-[120px]">
+                <span className="block text-sm text-neutral-600">{lang.languageId.toUpperCase()}</span>
+                <span className="block text-2xl font-bold">{lang.documentsNumber}</span>
+                <span className="block text-xs text-neutral-500">documents</span>
               </div>
             ))}
           </div>
         )}
-      </section>
+      </div>
 
       {/* Feedback / Support */}
-      <section style={{ marginBottom: 24 }}>
-        <h2>Feedback / Support</h2>
-        <ul>
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <h2 className="text-xl font-bold mb-6">Feedback / Support</h2>
+        <ul className="divide-y divide-neutral-200">
           {feedback.map((f) => (
-            <li key={f.id}>
-              <strong>{f.username}:</strong> {f.message}
+            <li key={f.id} className="py-3">
+              <strong>{f.username}:</strong> <span className="text-neutral-700">{f.message}</span>
             </li>
           ))}
         </ul>
-      </section>
+      </div>
     </div>
   );
 };
