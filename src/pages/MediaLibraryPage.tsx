@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
+import { useParams } from 'react-router-dom';
 import { DocumentCategory } from '../types/documents';
 import { useTags } from '../hooks/useTags';
 import { useLanguages } from '../hooks/useLanguages';
@@ -8,8 +7,9 @@ import { useMediaLibrary } from '../hooks/useMediaLibrary';
 import { TagSummaryDto } from '../types/tags';
 import PageHeader from '../components/ui/PageHeader';
 import { useTranslation } from '../hooks/useTranslation';
-import { Book, Filter, Search } from 'lucide-react';
+import { Filter, Search } from 'lucide-react';
 import Select from 'react-select';
+import LibraryItem from '../components/mediaLibrary/LibraryItem';
 
 const ITEMS_PER_PAGE_OPTIONS = [12, 24, 48];
 
@@ -43,8 +43,6 @@ const MediaLibraryPage = () => {
     author: '',
     languageId: '',
   });
-
-  const navigate = useNavigate();
 
   // Load master data once
   useEffect(() => {
@@ -102,7 +100,7 @@ const MediaLibraryPage = () => {
   return (
     <div className="min-h-screen bg-neutral-50">
       <PageHeader 
-        title={t('nav.books')}
+        title={t('nav.mediatheque')}
         subtitle={t('books.subtitle')}
         backgroundImage="https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg"
       />
@@ -112,7 +110,7 @@ const MediaLibraryPage = () => {
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="flex-grow relative">
-              <Search size={20} className="absolute left-3 top-[40%] transform -translate-y-1/2 text-neutral-400" />
+              <Search size={20} className="absolute left-3 top-[50%] transform -translate-y-1/2 text-neutral-400" />
               <input
                 name="search"
                 placeholder={t('common.search') || "Search title…"}
@@ -213,7 +211,7 @@ const MediaLibraryPage = () => {
 
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-2">
           <div className="text-neutral-700 font-bold">
-            {filtered.length} {t('books.foundResults')}
+            {filtered.length} {type+'(s)'} {t('books.foundResults')}
           </div>
           
           <div className="flex items-center gap-3">
@@ -240,71 +238,13 @@ const MediaLibraryPage = () => {
         </div>
       ) : (
         <div className='pb-16 container-custom'>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10">
             {paginatedBooks.map((item) => (
-              <div
+              <LibraryItem
                 key={item.mediaId}
-                className="group bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col overflow-hidden border border-neutral-100"
-                onClick={() => navigate(`/library/view/${item.id}/${item.language.id}/${type}`)}
-                title="View details"
-                style={{ cursor: "pointer" }}
-              >
-                <div className="relative aspect-[2/3] bg-neutral-100 flex items-center justify-center">
-                  <Book size={48} className="text-neutral-300" />
-                  <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-                </div>
-                {/* Card Content */}
-                <div className="flex flex-col flex-1 p-4">
-                  {/* Title */}
-                  <h3 className="text-base font-semibold text-neutral-900 mb-1 line-clamp-2 group-hover:text-primary-600 transition-colors duration-200">
-                    {item.title}
-                  </h3>
-                  {/* Key Persons */}
-                  {item.keyPersons?.length > 0 && (
-                    <p className="text-xs text-neutral-600 mb-2 line-clamp-1">
-                      {item.keyPersons.join(', ')}
-                    </p>
-                  )}
-                  {/* Categories & Language */}
-                  <div className="flex flex-wrap items-center gap-2 mb-2">
-                    {item.categories.map((cat) => (
-                      <span
-                        key={cat}
-                        className="px-2 py-0.5 bg-primary-50 text-primary-600 rounded-full text-xs font-medium"
-                      >
-                        {cat}
-                      </span>
-                    ))}
-                    <span className="px-2 py-0.5 bg-neutral-50 text-neutral-700 rounded-full text-xs font-medium">
-                      {item.language?.name}
-                    </span>
-                  </div>
-                  {/* Tags */}
-                  <div className="mb-2 text-xs">
-                    <strong className="text-neutral-700">Tags:</strong>{" "}
-                    {item.tags.length > 0 ? (
-                      item.tags.map((t) => (
-                        <span
-                          key={t.id}
-                          className="inline-block mr-1 mb-1 bg-neutral-100 rounded px-2 py-0.5 text-xs text-neutral-700"
-                        >
-                          {t.title}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-neutral-400">None</span>
-                    )}
-                  </div>
-                  {/* Media Type & Media ID */}
-                  <div className="mb-1 text-xs">
-                    <strong className="text-neutral-700">Media Type:</strong>{" "}
-                    <span className="text-neutral-600">{item.mediaType}</span>
-                  </div>
-                  <div className="mb-2 text-[11px] text-neutral-400">
-                    <strong>Media ID:</strong> {item.mediaId}
-                  </div>
-                </div>
-              </div>
+                item={item}
+                type={type}
+              />
             ))}
           </div>
 

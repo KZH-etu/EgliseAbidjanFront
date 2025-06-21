@@ -3,7 +3,8 @@ import { useParams } from "react-router-dom";
 import { useMediaLibrary } from "../hooks/useMediaLibrary";
 import { MediaLibraryItemViewDto } from "../types/mediaLibrary";
 import MainItemView from "../components/mediaLibrary/MainItemView";
-import RelatedItem from "../components/mediaLibrary/RelatedItem";
+import PageHeader from "../components/ui/PageHeader";
+import ScrollableLibraryList from "../components/mediaLibrary/ScrollableLibraryList";
 
 export default function LibraryItemViewPage() {
   const { docId, langId, type } = useParams<{ docId: string; langId: string; type: "audio" | "video" | "text" }>();
@@ -24,7 +25,10 @@ export default function LibraryItemViewPage() {
 
   return (
     <div>
-      <h1>{view.title}</h1>
+      <PageHeader 
+        title={view.title}
+        backgroundImage="https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg"
+      />
       {type === undefined ? (
         <p>Unknown type</p>
       ) : (
@@ -32,7 +36,7 @@ export default function LibraryItemViewPage() {
       )}
 
       {/* Language selector */}
-      <div style={{ margin: "16px 0" }}>
+      {/* <div style={{ margin: "16px 0" }}>
         <label>
           Language:{" "}
           <select value={langId}>
@@ -47,17 +51,17 @@ export default function LibraryItemViewPage() {
             )}
           </select>
         </label>
-      </div>
+      </div> */}
+
       {!view.relatedItems || view.relatedItems.length === 0 ? (
         <p>No related items found.</p>
       ) : (
-        <section>
-          <h2>Related Items</h2>
-          <ul>
-            {view.relatedItems.map((item) => (
-              <RelatedItem key={item.id} item={item} type={type} />
-            ))}
-          </ul>
+        <section className="container-custom">
+          <ScrollableLibraryList
+            title="Related Items"
+            items={view.relatedItems}
+            type={type}
+          />
         </section>
       )}
     </div>
