@@ -1,12 +1,12 @@
-import { LanguageResponseDto, LanguageSummaryDto, LanguageType } from "../types/languages";
+import { Language, LanguageOption, LanguageType } from "../types/api";
 
-export const mockLanguageSummaries: LanguageSummaryDto[] = [
+export const mockLanguageSummaries: LanguageOption[] = [
   { id: 'en', name: 'English' },
   { id: 'fr', name: 'Français' },
   { id: 'es', name: 'Español' },
 ];
 
-export const mockLanguages: LanguageResponseDto[] = [
+export const mockLanguages: Language[] = [
   {
     id: 'en',
     name: 'English',

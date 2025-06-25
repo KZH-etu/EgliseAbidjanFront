@@ -1,212 +1,105 @@
-import { useEffect, useState } from 'react';
-import { Edit2, Trash2, Plus, Save, X } from 'lucide-react';
-import { MediaType } from '../../types/document-media';
-import { CreateDocumentMediaDto, UpdateDocumentMediaDto } from "../../types/document-media";
+import { useState } from 'react';
+import { DocumentMedia, MediaType } from "../../types/api";
+import { NewDocumentMedia, DocumentMediaUpdate } from "../../types/api";
 import { useDocumentMedia } from '../../hooks/useDocumentMedia';
+import MediaTable from '../../components/admin/admin-document-media/MediaTable';
+import MediaForm from '../../components/admin/admin-document-media/MediaForm';
+import MediaTopBar from '../../components/admin/admin-document-media/MediaTopBar';
 
-const mediaTypeOptions: MediaType[] = [MediaType.AUDIO, MediaType.TEXT, MediaType.VIDEO]
-const orderFields = ['id', 'documentVersionId', 'createdAt', 'updatedAt'] as const;
+const mediaTypeOptions: MediaType[] = [MediaType.AUDIO, MediaType.TEXT, MediaType.VIDEO];
+const orderFields = ["id", "documentVersionId", "createdAt", "updatedAt"] as const;
 
-type OrderField = typeof orderFields[number];
+export type OrderField = typeof orderFields[number];
 
-type OrderDirection = 'asc' | 'desc';
+type OrderDirection = "asc" | "desc";
 
 export default function DocumentMediaPage() {
-  const {
-    items,
-    loadMedia,
-    // loading,
-    add,
-    patch,
-    remove,
-    error,
-  } = useDocumentMedia();
+  const { items, add, patch, remove, error } = useDocumentMedia();
 
-  const [search, setSearch] = useState('');
+  // UI state
+  const [search, setSearch] = useState("");
   const [selectedTypes, setSelectedTypes] = useState<MediaType[]>([]);
-  const [orderBy, setOrderBy] = useState<OrderField>('updatedAt');
-  const [orderDir, setOrderDir] = useState<OrderDirection>('desc');
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [form, setForm] = useState<Partial<CreateDocumentMediaDto>>({});
+  const [orderBy, setOrderBy] = useState<OrderField>("updatedAt");
+  const [orderDir, setOrderDir] = useState<OrderDirection>("desc");
+  const [editingMedia, setEditingMedia] = useState<DocumentMedia | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
-  useEffect(() => {
-    loadMedia();
-  }, [loadMedia]);
+  // filtering & sorting
+  const filtered = items
+    .filter((i) => [i.id, i.documentVersionId, i.url].some((f) => f.toLowerCase().includes(search.toLowerCase())))
+    .filter((i) => (selectedTypes.length ? selectedTypes.includes(i.mediaType) : true))
+    .sort((a, b) => {
+      const av = a[orderBy];
+      const bv = b[orderBy];
+      if (av < bv) return orderDir === "asc" ? -1 : 1;
+      if (av > bv) return orderDir === "asc" ? 1 : -1;
+      return 0;
+    });
 
-  const handleSearchFilterSort = () => {
-    return items
-      .filter(item =>
-        [item.id, item.documentVersionId, item.url].some(field =>
-          field.toLowerCase().includes(search.toLowerCase())
-        )
-      )
-      .filter(item =>
-        selectedTypes.length ? selectedTypes.includes(item.mediaType) : true
-      )
-      .sort((a, b) => {
-        const aValue = a[orderBy];
-        const bValue = b[orderBy];
-        if (aValue < bValue) return orderDir === 'asc' ? -1 : 1;
-        if (aValue > bValue) return orderDir === 'asc' ? 1 : -1;
-        return 0;
-      });
-  };
-
-  const toggleOrder = (field: OrderField) => {
-    if (orderBy === field) setOrderDir(dir => (dir === 'asc' ? 'desc' : 'asc'));
+  // handlers
+  const handleToggleOrder = (field: OrderField) => {
+    if (orderBy === field) setOrderDir((d) => (d === "asc" ? "desc" : "asc"));
     else setOrderBy(field);
   };
 
-  const handleSubmit = async () => {
-    if (!form.documentVersionId || !form.mediaType || !form.url) return;
-    if (editingId) {
-      await patch(editingId, form as UpdateDocumentMediaDto);
-      setEditingId(null);
-    } else if (isCreating) {
-    await add(form as CreateDocumentMediaDto);
-    setIsCreating(false);
-  }
-    setForm({});
+  const handleSave = async (data: Partial<NewDocumentMedia>, id: string | null) => {
+    if (id) await patch(id, data as DocumentMediaUpdate);
+    else await add(data as NewDocumentMedia);
   };
-
-  const filtered = handleSearchFilterSort();
 
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-bold">Gestion des DocumentMedia</h1>
-
       {error && <div className="text-red-500">{error}</div>}
 
-      {/* Top Bar */}
-      <div className="flex flex-col md:flex-row items-center gap-4">
-        <input
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="form-input"
-          placeholder="Search by id, docId, url"
-          id='search'
-        />
-
-        <div className="flex gap-2">
-          {mediaTypeOptions.map(type => (
-            <label key={type} className="flex items-center gap-1">
-              <input
-                type="checkbox"
-                checked={selectedTypes.includes(type)}
-                onChange={e => {
-                  setSelectedTypes(current =>
-                    e.target.checked ? [...current, type] : current.filter(t => t !== type)
-                  );
-                }}
-              />
-              {type}
-            </label>
-          ))}
-        </div>
-
-        <div className="flex gap-2">
-          {orderFields.map(f => (
-            <button
-              key={f}
-              onClick={() => toggleOrder(f)}
-              className="btn-secondary"
-            >
-              {f} {orderBy === f ? (orderDir === 'asc' ? '↑' : '↓') : ''}
-            </button>
-          ))}
-        </div>
-
-        <button
-          onClick={() => {
-            setEditingId(null);
-            setForm({});
-            setIsCreating(true); 
-          }}
-          className="btn-primary"
-        >
-          <Plus size={18} className="mr-1" /> Nouveau
-        </button>
-      </div>
+      {/* TopBar */}
+      <MediaTopBar
+        search={search}
+        onSearchChange={setSearch}
+        mediaTypes={mediaTypeOptions}
+        selectedTypes={selectedTypes}
+        onToggleType={(t, c) =>
+          setSelectedTypes((prev) => (c ? [...prev, t] : prev.filter((m) => m !== t)))
+        }
+        orderFields={orderFields}
+        orderBy={orderBy}
+        orderDir={orderDir}
+        onToggleOrder={handleToggleOrder}
+        onCreate={() => {
+          setEditingMedia(null);
+          setIsCreating(true);
+        }}
+      />
 
       {/* Form */}
-      {(editingId !== null || isCreating) && (
-        <div className="bg-gray-50 p-4 rounded shadow">
-          <div className="flex gap-2 mb-2">
-            <input
-              className="form-input"
-              placeholder="documentVersionId"
-              value={form.documentVersionId || ''}
-              onChange={e => setForm(f => ({ ...f, documentVersionId: e.target.value }))}
-              id="documentVersionId"
-            />
-            <input
-              className="form-input"
-              placeholder="URL"
-              value={form.url || ''}
-              onChange={e => setForm(f => ({ ...f, url: e.target.value }))}
-              id="url" 
-            />
-            <select
-              className="form-select"
-              value={form.mediaType || ''}
-              onChange={e => setForm(f => ({ ...f, mediaType: e.target.value as MediaType }))}
-              id="mediaType"
-            >
-              <option value="">Type</option>
-              {mediaTypeOptions.map(type => (
-                <option key={type} value={type}>{type}</option>
-              ))}
-            </select>
-          </div>
-          <div className="flex gap-2">
-            <button className="btn-primary" onClick={handleSubmit}><Save size={16} className="mr-1" /> Enregistrer</button>
-            <button className="btn-secondary" onClick={() => { setEditingId(null); setForm({}); }}><X size={16} className="mr-1" /> Annuler</button>
-          </div>
-        </div>
-      )}
+      <MediaForm
+        isCreating={isCreating}
+        editingId={editingMedia ? editingMedia.id : null}
+        initialData={
+          editingMedia
+            ? {
+                documentVersionId: editingMedia.documentVersionId,
+                url: editingMedia.url,
+                mediaType: editingMedia.mediaType,
+              }
+            : {}
+        }
+        onSave={handleSave}
+        onCancel={() => {
+          setEditingMedia(null);
+          setIsCreating(false);
+        }}
+      />
 
       {/* Table */}
-      <table className="table-auto w-full text-sm">
-        <thead>
-          <tr className="text-left">
-            <th>ID</th>
-            <th>DocumentVersionId</th>
-            <th>MediaType</th>
-            <th>URL</th>
-            <th>CreatedAt</th>
-            <th>UpdatedAt</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filtered.map(item => (
-            <tr key={item.id} className="border-t">
-              <td>{item.id}</td>
-              <td>{item.documentVersionId}</td>
-              <td>{item.mediaType}</td>
-              <td className="truncate max-w-xs">{item.url}</td>
-              <td>{new Date(item.createdAt).toLocaleString()}</td>
-              <td>{new Date(item.updatedAt).toLocaleString()}</td>
-              <td className="flex gap-2">
-                <button onClick={() => {
-                  setEditingId(item.id);
-                  setForm({
-                    documentVersionId: item.documentVersionId,
-                    mediaType: item.mediaType,
-                    url: item.url,
-                  });
-                }} className="text-blue-600 hover:text-blue-800">
-                  <Edit2 size={16} />
-                </button>
-                <button onClick={() => remove(item.id)} className="text-red-500 hover:text-red-700">
-                  <Trash2 size={16} />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <MediaTable
+        items={filtered}
+        onEdit={(m) => {
+          setEditingMedia(m);
+          setIsCreating(false);
+        }}
+        onDelete={remove}
+      />
     </div>
   );
 }

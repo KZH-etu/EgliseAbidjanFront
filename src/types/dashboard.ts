@@ -1,23 +1,23 @@
-import { SermonSummaryDto } from "./documents";
+import { } from "./api";
 
-export interface SermonStatsDto {
+export interface SermonStats {
   total: number;
   byType: {
     video: number;
     audio: number;
     text: number;
   };
-  recent: SermonSummaryDto[];
+  // recent: DocumentCard[];
 }
 
-export interface DocumentsByLanguageResponseDto {
+export interface DocumentsByLanguageResponse {
     data:{
         languageId: string;
         documentsNumber: number;
     }[]
 }
 
-export interface UserMessageResponseDto {
+export interface UserMessageResponse {
     id: string;
     username: string;
     email: string;

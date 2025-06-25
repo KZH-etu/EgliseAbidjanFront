@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import PageHeader from "../components/ui/PageHeader";
 import { useTranslation } from "../hooks/useTranslation";
 // import { useLanguageStore as useUILanguageStore } from "../stores/useUILanguageStore";
-import EventCard from "../components/events/EventCard";
 import { motion } from "framer-motion";
 import { useDocuments } from "../hooks/useDocuments";
 

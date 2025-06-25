@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useMediaLibrary } from "../hooks/useMediaLibrary";
-import { MediaLibraryItemViewDto } from "../types/mediaLibrary";
+import { MediaLibraryItemView } from "../types/api";
 import MainItemView from "../components/mediaLibrary/MainItemView";
 import RelatedItem from "../components/mediaLibrary/RelatedItem";
 
 export default function LibraryItemViewPage() {
   const { docId, langId, type } = useParams<{ docId: string; langId: string; type: "audio" | "video" | "text" }>();
-  const { fetchView, loadingView, errorView } = useMediaLibrary();
-  const [view, setView] = useState<MediaLibraryItemViewDto | null>(null);
+  const { fetchView, loading, error } = useMediaLibrary();
+  const [view, setView] = useState<MediaLibraryItemView | null>(null);
 
   useEffect(() => {
     if (docId && langId && type) {
@@ -18,8 +18,8 @@ export default function LibraryItemViewPage() {
     }
   }, [docId, langId, type, fetchView]);
 
-  if (loadingView) return <p>Loading…</p>;
-  if (errorView) return <p>Error: {errorView}</p>;
+  if (loading) return <p>Loading…</p>;
+  if (error) return <p>Error: {error}</p>;
   if (!view) return <p>Not found.</p>;
 
   return (

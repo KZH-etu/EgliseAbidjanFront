@@ -1,5 +1,5 @@
-import api from "./clientService";
-import { HomePageDto } from "../types/homepage";
+// import api from "./clientService";
+// import { HomePage } from "../types/homepage";
 
 
-export const fetchHome = () => api.get<HomePageDto>('/home');
+// export const fetchHome = () => api.get<HomePage>('/home');

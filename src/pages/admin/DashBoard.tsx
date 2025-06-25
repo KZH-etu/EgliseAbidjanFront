@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { DocumentsByLanguageResponseDto, SermonStatsDto, UserMessageResponseDto } from "../../types/dashboard";
-import { MediaType } from "../../types/document-media";
-import { EventSummaryDto } from "../../types/documents";
+import { DocumentsByLanguageResponse, SermonStats, UserMessageResponse } from "../../types/dashboard";
+import { MediaType } from "../../types/api";
+import { DocumentCard } from "../../types/api";
 
 // Mocked data fetching functions using new models
-const fetchSermonStats = async (): Promise<SermonStatsDto> => ({
+const fetchSermonStats = async (): Promise<SermonStats> => ({
   total: 120,
   byType: { video: 60, audio: 40, text: 20 },
   recent: [
@@ -27,7 +27,7 @@ const fetchSermonStats = async (): Promise<SermonStatsDto> => ({
   ]
 });
 
-const fetchEvents = async (): Promise<EventSummaryDto[]> => [
+const fetchEvents = async (): Promise<DocumentCard[]> => [
   { id: "1", title: "Sunday Service", date: "2025-06-22", location: "Main Hall" },
   { id: "2", title: "Youth Meeting", date: "2025-06-24", location: "Youth Center" },
 ];
@@ -54,7 +54,7 @@ const fetchSystemHealth = async (): Promise<{
   ],
 });
 
-const fetchLocalizationStats = async (): Promise<DocumentsByLanguageResponseDto> => ({
+const fetchLocalizationStats = async (): Promise<DocumentsByLanguageResponse> => ({
   data: [
     { languageId: "en", documentsNumber: 80 },
     { languageId: "fr", documentsNumber: 30 },
@@ -62,7 +62,7 @@ const fetchLocalizationStats = async (): Promise<DocumentsByLanguageResponseDto>
   ]
 });
 
-const fetchFeedback = async (): Promise<UserMessageResponseDto[]> => [
+const fetchFeedback = async (): Promise<UserMessageResponse[]> => [
   {
     id: "1",
     username: "John Doe",
@@ -80,14 +80,14 @@ const fetchFeedback = async (): Promise<UserMessageResponseDto[]> => [
 ];
 
 const DashBoard: React.FC = () => {
-  const [sermonStats, setSermonStats] = useState<SermonStatsDto | null>(null);
-  const [events, setEvents] = useState<EventSummaryDto[]>([]);
+  const [sermonStats, setSermonStats] = useState<SermonStats | null>(null);
+  const [events, setEvents] = useState<DocumentCard[]>([]);
   const [newsletter, setNewsletter] = useState<{ subscribers: number } | null>(null);
   const [streaming, setStreaming] = useState<{ online: boolean; currentViewers: number; totalStreams: number } | null>(null);
   const [docs, setDocs] = useState<{ totalDocs: number } | null>(null);
   const [systemHealth, setSystemHealth] = useState<{ serverStatus: string; errorLogs: { id: string; message: string }[] } | null>(null);
-  const [localization, setLocalization] = useState<DocumentsByLanguageResponseDto | null>(null);
-  const [feedback, setFeedback] = useState<UserMessageResponseDto[]>([]);
+  const [localization, setLocalization] = useState<DocumentsByLanguageResponse | null>(null);
+  const [feedback, setFeedback] = useState<UserMessageResponse[]>([]);
 
   useEffect(() => {
     fetchSermonStats().then(setSermonStats);

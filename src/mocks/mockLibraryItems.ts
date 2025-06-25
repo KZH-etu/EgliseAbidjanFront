@@ -1,11 +1,11 @@
-import { MediaLibraryItemDto, MediaLibraryItemViewDto } from "../types/mediaLibrary";
-import { MediaType } from "../types/document-media";
-import { DocumentCategory } from "../types/documents";
+import { MediaLibraryItem, MediaLibraryItemView } from "../types/api";
+import { MediaType } from "../types/api";
+import { DocumentCategory } from "../types/api";
 import { mockTagSummaries } from "./mockTags";
 import { mockLanguageSummaries } from "./mockLanguages";
 
 // Use tag and language summaries from mocks for consistency
-export const mockLibraryItems: MediaLibraryItemDto[] = [
+export const mockLibraryItems: MediaLibraryItem[] = [
   {
     id: "doc1",
     mediaId: "dm1",
@@ -53,7 +53,7 @@ export const mockLibraryItems: MediaLibraryItemDto[] = [
 ];
 
 // Example MediaLibraryItemViewDto (using tags/languages from mocks)
-export const mockTextItemView: MediaLibraryItemViewDto = {
+export const mockTextItemView: MediaLibraryItemView = {
   id: "doc1",
   title: "Walking in Faith",
   description: "A book about walking in faith.",
@@ -78,7 +78,7 @@ export const mockTextItemView: MediaLibraryItemViewDto = {
   ]
 };
 
-export const mockAudioItemView: MediaLibraryItemViewDto = {
+export const mockAudioItemView: MediaLibraryItemView = {
   id: "doc2",
   title: "Sunday Sermon Series",
   description: "A powerful sermon series.",
@@ -101,7 +101,7 @@ export const mockAudioItemView: MediaLibraryItemViewDto = {
   ]
 };
 
-export const mockVideoItemView: MediaLibraryItemViewDto = {
+export const mockVideoItemView: MediaLibraryItemView = {
   id: "doc4",
   title: "Faith & Fellowship",
   description: "A book and sermon on faith and fellowship.",

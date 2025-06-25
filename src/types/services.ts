@@ -1,15 +1,15 @@
 // Importing necessary DTOs and interfaces for the services
-import { CreateDocumentMediaDto, UpdateDocumentMediaDto } from "./document-media";
-import { DocumentMediaResponseDto } from "./document-media";
-import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from "./document-versions";
-import { DocumentVersionResponseDto } from "./document-versions";
-import { CreateDocumentDto, UpdateDocumentDto } from "./documents";
-import { DocumentMetaResponseDto, DocumentResponseDto, EventSummaryDto } from "./documents";
-import { CreateLanguageDto, UpdateLanguageDto } from "./languages";
-import { LanguageResponseDto, LanguageSummaryDto } from "./languages";
-import { MediaLibraryItemDto, MediaLibraryItemViewDto } from "./mediaLibrary";
-import { CreateTagDto } from "./tags";
-import { TagResponseDto, TagSummaryDto } from "./tags";
+import { NewDocumentMedia, DocumentMediaUpdate } from "./api";
+import { DocumentMedia } from "./api";
+import { NewDocumentVersion, DocumentVersionUpdate } from "./api";
+import { DocumentVersion } from "./api";
+import { NewDocument, DocumentUpdate } from "./api";
+import { DocumentMeta, Document } from "./api";
+import { NewLanguage, LanguageUpdate } from "./api";
+import { Language, LanguageOption } from "./api";
+import { MediaLibraryItem, MediaLibraryItemView } from "./api";
+import { NewTag } from "./api";
+import { Tag, TagSummary } from "./api";
 
 // Type Definitions for Services
 
@@ -23,53 +23,52 @@ export interface Services {
 }
 
 export interface IDocumentService {
-    fetchDocuments(): Promise<DocumentResponseDto[]>;
-    fetchDocument(id: string): Promise<DocumentResponseDto>;
-    createDocument(body: CreateDocumentDto): Promise<void>;
-    updateDocument(id: string, body: UpdateDocumentDto): Promise<void>;
+    fetchDocuments(): Promise<Document[]>;
+    fetchDocument(id: string): Promise<Document>;
+    createDocument(body: NewDocument): Promise<void>;
+    updateDocument(id: string, body: DocumentUpdate): Promise<void>;
     deleteDocument(id: string): Promise<void>;
-    fetchMetaByDocument(documentId: string): Promise<DocumentMetaResponseDto>;
-    fetchEvents(): Promise<EventSummaryDto[]>;
+    fetchMetaByDocument(documentId: string): Promise<DocumentMeta>;
 }
 
 export interface IDocumentMediaService {
-    fetchAllMedia(): Promise<DocumentMediaResponseDto[]>;
-    fetchMediaByVersion(versionId: string): Promise<DocumentMediaResponseDto[]>;
-    fetchMediaItem(id: string): Promise<DocumentMediaResponseDto>;
-    createMedia(body: CreateDocumentMediaDto): Promise<void>;
-    updateMedia(id: string, body: UpdateDocumentMediaDto): Promise<void>;
+    fetchAllMedia(): Promise<DocumentMedia[]>;
+    fetchMediaByVersion(versionId: string): Promise<DocumentMedia[]>;
+    fetchMediaItem(id: string): Promise<DocumentMedia>;
+    createMedia(body: NewDocumentMedia): Promise<void>;
+    updateMedia(id: string, body: DocumentMediaUpdate): Promise<void>;
     deleteMedia(id: string): Promise<void>;
 }
 
 export interface IDocumentVersionService {
-    fetchAllVersions(): Promise<DocumentVersionResponseDto[]>;
-    fetchVersionsByDocument(documentId: string): Promise<DocumentVersionResponseDto[]>;
-    fetchVersion(id: string): Promise<DocumentVersionResponseDto>;
-    createVersion(body: CreateDocumentVersionDto): Promise<void>;
-    updateVersion(id: string, body: UpdateDocumentVersionDto): Promise<void>;
+    fetchAllVersions(): Promise<DocumentVersion[]>;
+    fetchVersionsByDocument(documentId: string): Promise<DocumentVersion[]>;
+    fetchVersion(id: string): Promise<DocumentVersion>;
+    createVersion(body: NewDocumentVersion): Promise<void>;
+    updateVersion(id: string, body: DocumentVersionUpdate): Promise<void>;
     deleteVersion(id: string): Promise<void>;
-    searchVersions(query: string): Promise<DocumentVersionResponseDto[]>;
+    searchVersions(query: string): Promise<DocumentVersion[]>;
 }
 
 export interface ILanguageService {
-    fetchLanguageSummaries(): Promise<LanguageSummaryDto[]>;
-    fetchLanguages(): Promise<LanguageResponseDto[]>;
-    createLanguage(body: CreateLanguageDto): Promise<void>;
-    updateLanguage(id: string, body: UpdateLanguageDto): Promise<void>;
+    fetchLanguageSummaries(): Promise<LanguageOption[]>;
+    fetchLanguages(): Promise<Language[]>;
+    createLanguage(body: NewLanguage): Promise<void>;
+    updateLanguage(id: string, body: LanguageUpdate): Promise<void>;
     deleteLanguage(id: string): Promise<void>;
 }
 
 export interface ITagService {
-    fetchTagSummaries(): Promise<TagSummaryDto[]>;
-    fetchTags(): Promise<TagResponseDto[]>;
-    searchTags(query: string): Promise<TagSummaryDto[]>;
-    createTag(body: CreateTagDto): Promise<void>;
-    updateTag(id: string, body: CreateTagDto): Promise<void>;
+    fetchTagSummaries(): Promise<TagSummary[]>;
+    fetchTags(): Promise<Tag[]>;
+    searchTags(query: string): Promise<TagSummary[]>;
+    createTag(body: NewTag): Promise<void>;
+    updateTag(id: string, body: NewTag): Promise<void>;
     deleteTag(id: string): Promise<void>;
 }
 
 export interface IMediaLibraryService {
-    fetchItems(): Promise<MediaLibraryItemDto[]>;
-    fetchView(id: string, languageId: string, type: string ): Promise<MediaLibraryItemViewDto>;
+    fetchItems(): Promise<MediaLibraryItem[]>;
+    fetchView(id: string, languageId: string, type: string ): Promise<MediaLibraryItemView>;
         // type can be 'audio', 'video', or 'text'
 }

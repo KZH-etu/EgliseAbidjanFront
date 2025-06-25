@@ -1,69 +1,50 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServices } from "../providers/serviceProvider";
-import { TagResponseDto } from "../types/tags";
-import { CreateTagDto } from "../types/tags";
+import { NewTag } from "../types/api";
 
+export function useTags() {
+  const { tagService } = useServices();
+  const queryClient = useQueryClient();
 
-export const useTags = () => {
-    const { tagService } = useServices();
-    const [tags, setTags] = useState<TagResponseDto[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+  // Fetch all tags
+  const { data: tags = [], isLoading: loading, error } = useQuery({
+    queryKey: ["tags"],
+    queryFn: () => tagService.fetchTags(),
+  });
 
-    const loadTags = useCallback(async () => {
-        setLoading(true);
-        setError(null);
+  // Add tag
+  const addMutation = useMutation({
+    mutationFn: (body: NewTag) => tagService.createTag(body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tags"] }),
+  });
 
-        try {
-            const tagData = await tagService.fetchTags();
-            setTags(tagData);
-        } catch (e: any) {
-            setError(e.message);
-        } finally {
-            setLoading(false);
-        }
-    }, [tagService]);
+  // Update tag
+  const updateMutation = useMutation({
+    mutationFn: ({ id, body }: { id: string; body: NewTag }) =>
+      tagService.updateTag(id, body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tags"] }),
+  });
 
-    useEffect(() => {
-        loadTags();
-    }, [loadTags]);
+  // Remove tag
+  const removeMutation = useMutation({
+    mutationFn: (id: string) => tagService.deleteTag(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tags"] }),
+  });
 
-    const searchTags = useCallback(async (query: string) => {
-        const searchedTags = await tagService.searchTags(query);
-        return searchedTags;
-    }, [tagService]);
+  // Search tags
+  const searchTags = (query: string) => tagService.searchTags(query);
 
-    const fetchTagSummaries = useCallback(async () => {
-        const summaries = await tagService.fetchTagSummaries();
-        return summaries;
-    }, [tagService]);
+  // Fetch tag summaries
+  const fetchTagSummaries = () => tagService.fetchTagSummaries();
 
-    const addTag = useCallback(async (tag: CreateTagDto) => {
-        await tagService.createTag(tag);
-        await loadTags(); // Reload tags after adding
-    }, [tagService, loadTags]);  
-
-    const updateTag = useCallback(async (id: string, tag: CreateTagDto) => {
-        await tagService.updateTag(id, tag);
-        await loadTags(); // Reload tags after updating
-    }, [tagService, loadTags]);
-
-    const removeTag = useCallback(async (id: string) => {
-        await tagService.deleteTag(id);
-        await loadTags(); // Reload tags after removing
-    }, [tagService, loadTags]);
-
-    const memoizedTags = useMemo(() => ({
-        tags,
-        loadTags,
-        loading,
-        error,
-        searchTags,
-        fetchTagSummaries,
-        addTag,
-        updateTag,
-        removeTag
-    }),[tags, loadTags, loading, error, searchTags, fetchTagSummaries]);
-
-    return memoizedTags;
+  return {
+    tags,
+    loading,
+    error: error ? String(error) : null,
+    searchTags,
+    fetchTagSummaries,
+    addTag: addMutation.mutateAsync,
+    updateTag: (id: string, body: NewTag) => updateMutation.mutateAsync({ id, body }),
+    removeTag: removeMutation.mutateAsync,
+  };
 }

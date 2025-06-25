@@ -1,8 +1,8 @@
-import { MediaLibraryItemViewDto } from "../../types/mediaLibrary";
+import { MediaLibraryItemView } from "../../types/api";
 
 type MainViewProps = {
   type: "audio" | "video" | "text";
-  data: MediaLibraryItemViewDto;
+  data: MediaLibraryItemView;
 };
 
 export default function MainItemView({ type, data }: MainViewProps) {

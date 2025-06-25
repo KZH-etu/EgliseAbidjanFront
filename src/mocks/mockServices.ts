@@ -15,7 +15,6 @@ const mockServices: Services = {
     createDocument: async () => {},
     updateDocument: async () => {},
     deleteDocument: async () => {},
-    fetchEvents: async () => [],
     fetchMetaByDocument: async () => (mockMetaData[0]), // Return an empty object as a mock
   },
   documentMediaService: {

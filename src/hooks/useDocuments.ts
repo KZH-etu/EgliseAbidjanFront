@@ -1,78 +1,47 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { DocumentResponseDto, EventSummaryDto } from '../types/documents';
-import { useServices } from '../providers/serviceProvider';
-import { CreateDocumentDto, UpdateDocumentDto } from "../types/documents";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useServices } from "../providers/serviceProvider";
+import { NewDocument, DocumentUpdate } from "../types/api";
 
 export function useDocuments() {
+  const { documentService } = useServices();
+  const queryClient = useQueryClient();
 
-    const { documentService } = useServices();
-    const [docs, setDocs] = useState<DocumentResponseDto[]>([]);
-    const [events, setEvents] = useState<EventSummaryDto[]>([]);
-    const [loadingDocs, setLoadingDocs] = useState(true);
-    const [loadingEvents, setLoadingEvents] = useState(true);
-    const [errorDocs, setErrorDocs] = useState<string|null>(null);
-    const [errorEvents, setErrorEvents] = useState<string|null>(null);
+  // Fetch all documents
+  const { data: docs = [], isLoading: loadingDocs, error: errorDocs } = useQuery({
+    queryKey: ["documents"],
+    queryFn: () => documentService.fetchDocuments(),
+  });
 
-    const loadDocs = useCallback(async () => {
-        setLoadingDocs(true);
-        setErrorDocs(null);
-    
-        try {
-          const docData = await documentService.fetchDocuments();
-          setDocs(docData);
-        } catch (e: any) {
-          setErrorDocs(e.message);
-        } finally {
-          setLoadingDocs(false);
-        }
-      }, []);
+  // Add document
+  const addMutation = useMutation({
+    mutationFn: (body: NewDocument) => documentService.createDocument(body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documents"] }),
+  });
 
-    const loadEvents = useCallback(async () => {
-      setLoadingEvents(true);
-      setErrorEvents(null);
-      try {
-        const eventData = await documentService.fetchEvents();
-        setEvents(eventData);
-      } catch (e: any) {
-        setErrorEvents(e.message);
-      } finally {
-        setLoadingEvents(false);
-      }
-    }, []);
+  // Update document
+  const patchMutation = useMutation({
+    mutationFn: ({ id, body }: { id: string; body: DocumentUpdate }) =>
+      documentService.updateDocument(id, body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documents"] }),
+  });
 
-    useEffect(() => {
-      loadDocs();
-      loadEvents();
-    }, [loadDocs, loadEvents, documentService]);
+  // Remove document
+  const removeMutation = useMutation({
+    mutationFn: (id: string) => documentService.deleteDocument(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documents"] }),
+  });
 
-    const remove = useCallback(async (id: string) => {
-    await documentService.deleteDocument(id);
-    await loadDocs();
-    await loadEvents();
-    }, [loadDocs, loadEvents, documentService]);
+  // Fetch meta by document
+  const fetchMetaByDocument = (documentId: string) =>
+    documentService.fetchMetaByDocument(documentId);
 
-    const add = useCallback(async (body: CreateDocumentDto) => {
-    await documentService.createDocument(body);
-    await loadDocs();
-    await loadEvents();
-    }, [loadDocs, loadEvents, documentService]);
-
-    const patch = useCallback(async (id: string, body: UpdateDocumentDto) => {
-    await documentService.updateDocument(id, body);
-    await loadDocs();
-    await loadEvents();
-    }, [loadDocs, loadEvents, documentService]);
-
-    const fetchMetaByDocument = useCallback(async (documentId: string) => {
-      const meta = await documentService.fetchMetaByDocument(documentId);
-      return meta;
-    }, [documentService]);
-
-    const memoizedDocs = useMemo(() => ({docs, loadingDocs, errorDocs, fetchMetaByDocument,
-      loadDocs, add, patch, remove}), [docs, loadingDocs, errorDocs, loadDocs, add, patch, remove]);
-
-    const memoizedEvents = useMemo(() => ({events, loadingEvents, errorEvents,
-      loadEvents}), [events, loadingEvents, errorEvents, loadEvents]);
-
-    return {...memoizedDocs, ...memoizedEvents,};
+  return {
+    docs,
+    loadingDocs,
+    errorDocs: errorDocs ? String(errorDocs) : null,
+    fetchMetaByDocument,
+    add: addMutation.mutateAsync,
+    patch: (id: string, body: DocumentUpdate) => patchMutation.mutateAsync({ id, body }),
+    remove: removeMutation.mutateAsync,
+  };
 }

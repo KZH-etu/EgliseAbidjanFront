@@ -1,12 +1,12 @@
-import { DocumentCategory, DocumentResponseDto } from '../types/documents';
+import { DocumentCategory, Document } from "../types/api";
 import { mockTags } from './mockTags';
-import { LanguageSummaryDto } from '../types/languages';
+import { LanguageOption } from "../types/api";
 
-const langEn: LanguageSummaryDto = { id: 'en', name: 'English' };
-const langFr: LanguageSummaryDto = { id: 'fr', name: 'Français' };
-const langEs: LanguageSummaryDto = { id: 'es', name: 'Español' };
+const langEn: LanguageOption = { id: 'en', name: 'English' };
+const langFr: LanguageOption = { id: 'fr', name: 'Français' };
+const langEs: LanguageOption = { id: 'es', name: 'Español' };
 
-const mockDocuments: DocumentResponseDto[] = [
+const mockDocuments: Document[] = [
   {
     id: 'doc1',
     globalTitle: 'Walking in Faith',

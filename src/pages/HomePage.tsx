@@ -8,7 +8,7 @@ import SermonCard from "../components/sermons/SermonCard";
 import EventCard from "../components/events/EventCard";
 import { BookOpen, Radio, Tv } from "lucide-react";
 import { useHomeStore } from "../stores/useHomeStore";
-import { MediaType } from "../types/document-media";
+import { MediaType } from "../types/api";
 
 const videos = [
   {

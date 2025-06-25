@@ -1,50 +1,42 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useServices } from '../providers/serviceProvider';
-import { DocumentMediaResponseDto } from '../types/document-media';
-import { CreateDocumentMediaDto, UpdateDocumentMediaDto } from "../types/document-media";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useServices } from "../providers/serviceProvider";
+import { NewDocumentMedia, DocumentMediaUpdate } from "../types/api";
 
 export function useDocumentMedia() {
-    const { documentMediaService } = useServices();
-    const [items, setItems] = useState<DocumentMediaResponseDto[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string|null>(null);
+  const { documentMediaService } = useServices();
+  const queryClient = useQueryClient();
 
-    const loadMedia = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  // Fetch all media
+  const { data: items = [], isLoading: loading, error } = useQuery({
+    queryKey: ["documentMedia"],
+    queryFn: () => documentMediaService.fetchAllMedia(),
+  });
 
-    try {
-      const data = await documentMediaService.fetchAllMedia();
-      setItems(data);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  // Add media
+  const addMutation = useMutation({
+    mutationFn: (body: NewDocumentMedia) => documentMediaService.createMedia(body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documentMedia"] }),
+  });
 
-    useEffect(() => {
-        loadMedia();
-    }, [loadMedia, documentMediaService]);
+  // Update media
+  const patchMutation = useMutation({
+    mutationFn: ({ id, body }: { id: string; body: DocumentMediaUpdate }) =>
+      documentMediaService.updateMedia(id, body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documentMedia"] }),
+  });
 
-    const remove = useCallback(async (id: string) => {
-    await documentMediaService.deleteMedia(id);
-    // optionally refresh list:
-    await loadMedia();
-    }, [loadMedia, documentMediaService]);
+  // Remove media
+  const removeMutation = useMutation({
+    mutationFn: (id: string) => documentMediaService.deleteMedia(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documentMedia"] }),
+  });
 
-    const add = useCallback(async (body: CreateDocumentMediaDto) => {
-    await documentMediaService.createMedia(body);
-    await loadMedia();
-    }, [loadMedia, documentMediaService]);
-
-    const patch = useCallback(async (id: string, body: UpdateDocumentMediaDto) => {
-    await documentMediaService.updateMedia(id, body);
-    await loadMedia();
-    }, [loadMedia, documentMediaService]);
-
-    const memoizedMedia = useMemo(()=> ({ items, loadMedia, loading, add,
-       patch, remove, error }), [items, loadMedia, loading, add, patch, remove, error]);
-
-    return memoizedMedia;
+  return {
+    items,
+    loading,
+    error: error ? String(error) : null,
+    add: addMutation.mutateAsync,
+    patch: (id: string, body: DocumentMediaUpdate) => patchMutation.mutateAsync({ id, body }),
+    remove: removeMutation.mutateAsync,
+  };
 }

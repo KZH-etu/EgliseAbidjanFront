@@ -1,7 +1,7 @@
-import { DocumentMetaResponseDto } from '../types/documents';
-import { EventType } from '../types/documents';
+import { DocumentMeta } from "../types/api";
+import { EventType } from "../types/api";
 
-const mockMetaData: DocumentMetaResponseDto[] = [
+const mockMetaData: DocumentMeta[] = [
   {
     id: 'meta1',
     bookMeta: {

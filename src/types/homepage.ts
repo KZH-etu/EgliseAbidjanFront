@@ -1,6 +1,6 @@
-import { EventSummaryDto, SermonSummaryDto } from "./documents";
+// import { DocumentCard } from "./api";
 
-export interface HomePageDto {
-    sermons: SermonSummaryDto[];
-    events: EventSummaryDto[];
-}
+// export interface HomePage {
+//     sermons: DocumentCard[];
+//     events: DocumentCard[];
+// }

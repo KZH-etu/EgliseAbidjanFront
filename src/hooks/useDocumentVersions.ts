@@ -1,56 +1,47 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useServices } from '../providers/serviceProvider';
-import { DocumentVersionResponseDto } from '../types/document-versions';
-import { CreateDocumentVersionDto, UpdateDocumentVersionDto } from "../types/document-versions";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useServices } from "../providers/serviceProvider";
+import { NewDocumentVersion, DocumentVersionUpdate } from "../types/api";
 
 export function useDocumentVersions() {
-    const { documentVersionsService } = useServices();
-    const [items, setItems] = useState<DocumentVersionResponseDto[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string|null>(null);
+  const { documentVersionsService } = useServices();
+  const queryClient = useQueryClient();
 
-    const loadVersions = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  // Fetch all versions
+  const { data: items = [], isLoading: loading, error } = useQuery({
+    queryKey: ["documentVersions"],
+    queryFn: () => documentVersionsService.fetchAllVersions(),
+  });
 
-    try {
-      const data = await documentVersionsService.fetchAllVersions();
-      setItems(data);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  // Add version
+  const addMutation = useMutation({
+    mutationFn: (body: NewDocumentVersion) => documentVersionsService.createVersion(body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documentVersions"] }),
+  });
 
-    useEffect(() => {
-        loadVersions();
-    }, [loadVersions, documentVersionsService]);
+  // Update version
+  const patchMutation = useMutation({
+    mutationFn: ({ id, body }: { id: string; body: DocumentVersionUpdate }) =>
+      documentVersionsService.updateVersion(id, body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documentVersions"] }),
+  });
 
-    const remove = useCallback(async (id: string) => {
-    await documentVersionsService.deleteVersion(id);
-    // optionally refresh list:
-    await loadVersions();
-    }, [loadVersions, documentVersionsService]);
+  // Remove version
+  const removeMutation = useMutation({
+    mutationFn: (id: string) => documentVersionsService.deleteVersion(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["documentVersions"] }),
+  });
 
-    const add = useCallback(async (body: CreateDocumentVersionDto) => {
-    await documentVersionsService.createVersion(body);
-    await loadVersions();
-    }, [loadVersions, documentVersionsService]);
+  // Search versions
+  const searchVersions = async (query: string) =>
+    documentVersionsService.searchVersions(query);
 
-    const patch = useCallback(async (id: string, body: UpdateDocumentVersionDto) => {
-    await documentVersionsService.updateVersion(id, body);
-    await loadVersions();
-    }, [loadVersions, documentVersionsService]);
-
-    const searchVersions = useCallback(async (query: string) => {
-      const searchedVersions = await documentVersionsService.searchVersions(query);
-      return searchedVersions;
-    }, [documentVersionsService]);
-
-    const memoizedVersions = useMemo(() => ({ items, loadVersions, loading, add,
-       patch, remove, searchVersions, error }), [items, loadVersions, loading,
-        searchVersions, add, patch, remove, error]);
-
-   return memoizedVersions;
+  return {
+    items,
+    loading,
+    error: error ? String(error) : null,
+    add: addMutation.mutateAsync,
+    patch: (id: string, body: DocumentVersionUpdate) => patchMutation.mutateAsync({ id, body }),
+    remove: removeMutation.mutateAsync,
+    searchVersions,
+  };
 }

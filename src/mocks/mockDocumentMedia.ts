@@ -1,7 +1,7 @@
-import { DocumentMediaResponseDto, MediaType } from "../types/document-media";
+import { DocumentMedia, MediaType } from "../types/api";
 
 // These media items are referenced by mediaId in mockLibraryItems
-const mockDocumentMedia: DocumentMediaResponseDto[] = [
+const mockDocumentMedia: DocumentMedia[] = [
   {
     id: 'dm1',
     documentVersionId: 'v1',

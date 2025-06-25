@@ -1,61 +1,47 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useServices } from '../providers/serviceProvider';
-import { LanguageResponseDto, LanguageSummaryDto } from '../types/languages';
-import { CreateLanguageDto, UpdateLanguageDto } from "../types/languages";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useServices } from "../providers/serviceProvider";
+import { LanguageOption, NewLanguage, LanguageUpdate } from "../types/api";
 
 export function useLanguages() {
-    const { languageService } = useServices();
-    const [languages, setLanguages] = useState<LanguageResponseDto[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string|null>(null);
+  const { languageService } = useServices();
+  const queryClient = useQueryClient();
 
-    const loadLanguages = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  // Fetch all languages
+  const { data: languages = [], isLoading: loading, error } = useQuery({
+    queryKey: ["languages"],
+    queryFn: () => languageService.fetchLanguages(),
+  });
 
-    try {
-      const data = await languageService.fetchLanguages();
-      setLanguages(data);
-    } catch (e: any) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  // Add language
+  const addMutation = useMutation({
+    mutationFn: (body: NewLanguage) => languageService.createLanguage(body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["languages"] }),
+  });
 
-    useEffect(() => {
-        loadLanguages();
-    }, [loadLanguages, languageService]);
+  // Update language
+  const updateMutation = useMutation({
+    mutationFn: ({ id, body }: { id: string; body: LanguageUpdate }) =>
+      languageService.updateLanguage(id, body),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["languages"] }),
+  });
 
-    const getLanguageSummaries = useCallback(async (): Promise<LanguageSummaryDto[]> => {
-        return await languageService.fetchLanguageSummaries();
-    }, [languageService]);
+  // Remove language
+  const removeMutation = useMutation({
+    mutationFn: (id: string) => languageService.deleteLanguage(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["languages"] }),
+  });
 
-    const removeLanguage = useCallback(async (id: string) => {
-        await languageService.deleteLanguage(id);
-        await loadLanguages();
-    }, [loadLanguages, languageService]);
+  // Get language summaries
+  const getLanguageSummaries = async (): Promise<LanguageOption[]> =>
+    languageService.fetchLanguageSummaries();
 
-    const addLanguage = useCallback(async (body: CreateLanguageDto) => {
-        await languageService.createLanguage(body);
-        await loadLanguages();
-    }, [loadLanguages, languageService]);
-
-    const updateLanguage = useCallback(async (id: string, body: UpdateLanguageDto) => {
-        await languageService.updateLanguage(id, body);
-        await loadLanguages();
-    }, [loadLanguages, languageService]);
-
-    const memoizedLanguages = useMemo(() => ({
-        languages,
-        loadLanguages,
-        loading,
-        addLanguage,
-        updateLanguage,
-        removeLanguage,
-        getLanguageSummaries,
-        error
-    }), [languages, loadLanguages, loading, addLanguage, updateLanguage, removeLanguage, getLanguageSummaries, error]);
-
-  return memoizedLanguages;
+  return {
+    languages,
+    loading,
+    error: error ? String(error) : null,
+    addLanguage: addMutation.mutateAsync,
+    updateLanguage: (id: string, body: LanguageUpdate) => updateMutation.mutateAsync({ id, body }),
+    removeLanguage: removeMutation.mutateAsync,
+    getLanguageSummaries,
+  };
 }

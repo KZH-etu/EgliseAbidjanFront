@@ -1,14 +1,14 @@
-import { MediaLibraryCardDto } from "../../types/mediaLibrary";
+import { MediaLibraryCard } from "../../types/api";
 
 type RelatedItemsProps = {
-  item: MediaLibraryCardDto;
+  item: MediaLibraryCard;
   type?: "audio" | "video" | "text";
 };
 
 // This component renders a related item in the media library, displaying its title, speaker, description, location, date, and media controls.
 
 export default function RelatedItem({ item, type }: RelatedItemsProps) {
-  return (
+    return (
         <li key={item.id} style={{ marginBottom: "1em" }}>
             <div>
                 <strong>{item.title}</strong>
