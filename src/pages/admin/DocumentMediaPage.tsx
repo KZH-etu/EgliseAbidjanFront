@@ -83,37 +83,24 @@ export default function DocumentMediaPage() {
         <input
           value={search}
           onChange={e => setSearch(e.target.value)}
-          className="form-input"
-          placeholder="Search by id, docId, url"
-          id='search'
+          className="form-input w-full md:max-w-2xl"
+          placeholder="Recherche par id, docId, url"
         />
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 items-center">
           {mediaTypeOptions.map(type => (
-            <label key={type} className="flex items-center gap-1">
+            <label key={type} className="flex items-center gap-1 text-sm">
               <input
                 type="checkbox"
                 checked={selectedTypes.includes(type)}
-                onChange={e => {
+                onChange={e =>
                   setSelectedTypes(current =>
                     e.target.checked ? [...current, type] : current.filter(t => t !== type)
-                  );
-                }}
+                  )
+                }
               />
               {type}
             </label>
-          ))}
-        </div>
-
-        <div className="flex gap-2">
-          {orderFields.map(f => (
-            <button
-              key={f}
-              onClick={() => toggleOrder(f)}
-              className="btn-secondary"
-            >
-              {f} {orderBy === f ? (orderDir === 'asc' ? '↑' : '↓') : ''}
-            </button>
           ))}
         </div>
 
@@ -161,52 +148,71 @@ export default function DocumentMediaPage() {
           </div>
           <div className="flex gap-2">
             <button className="btn-primary" onClick={handleSubmit}><Save size={16} className="mr-1" /> Enregistrer</button>
-            <button className="btn-secondary" onClick={() => { setEditingId(null); setForm({}); }}><X size={16} className="mr-1" /> Annuler</button>
+            <button className="btn-secondary" onClick={() => { setEditingId(null); setForm({}); setIsCreating(false); }}><X size={16} className="mr-1" /> Annuler</button>
           </div>
         </div>
       )}
 
       {/* Table */}
-      <table className="table-auto w-full text-sm">
-        <thead>
-          <tr className="text-left">
-            <th>ID</th>
-            <th>DocumentVersionId</th>
-            <th>MediaType</th>
-            <th>URL</th>
-            <th>CreatedAt</th>
-            <th>UpdatedAt</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filtered.map(item => (
-            <tr key={item.id} className="border-t">
-              <td>{item.id}</td>
-              <td>{item.documentVersionId}</td>
-              <td>{item.mediaType}</td>
-              <td className="truncate max-w-xs">{item.url}</td>
-              <td>{new Date(item.createdAt).toLocaleString()}</td>
-              <td>{new Date(item.updatedAt).toLocaleString()}</td>
-              <td className="flex gap-2">
-                <button onClick={() => {
-                  setEditingId(item.id);
-                  setForm({
-                    documentVersionId: item.documentVersionId,
-                    mediaType: item.mediaType,
-                    url: item.url,
-                  });
-                }} className="text-blue-600 hover:text-blue-800">
-                  <Edit2 size={16} />
+      <div className="bg-white rounded-lg shadow-sm overflow-x-auto mt-5">
+        <table className="w-full">
+          <thead>
+            <tr className="bg-neutral-50 border-b border-neutral-200">
+              <th className="px-6 py-3 text-center">
+                <button onClick={() => toggleOrder("id")} className="hover:underline">
+                  ID {orderBy === "id" ? (orderDir === "asc" ? "↑" : "↓") : ""}
                 </button>
-                <button onClick={() => remove(item.id)} className="text-red-500 hover:text-red-700">
-                  <Trash2 size={16} />
+              </th>
+              <th className="px-6 py-3 text-center">
+                <button onClick={() => toggleOrder("documentVersionId")} className="hover:underline">
+                  DocumentVersionId {orderBy === "documentVersionId" ? (orderDir === "asc" ? "↑" : "↓") : ""}
                 </button>
-              </td>
+              </th>
+              <th className="px-6 py-3 text-center">MediaType</th>
+              <th className="px-6 py-3 text-center">URL</th>
+              <th className="px-6 py-3 text-center">
+                <button onClick={() => toggleOrder("createdAt")} className="hover:underline">
+                  Créé {orderBy === "createdAt" ? (orderDir === "asc" ? "↑" : "↓") : ""}
+                </button>
+              </th>
+              <th className="px-6 py-3 text-center">
+                <button onClick={() => toggleOrder("updatedAt")} className="hover:underline">
+                  Modifié {orderBy === "updatedAt" ? (orderDir === "asc" ? "↑" : "↓") : ""}
+                </button>
+              </th>
+              <th className="px-6 py-3 text-center">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filtered.map(item => (
+              <tr key={item.id} className="border-b border-neutral-200 hover:bg-neutral-50">
+                <td className="px-6 py-4 text-center">{item.id}</td>
+                <td className="px-6 py-4 text-center">{item.documentVersionId}</td>
+                <td className="px-6 py-4 text-center">{item.mediaType}</td>
+                <td className="truncate max-w-xs">{item.url}</td>
+                <td className="px-6 py-4 text-center">{new Date(item.createdAt).toLocaleString()}</td>
+                <td className="px-6 py-4 text-center">{new Date(item.updatedAt).toLocaleString()}</td>
+                <td className="flex gap-2 px-6 py-4 text-center">
+                  <button onClick={() => {
+                    setEditingId(item.id);
+                    setForm({
+                      documentVersionId: item.documentVersionId,
+                      mediaType: item.mediaType,
+                      url: item.url,
+                    });
+                  }} className="text-blue-600 hover:text-blue-800">
+                    <Edit2 size={16} />
+                  </button>
+                  <button onClick={() => remove(item.id)} className="text-red-500 hover:text-red-700">
+                    <Trash2 size={16} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      
     </div>
   );
 }

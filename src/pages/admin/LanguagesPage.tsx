@@ -83,11 +83,11 @@ export default function LanguagesPage() {
 
       {/* Form */}
       {(editingId !== null || isCreating) && (
-        <div className="bg-gray-50 p-4 rounded shadow max-w-md">
+        <div className="bg-gray-50 p-4 rounded shadow">
           <div className="mb-2 font-semibold">Détails de la langue</div>
-          <div className="flex flex-col gap-2 mb-4">
+          <div className="flex justify-around gap-2 mb-4">
             <div className="flex items-center gap-2">
-              <label className="w-32">Nom:</label>
+              <label className="w-24">Nom:</label>
               <input
                 className="form-input flex-1"
                 placeholder="Nom de la langue"
@@ -96,9 +96,9 @@ export default function LanguagesPage() {
               />
             </div>
             <div className="flex items-center gap-2">
-              <label className="w-32">Type:</label>
+              <label className="w-24">Type:</label>
               <select
-                className="form-select flex-1"
+                className="form-select flex-1 p-3"
                 value={form.type || ""}
                 onChange={(e) =>
                   setForm((f) => ({
@@ -117,7 +117,7 @@ export default function LanguagesPage() {
             </div>
             {form.type === LanguageType.INTERNATIONAL && (
               <div className="flex items-center gap-2">
-                <label className="w-32">Pays d'origine:</label>
+                <label className="w-24s">Pays d'origine:</label>
                 <input
                   className="form-input flex-1"
                   placeholder="Pays d'origine"
@@ -129,7 +129,7 @@ export default function LanguagesPage() {
               </div>
             )}
           </div>
-          <div className="flex gap-2">
+          <div className="flex justify-center gap-2">
             <button className="btn-primary" onClick={handleSubmit}>
               <Save size={16} className="mr-1" /> Enregistrer
             </button>
@@ -148,41 +148,44 @@ export default function LanguagesPage() {
       )}
 
       {/* Table */}
-      <table className="table-auto w-full text-sm">
-        <thead>
-          <tr className="text-left">
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Type</th>
-            <th>Pays d'origine</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filtered.map((lang) => (
-            <tr key={lang.id} className="border-t">
-              <td>{lang.id}</td>
-              <td>{lang.name}</td>
-              <td>{lang.type}</td>
-              <td>{lang.countryOfOrigin || <span className="text-gray-400 italic">-</span>}</td>
-              <td className="flex gap-2">
-                <button
-                  onClick={() => handleEdit(lang)}
-                  className="text-blue-600 hover:text-blue-800"
-                >
-                  <Edit2 size={16} />
-                </button>
-                <button
-                  onClick={() => removeLanguage(lang.id)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  <Trash2 size={16} />
-                </button>
-              </td>
+      <div className="bg-white rounded-lg shadow-sm overflow-x-auto mt-5">
+        <table className="w-full">
+          <thead>
+            <tr className="bg-neutral-50 border-b border-neutral-200">
+              <th className="px-6 py-3 text-center">ID</th>
+              <th className="px-6 py-3 text-center">Nom</th>
+              <th className="px-6 py-3 text-center">Type</th>
+              <th className="px-6 py-3 text-center">Pays d'origine</th>
+              <th className="px-6 py-3 text-center">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filtered.map((lang) => (
+              <tr key={lang.id} className="border-b border-neutral-200 hover:bg-neutral-50">
+                <td className="px-6 py-4 text-center">{lang.id}</td>
+                <td className="px-6 py-4 text-center">{lang.name}</td>
+                <td className="px-6 py-4 text-center">{lang.type}</td>
+                <td className="px-6 py-4 text-center">{lang.countryOfOrigin || <span className="text-gray-400 italic">-</span>}</td>
+                <td className="px-6 py-4 text-center">
+                  <button
+                    onClick={() => handleEdit(lang)}
+                    className="text-primary-600 hover:text-primary-800 p-2"
+                  >
+                    <Edit2 size={16} />
+                  </button>
+                  <button
+                    onClick={() => removeLanguage(lang.id)}
+                    className="text-error hover:text-error/80 p-2"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      
     </div>
   );
 }
