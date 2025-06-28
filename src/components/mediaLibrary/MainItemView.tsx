@@ -12,12 +12,6 @@ type MainViewProps = {
 export default function MainItemView({ type, data }: MainViewProps) {
   return (
     <section>
-      <h2 style={{ fontSize: "1.2em", marginBottom: 8 }}>{data.title}</h2>
-      {/* Description */}
-      <div>
-        <h3>Description</h3>
-        <p>{data.description ? data.description : "no description available yet"}</p>
-      </div>
 
       {/* Sermon Metadata */}
       {data.sermonMeta && (
