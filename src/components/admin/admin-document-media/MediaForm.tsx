@@ -36,6 +36,7 @@ const MediaForm: React.FC<MediaFormProps> = ({
       <div className="flex gap-2 mb-2">
         <input
           id="documentVersionId"
+          name="documentVersionId"
           className="form-input"
           placeholder="documentVersionId"
           value={form.documentVersionId || ""}
@@ -43,6 +44,7 @@ const MediaForm: React.FC<MediaFormProps> = ({
         />
         <input
           id="url"
+          name="url"
           className="form-input"
           placeholder="URL"
           value={form.url || ""}
@@ -50,6 +52,7 @@ const MediaForm: React.FC<MediaFormProps> = ({
         />
         <select
           id="mediaType"
+          name="mediaType"
           className="form-select"
           value={form.mediaType || ""}
           onChange={(e) => setForm((f) => ({ ...f, mediaType: e.target.value as MediaType }))}

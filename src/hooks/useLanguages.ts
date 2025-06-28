@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServices } from "../providers/serviceProvider";
-import { LanguageOption, NewLanguage, LanguageUpdate } from "../types/api";
+import { NewLanguage, LanguageUpdate } from "../types/api";
 
 export function useLanguages() {
   const { languageService } = useServices();
@@ -31,10 +31,6 @@ export function useLanguages() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["languages"] }),
   });
 
-  // Get language summaries
-  const getLanguageSummaries = async (): Promise<LanguageOption[]> =>
-    languageService.fetchLanguageSummaries();
-
   return {
     languages,
     loading,
@@ -42,6 +38,5 @@ export function useLanguages() {
     addLanguage: addMutation.mutateAsync,
     updateLanguage: (id: string, body: LanguageUpdate) => updateMutation.mutateAsync({ id, body }),
     removeLanguage: removeMutation.mutateAsync,
-    getLanguageSummaries,
   };
 }

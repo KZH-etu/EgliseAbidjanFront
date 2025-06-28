@@ -1,6 +1,5 @@
-
 ///////////////////////
-// Shared Enums
+// Base Types & Enums
 ///////////////////////
 
 export enum MediaType {
@@ -10,9 +9,9 @@ export enum MediaType {
 }
 
 export enum DocumentCategory {
-  BOOK   = 'BOOK',
+  BOOK = 'BOOK',
   SERMON = 'SERMON',
-  EVENT  = 'EVENT',
+  EVENT = 'EVENT',
 }
 
 export enum LanguageEnum {
@@ -28,63 +27,26 @@ export enum LanguageType {
 
 export enum EventType {
   CONVENTION = 'CONVENTION',
-  PRAYER     = 'PRAYER',
-  SEMINAR    = 'SEMINAR',
+  PRAYER = 'PRAYER',
+  SEMINAR = 'SEMINAR',
 }
 
 ///////////////////////
-// Subscriber
+// Base Entity Interface
 ///////////////////////
 
-
-export interface Subscriber {
-  id: string;
-  email: string;
-  subscribedAt: Date;
-  isActive: boolean;
-}
-
-export interface NewSubscriber {
-  email: string;
-}
-
-export interface SubscriberUpdate {
-  isActive?: boolean;
-}
-
-///////////////////////
-// Tag
-///////////////////////
-
-
-export interface Tag {
+export interface BaseEntity {
   id: string;
   createdAt: Date;
   updatedAt: Date;
-  translations: TagTranslation[];
-}
-
-export interface TagTranslation {
-  language: LanguageEnum;
-  title: string;
-}
-
-export interface TagSummary {
-  id: string;
-  title?: string;  // in selected language
-}
-
-export interface NewTag {
-  translations: TagTranslation[];
 }
 
 ///////////////////////
-// Language
+// Language Types
 ///////////////////////
 
-export interface Language {
-  id: string;               // e.g. 'en', 'fr', 'es'
-  name: string;             // 'English', 'Français'
+export interface Language extends BaseEntity {
+  name: string;
   type: LanguageType;
   countryOfOrigin?: string;
 }
@@ -95,9 +57,9 @@ export interface LanguageOption {
 }
 
 export interface NewLanguage {
-  id: string;               // e.g. 'en'
+  id: string;
   name: string;
-  type?: LanguageType;
+  type: LanguageType;
   countryOfOrigin?: string;
 }
 
@@ -108,25 +70,73 @@ export interface LanguageUpdate {
 }
 
 ///////////////////////
-// Document
+// Tag Types
 ///////////////////////
 
-export interface Document {
+export interface TagTranslation {
+  language: LanguageEnum;
+  title: string;
+}
+
+export interface Tag extends BaseEntity {
+  translations: TagTranslation[];
+}
+
+export interface TagSummary {
   id: string;
+  title?: string; // in selected language
+}
+
+export interface NewTag {
+  translations: TagTranslation[];
+}
+
+///////////////////////
+// Metadata Types
+///////////////////////
+
+export interface BookMetadata {
+  author: string;
+  publisher?: string;
+  publishedAt?: Date;
+  isbn?: string;
+  pageCount?: number;
+}
+
+export interface SermonMetadata {
+  preacher: string;
+  preachedAt: Date;
+  location?: string;
+}
+
+export interface EventMetadata {
+  type: EventType;
+  startTime: Date;
+  endTime?: Date;
+  location?: string;
+}
+
+// Create types for new metadata (used in forms)
+export type NewBookMetadata = Partial<BookMetadata>;
+export type NewSermonMetadata = Partial<SermonMetadata>;
+export type NewEventMetadata = Partial<EventMetadata>;
+
+///////////////////////
+// Document Types
+///////////////////////
+
+export interface DocumentMeta extends BaseEntity {
+  bookMeta?: BookMetadata;
+  sermonMeta?: SermonMetadata;
+  eventMeta?: EventMetadata;
+}
+
+export interface Document extends BaseEntity {
   globalTitle: string;
-  createdAt: Date;
-  updatedAt: Date;
   categories: DocumentCategory[];
   tags: TagSummary[];
   availableLanguages: LanguageOption[];
   docVersionIds: string[];
-}
-
-export interface DocumentMeta {
-  id: string;
-  bookMeta?: BookMetadata;
-  sermonMeta?: SermonMetadata;
-  eventMeta?: EventMetadata;
 }
 
 export interface NewDocument {
@@ -149,19 +159,15 @@ export interface DocumentUpdate {
   docVersionIds?: string[];
 }
 
-
 ///////////////////////
-// Document Version
+// Document Version Types
 ///////////////////////
 
-export interface DocumentVersion {
-  id: string;
+export interface DocumentVersion extends BaseEntity {
   documentId: string;
   languageId: string;
   title: string;
   description?: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface NewDocumentVersion {
@@ -181,16 +187,13 @@ export interface DocumentVersionUpdate {
 }
 
 ///////////////////////
-// Document Media
+// Document Media Types
 ///////////////////////
 
-export interface DocumentMedia {
-  id: string;
+export interface DocumentMedia extends BaseEntity {
   documentVersionId: string;
   mediaType: MediaType;
   url: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface NewDocumentMedia {
@@ -208,42 +211,115 @@ export interface DocumentMediaUpdate {
 }
 
 ///////////////////////
-// Metadata Details
+// Subscriber Types
 ///////////////////////
 
-export interface BookMetadata {
-  author: string;
-  publisher?: string;
-  publishedAt?: Date;
-  isbn?: string;
+export interface Subscriber extends BaseEntity {
+  email: string;
+  subscribedAt: Date;
+  isActive: boolean;
+}
+
+export interface NewSubscriber {
+  email: string;
+}
+
+export interface SubscriberUpdate {
+  isActive?: boolean;
+}
+
+///////////////////////
+// Media Library Types
+///////////////////////
+
+// Base interface for all media cards - shared properties regardless of media type
+export interface BaseMediaCard {
+  id: string;
+  title: string;
+  description?: string;
+  categories: DocumentCategory[];
+  mediaType: MediaType;
+  mediaUrl: string;
+  tags: TagSummary[];
+  language: LanguageOption;
+  duration?: number; // in seconds, useful for audio/video
+  fileSize?: number; // in bytes
+  thumbnailUrl?: string; // for video/image previews
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Text-specific media card (books, documents, transcripts)
+export interface TextMediaCard extends BaseMediaCard {
+  mediaType: MediaType.TEXT;
+  // Text-specific metadata (minimal display)
+  author?: string;
   pageCount?: number;
+  publisher?: string;
+  isbn?: string;
+  // Small metadata section
+  textMeta?: {
+    wordCount?: number;
+    readingTime?: number; // estimated reading time in minutes
+    format?: 'PDF' | 'EPUB' | 'TXT' | 'DOC';
+  };
 }
 
-export interface NewBookMetadata extends Partial<BookMetadata> {}
-
-export interface SermonMetadata {
-  preacher: string;
-  preachedAt: Date;
+// Audio-specific media card (sermons, music, podcasts)
+export interface AudioMediaCard extends BaseMediaCard {
+  mediaType: MediaType.AUDIO;
+  // Audio-specific metadata (minimal display)
+  speaker?: string;
+  preacher?: string;
   location?: string;
+  recordedAt?: Date;
+  // Small metadata section
+  audioMeta?: {
+    bitrate?: number;
+    format?: 'MP3' | 'WAV' | 'OGG' | 'AAC';
+    quality?: 'Low' | 'Medium' | 'High' | 'Lossless';
+  };
 }
 
-export interface NewSermonMetadata extends Partial<SermonMetadata> {}
-
-export interface EventMetadata {
-  type: EventType;
-  startTime: Date;
-  endTime?: Date;
+// Video-specific media card (sermons, events, documentaries)
+export interface VideoMediaCard extends BaseMediaCard {
+  mediaType: MediaType.VIDEO;
+  // Video-specific metadata (minimal display)
+  speaker?: string;
+  preacher?: string;
   location?: string;
+  recordedAt?: Date;
+  // Small metadata section
+  videoMeta?: {
+    resolution?: string; // e.g., "1080p", "720p"
+    format?: 'MP4' | 'WEBM' | 'AVI' | 'MOV';
+    aspectRatio?: string; // e.g., "16:9", "4:3"
+    hasSubtitles?: boolean;
+  };
 }
 
-export interface NewEventMetadata extends Partial<EventMetadata> {}
+// Union type for all media card types
+export type MediaCard = TextMediaCard | AudioMediaCard | VideoMediaCard;
 
+// Basic media card for mixed-type displays (when no specific media type is selected)
+export interface BasicMediaCard {
+  id: string;
+  title: string;
+  description?: string;
+  categories: DocumentCategory[];
+  mediaType: MediaType;
+  tags: TagSummary[];
+  language: LanguageOption;
+  thumbnailUrl?: string;
+  duration?: number;
+  createdAt: Date;
+  // Minimal metadata that works for all types
+  primaryPerson?: string; // author, speaker, preacher - whatever is most relevant
+  location?: string;
+  recordedAt?: Date;
+}
 
-///////////////////////
-// Media Library Views
-///////////////////////
-
-
+// Legacy types for backward compatibility
 export interface MediaLibraryItem {
   id: string;
   title: string;
@@ -256,16 +332,6 @@ export interface MediaLibraryItem {
   keyPersons: string[];
 }
 
-export interface MediaLibraryCard {
-  id: string;
-  title: string;
-  description?: string;
-  speaker?: string;
-  location?: string;
-  date?: Date;
-  mediaUrl: string;
-}
-
 export interface MediaLibraryItemView {
   id: string;
   title: string;
@@ -276,47 +342,75 @@ export interface MediaLibraryItemView {
   mediaUrl: string;
   tags: TagSummary[];
   availableLanguages: LanguageOption[];
-  relatedItems: MediaLibraryCard[];
+  relatedItems: string[]; // Changed to array of IDs
 }
 
 ///////////////////////
-// Document Cards
+// Card Data Types (for UI components)
 ///////////////////////
 
-/**
- * Core fields for any document card
- */
-interface BaseDocumentCardProps {
+interface BaseCardData {
   id: string;
   title: string;
   categories: DocumentCategory[];
 }
 
-/**
- * Book card data extends base with book-specific metadata
- */
-export interface BookCardData extends BaseDocumentCardProps {
+export interface BookCardData extends BaseCardData {
   bookMeta: BookMetadata;
 }
 
-/**
- * Sermon card data extends base with sermon-specific metadata
- */
-export interface SermonCardData extends BaseDocumentCardProps {
+export interface SermonCardData extends BaseCardData {
   sermonMeta: SermonMetadata;
 }
 
-/**
- * Event card data extends base with event-specific metadata
- */
-export interface EventCardData extends BaseDocumentCardProps {
+export interface EventCardData extends BaseCardData {
   eventMeta: EventMetadata;
 }
 
-/**
- * Discriminated union for all document card types
- */
-export type DocumentCardData =
-  | (BookCardData & { categories: [DocumentCategory.BOOK] })
-  | (SermonCardData & { categories: [DocumentCategory.SERMON] })
-  | (EventCardData & { categories: [DocumentCategory.EVENT] });
+// Union type for all card data types
+export type DocumentCardData = BookCardData | SermonCardData | EventCardData;
+
+///////////////////////
+// Type Guards
+///////////////////////
+
+export function isBookCard(card: DocumentCardData): card is BookCardData {
+  return card.categories.includes(DocumentCategory.BOOK);
+}
+
+export function isSermonCard(card: DocumentCardData): card is SermonCardData {
+  return card.categories.includes(DocumentCategory.SERMON);
+}
+
+export function isEventCard(card: DocumentCardData): card is EventCardData {
+  return card.categories.includes(DocumentCategory.EVENT);
+}
+
+// Media card type guards
+export function isTextMediaCard(card: MediaCard): card is TextMediaCard {
+  return card.mediaType === MediaType.TEXT;
+}
+
+export function isAudioMediaCard(card: MediaCard): card is AudioMediaCard {
+  return card.mediaType === MediaType.AUDIO;
+}
+
+export function isVideoMediaCard(card: MediaCard): card is VideoMediaCard {
+  return card.mediaType === MediaType.VIDEO;
+}
+
+///////////////////////
+// Utility Types
+///////////////////////
+
+// Extract ID type from any entity
+export type EntityId<T extends { id: any }> = T['id'];
+
+// Make all properties of T optional except for the specified keys
+export type PartialExcept<T, K extends keyof T> = Partial<T> & Pick<T, K>;
+
+// Create a type that represents the creation payload for any entity
+export type CreatePayload<T extends BaseEntity> = Omit<T, keyof BaseEntity>;
+
+// Create a type that represents the update payload for any entity
+export type UpdatePayload<T extends BaseEntity> = Partial<Omit<T, keyof BaseEntity>>;

@@ -9,6 +9,8 @@ const EventMetaBlock: React.FC<{
     <div className="font-semibold mb-1">Event Metadata</div>
     {/* Type */}
     <select
+      id="eventType"
+      name="eventType"
       className="form-select mb-1"
       value={form.eventMeta?.type || ""}
       onChange={(e) =>
@@ -27,6 +29,8 @@ const EventMetaBlock: React.FC<{
     </select>
     {/* Start / End */}
     <input
+      id="eventStartTime"
+      name="eventStartTime"
       className="form-input mb-1"
       type="date"
       value={form.eventMeta?.startTime
@@ -43,6 +47,8 @@ const EventMetaBlock: React.FC<{
       }
     />
     <input
+      id="eventEndTime"
+      name="eventEndTime"
       className="form-input mb-1"
       type="date"
       value={form.eventMeta?.endTime
@@ -60,6 +66,8 @@ const EventMetaBlock: React.FC<{
     />
     {/* Location */}
     <input
+      id="eventLocation"
+      name="eventLocation"
       className="form-input"
       placeholder="Location"
       value={form.eventMeta?.location || ""}

@@ -15,7 +15,7 @@ const mockDocuments: Document[] = [
     categories: [DocumentCategory.BOOK],
     tags: [mockTags[0]],
     availableLanguages: [langEn, langFr],
-    docVersionIds: ['v1', 'v2']
+    docVersionIds: ['dv1', 'dv2'] // Updated to use new document version IDs
   },
   {
     id: 'doc2',
@@ -25,7 +25,7 @@ const mockDocuments: Document[] = [
     categories: [DocumentCategory.SERMON],
     tags: [mockTags[1], mockTags[2]],
     availableLanguages: [langEn],
-    docVersionIds: ['v1']
+    docVersionIds: ['dv3'] // Updated to use new document version IDs
   },
   {
     id: 'doc3',
@@ -34,8 +34,8 @@ const mockDocuments: Document[] = [
     updatedAt: new Date('2025-05-06T09:15:00Z'),
     categories: [DocumentCategory.EVENT],
     tags: [mockTags[3], mockTags[4]],
-    availableLanguages: [langEn],
-    docVersionIds: ['v1', 'v2', 'v3']
+    availableLanguages: [langEn, langFr, langEs],
+    docVersionIds: ['dv4', 'dv5', 'dv6'] // Updated to use new document version IDs
   },
   {
     id: 'doc4',
@@ -45,7 +45,7 @@ const mockDocuments: Document[] = [
     categories: [DocumentCategory.BOOK, DocumentCategory.SERMON],
     tags: [mockTags[0], mockTags[1], mockTags[2]],
     availableLanguages: [langEn, langFr, langEs],
-    docVersionIds: ['v1', 'v2']
+    docVersionIds: ['dv7', 'dv8', 'dv9'] // Updated to use new document version IDs
   }
 ];
 

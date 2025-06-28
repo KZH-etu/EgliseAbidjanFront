@@ -4,15 +4,15 @@ import { useTranslation } from "../hooks/useTranslation";
 import { Link } from "react-router-dom";
 
 //Components
-import SermonCard from "../components/sermons/SermonCard";
-import EventCard from "../components/events/EventCard";
+import SermonCard from "../components/shared/cards/SermonCard";
+import EventCard from "../components/shared/cards/EventCard";
 import { BookOpen, Radio, Tv } from "lucide-react";
 import { useHomeStore } from "../stores/useHomeStore";
 import { MediaType } from "../types/api";
 
 const videos = [
   {
-    url: "https: static.s123-cdn-static-d.com/uploads/8356083/normal_64c6efbd7559b.mp4",
+    url: "https://static.s123-cdn-static-d.com/uploads/8356083/normal_64c6efbd7559b.mp4",
     titleByLang: {
       fr: "Culte du dimanche",
       en: "Sunday Service",
@@ -20,7 +20,7 @@ const videos = [
     }
   },
   {
-    url: "https: static.s123-cdn-static-d.com/uploads/8356083/normal_64c6efe7b6441.mp4",
+    url: "https://static.s123-cdn-static-d.com/uploads/8356083/normal_64c6efe7b6441.mp4",
     titleByLang: {
       fr: "Étude biblique",
       en: "Bible Study",
@@ -28,7 +28,7 @@ const videos = [
     }
   },
   {
-    url: "https: static.s123-cdn-static-d.com/uploads/8356083/normal_64c8d304a59fd.mp4",
+    url: "https://static.s123-cdn-static-d.com/uploads/8356083/normal_64c8d304a59fd.mp4",
     titleByLang: {
       fr: "Prière et adoration",
       en: "Prayer and Worship",
@@ -51,7 +51,7 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    if (!hasFetchedHome) fetchHome;
+    if (!hasFetchedHome) fetchHome();
   }, [hasFetchedHome, fetchHome])
 
   const videoSermons = home?.sermons.filter(s => s.type === MediaType.VIDEO)
@@ -125,7 +125,7 @@ const HomePage = () => {
               <Link to="/about" className="btn-primary">
                 {t('common.readMore')}
               </Link>
-              <Link to="/sermons/video" className="btn-outline border-white text-white hover:bg-white/10">
+              <Link to="/library/video" className="btn-outline border-white text-white hover:bg-white/10">
                 {t('home.hero.discoverSermons')}
               </Link>
             </motion.div>
@@ -184,13 +184,13 @@ const HomePage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {videoSermons?.map((sermon) => (
-                <SermonCard key={sermon.id} sermon={sermon} />
+                <SermonCard key={sermon.id} data={sermon} />
               ))}
             </div>
           )}
           
           <div className="text-center mt-10">
-            <Link to="/sermons/video" className="btn-outline">
+            <Link to="/library/video" className="btn-outline">
               {t('home.videoSermons.seeAll')}
             </Link>
           </div>
@@ -214,13 +214,13 @@ const HomePage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {audioSermons?.map((sermon) => (
-                <SermonCard key={sermon.id} sermon={sermon} />
+                <SermonCard key={sermon.id} data={sermon} />
               ))}
             </div>
           )}
           
           <div className="text-center mt-10">
-            <Link to="/sermons/audio" className="btn-outline">
+            <Link to="/library/audio" className="btn-outline">
               {t('home.audioSermons.seeAll')}
             </Link>
           </div>
@@ -244,7 +244,7 @@ const HomePage = () => {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {home?.events.map((event) => (
-                <EventCard key={event.id} event={event} />
+                <EventCard key={event.id} data={event} />
               ))}
             </div>
           )}
@@ -299,7 +299,7 @@ const HomePage = () => {
               <p className="text-neutral-300 mb-6">
                 {t('home.media.booksDescription')}
               </p>
-              <Link to="/books" className="btn-primary inline-block">
+              <Link to="/library/text" className="btn-primary inline-block">
                 {t('home.media.download')}
               </Link>
             </div>

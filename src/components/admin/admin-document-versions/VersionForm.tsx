@@ -38,6 +38,7 @@ const VersionForm: React.FC<VersionFormProps> = ({
       <div className="flex gap-2 mb-2">
         <input
           id="documentId"
+          name="documentId"
           className="form-input"
           placeholder="documentId"
           value={form.documentId || ""}
@@ -45,6 +46,7 @@ const VersionForm: React.FC<VersionFormProps> = ({
         />
         <input
           id="title"
+          name="title"
           className="form-input"
           placeholder="Titre"
           value={form.title || ""}
@@ -52,6 +54,7 @@ const VersionForm: React.FC<VersionFormProps> = ({
         />
         <select
           id="languageId"
+          name="languageId"
           className="form-select"
           value={form.languageId || ""}
           onChange={(e) => setForm((f) => ({ ...f, languageId: e.target.value }))}

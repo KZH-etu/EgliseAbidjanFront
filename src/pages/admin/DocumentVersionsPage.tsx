@@ -1,112 +1,227 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
+import { Plus, Edit2, Trash2 } from 'lucide-react';
 import { NewDocumentVersion, DocumentVersionUpdate, DocumentVersion } from "../../types/api";
 import { useDocumentVersions } from '../../hooks/useDocumentVersions';
+import { useDocumentVersionsQuery } from '../../hooks/useDocumentVersionsQuery';
 import { useLanguages } from '../../hooks/useLanguages';
-import VersionsTopBar from '../../components/admin/admin-document-versions/VersionsTopBar';
+import { useAsyncOperation } from '../../hooks/useAsyncOperation';
+import { AdminPageLayout } from '../../components/admin/shared/AdminPageLayout';
+import { DataTable, Column } from '../../components/ui/DataTable/DataTable';
+import { Pagination } from '../../components/ui/Pagination/Pagination';
+import { QueryControls } from '../../components/ui/QueryControls/QueryControls';
 import VersionForm from '../../components/admin/admin-document-versions/VersionForm';
-import VersionsTable from '../../components/admin/admin-document-versions/VersionsTable';
-
-const orderFields = ["id", "documentId", "title", "createdAt", "updatedAt"] as const;
-
-export type OrderField = typeof orderFields[number];
-type OrderDirection = "asc" | "desc";
 
 export default function DocumentVersionsPage() {
-  // hooks
-  const { items, add, patch, remove, error } = useDocumentVersions();
+  // Backend query hook
+  const {
+    data: items,
+    pagination,
+    loading,
+    error,
+    queryState,
+    setSearch,
+    setFilter,
+    setSort,
+    setPage,
+    refresh
+  } = useDocumentVersionsQuery();
+
+  // API hooks for operations
+  const { add, patch, remove } = useDocumentVersions();
   const { languages } = useLanguages();
 
   // UI state
-  const [search, setSearch] = useState("");
-  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-  const [orderBy, setOrderBy] = useState<OrderField>("updatedAt");
-  const [orderDir, setOrderDir] = useState<OrderDirection>("desc");
   const [editingVersion, setEditingVersion] = useState<DocumentVersion | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [searchInput, setSearchInput] = useState(queryState.search || '');
 
-  // language names memo for filtering
-  const selectedLanguageNames = useMemo(
-    () => selectedLanguages.map((id) => languages.find((l) => l.id === id)?.name || ""),
-    [languages, selectedLanguages]
+  // Async operations
+  const saveOperation = useAsyncOperation(
+    async (data: Partial<NewDocumentVersion>, id: string | null) => {
+      if (id) {
+        await patch(id, data as DocumentVersionUpdate);
+      } else {
+        await add(data as NewDocumentVersion);
+      }
+      refresh();
+    },
+    {
+      onSuccess: () => {
+        setEditingVersion(null);
+        setIsCreating(false);
+      }
+    }
   );
 
-  // filtering & sorting
-  const filtered = items
-    .filter((i) => [i.id, i.documentId, i.title].some((f) => f.toLowerCase().includes(search.toLowerCase())))
-    .filter((i) => (selectedLanguages.length ? selectedLanguageNames.includes(i.languageId) : true))
-    .sort((a, b) => {
-      const av = a[orderBy];
-      const bv = b[orderBy];
-      if (av < bv) return orderDir === "asc" ? -1 : 1;
-      if (av > bv) return orderDir === "asc" ? 1 : -1;
-      return 0;
-    });
+  const deleteOperation = useAsyncOperation(
+    async (id: string) => {
+      if (window.confirm('Are you sure you want to delete this version?')) {
+        await remove(id);
+        refresh();
+      }
+    }
+  );
 
-  // handlers
-  const handleToggleOrder = (field: OrderField) => {
-    if (orderBy === field) setOrderDir((d) => (d === "asc" ? "desc" : "asc"));
-    else setOrderBy(field);
+  // Handle search submission
+  const handleSearchSubmit = () => {
+    setSearch(searchInput);
   };
 
-  const handleSave = async (data: Partial<NewDocumentVersion>, id: string | null) => {
-    if (id) await patch(id, data as DocumentVersionUpdate);
-    else await add(data as NewDocumentVersion);
-  };
+  // Table columns configuration
+  const columns: Column<DocumentVersion>[] = [
+    {
+      key: 'id',
+      header: 'ID',
+      sortable: true,
+      width: '100px'
+    },
+    {
+      key: 'documentId',
+      header: 'Document ID',
+      sortable: true,
+      width: '150px'
+    },
+    {
+      key: 'title',
+      header: 'Title',
+      sortable: true
+    },
+    {
+      key: 'languageId',
+      header: 'Language',
+      sortable: true,
+      width: '120px'
+    },
+    {
+      key: 'createdAt',
+      header: 'Created At',
+      sortable: true,
+      render: (version) => new Date(version.createdAt).toLocaleDateString(),
+      width: '120px'
+    },
+    {
+      key: 'updatedAt',
+      header: 'Updated At',
+      sortable: true,
+      render: (version) => new Date(version.updatedAt).toLocaleDateString(),
+      width: '120px'
+    },
+    {
+      key: 'actions',
+      header: 'Actions',
+      render: (version) => (
+        <div className="flex gap-2">
+          <button
+            className="text-blue-600 hover:text-blue-800"
+            onClick={() => {
+              setEditingVersion(version);
+              setIsCreating(false);
+            }}
+          >
+            <Edit2 size={16} />
+          </button>
+          <button
+            className="text-red-500 hover:text-red-700"
+            onClick={() => deleteOperation.execute(version.id)}
+            disabled={deleteOperation.isLoading}
+          >
+            <Trash2 size={16} />
+          </button>
+        </div>
+      ),
+      width: '100px'
+    }
+  ];
+
+  const actions = (
+    <button
+      className="btn-primary"
+      onClick={() => {
+        setEditingVersion(null);
+        setIsCreating(true);
+      }}
+    >
+      <Plus size={18} className="mr-1" /> Nouveau
+    </button>
+  );
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Gestion des Versions de Documents</h1>
-      {error && <div className="text-red-500">{error}</div>}
-
-      {/* TopBar */}
-      <VersionsTopBar
-        search={search}
-        onSearchChange={setSearch}
-        languages={languages}
-        selectedLanguages={selectedLanguages}
-        onToggleLanguage={(id, checked) =>
-          setSelectedLanguages((prev) => (checked ? [...prev, id] : prev.filter((l) => l !== id)))
-        }
-        orderFields={orderFields}
-        orderBy={orderBy}
-        orderDir={orderDir}
-        onToggleOrder={handleToggleOrder}
-        onCreate={() => {
-          setEditingVersion(null);
-          setIsCreating(true);
-        }}
-      />
+    <AdminPageLayout
+      title="Gestion des Versions de Documents"
+      error={error}
+      actions={actions}
+    >
+      {/* Query Controls */}
+      <QueryControls
+        searchValue={searchInput}
+        onSearchChange={setSearchInput}
+        onSearchSubmit={handleSearchSubmit}
+        onRefresh={refresh}
+        loading={loading}
+        placeholder="Search by id, docId, title..."
+      >
+        {/* Language filter */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <select
+            className="form-select"
+            value={queryState.languageId || ''}
+            onChange={(e) => setFilter('languageId', e.target.value)}
+          >
+            <option value="">All Languages</option>
+            {languages.map(lang => (
+              <option key={lang.id} value={lang.id}>{lang.name}</option>
+            ))}
+          </select>
+        </div>
+      </QueryControls>
 
       {/* Form */}
-      <VersionForm
-        isCreating={isCreating}
-        editingId={editingVersion ? editingVersion.id : null}
-        initialData={
-          editingVersion
-            ? {
-                documentId: editingVersion.documentId,
-                title: editingVersion.title,
-                languageId: languages.find((l) => l.name === editingVersion.languageId)?.id || "",
-              }
-            : {}
-        }
-        languages={languages}
-        onSave={handleSave}
-        onCancel={() => {
-          setEditingVersion(null);
-          setIsCreating(false);
-        }}
-      />
+      {(isCreating || editingVersion) && (
+        <VersionForm
+          isCreating={isCreating}
+          editingId={editingVersion ? editingVersion.id : null}
+          initialData={
+            editingVersion
+              ? {
+                  documentId: editingVersion.documentId,
+                  title: editingVersion.title,
+                  languageId: editingVersion.languageId,
+                }
+              : {}
+          }
+          languages={languages}
+          onSave={saveOperation.execute}
+          onCancel={() => {
+            setEditingVersion(null);
+            setIsCreating(false);
+          }}
+        />
+      )}
 
       {/* Table */}
-      <VersionsTable
-        items={filtered}
-        onEdit={(item) => {
-          setEditingVersion(item);
-          setIsCreating(false);
-        }}
-        onDelete={remove}
-      />
-    </div>
+      <div className="bg-white rounded-lg shadow-sm">
+        <DataTable
+          data={items}
+          columns={columns}
+          sortParams={{
+            sortBy: queryState.sortBy,
+            sortOrder: queryState.sortOrder
+          }}
+          onSort={setSort}
+          loading={loading || saveOperation.isLoading || deleteOperation.isLoading}
+          emptyMessage="No document versions found"
+        />
+        
+        {/* Pagination */}
+        <Pagination
+          currentPage={pagination.page}
+          totalPages={pagination.totalPages}
+          onPageChange={setPage}
+          hasNext={pagination.hasNext}
+          hasPrev={pagination.hasPrev}
+          loading={loading}
+        />
+      </div>
+    </AdminPageLayout>
   );
 }

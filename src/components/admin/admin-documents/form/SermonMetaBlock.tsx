@@ -8,6 +8,8 @@ const SermonMetaBlock: React.FC<{
   <div className="mb-2 p-2 border rounded bg-gray-100">
     <div className="font-semibold mb-1">Sermon Metadata</div>
     <input
+      id="sermonPreacher"
+      name="sermonPreacher"
       className="form-input mb-1"
       placeholder="Preacher"
       value={form.sermonMeta?.preacher || ""}
@@ -19,6 +21,8 @@ const SermonMetaBlock: React.FC<{
       }
     />
     <input
+      id="sermonPreachedAt"
+      name="sermonPreachedAt"
       className="form-input mb-1"
       type="date"
       value={form.sermonMeta?.preachedAt
@@ -35,6 +39,8 @@ const SermonMetaBlock: React.FC<{
       }
     />
     <input
+      id="sermonLocation"
+      name="sermonLocation"
       className="form-input"
       placeholder="Location"
       value={form.sermonMeta?.location || ""}

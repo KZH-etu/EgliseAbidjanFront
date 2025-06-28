@@ -27,6 +27,7 @@ import TagsPage from './pages/admin/TagsPage';
 import LanguagesPage from './pages/admin/LanguagesPage';
 import AdminStreams from './pages/admin/StreamsPage';
 import AdminNewsletter from './pages/admin/NewsletterPage';
+import AdminEventsPage from './pages/admin/EventsPage';
 import LoginPage from './pages/LoginPage';
 
 
@@ -58,6 +59,7 @@ function App() {
           <Route path="doc-media" element={<DocumentMediaPage />} />
           <Route path="tags" element={<TagsPage />} />
           <Route path="languages" element={<LanguagesPage />} />
+          <Route path="events" element={<AdminEventsPage />} />
           <Route path="streams" element={<AdminStreams />} />
           <Route path="newsletter" element={<AdminNewsletter />} />
         </Route>

@@ -9,6 +9,8 @@ const BookMetaBlock: React.FC<{
     <div className="font-semibold mb-1">Book Metadata</div>
     {/* Author */}
     <input
+      id="bookAuthor"
+      name="bookAuthor"
       className="form-input mb-1"
       placeholder="Author"
       value={form.bookMeta?.author || ""}
@@ -21,6 +23,8 @@ const BookMetaBlock: React.FC<{
     />
     {/* Published At */}
     <input
+      id="bookPublishedAt"
+      name="bookPublishedAt"
       className="form-input mb-1"
       type="date"
       value={form.bookMeta?.publishedAt
@@ -38,6 +42,8 @@ const BookMetaBlock: React.FC<{
     />
     {/* Publisher */}
     <input
+      id="bookPublisher"
+      name="bookPublisher"
       className="form-input mb-1"
       placeholder="Publisher"
       value={form.bookMeta?.publisher || ""}
@@ -50,6 +56,8 @@ const BookMetaBlock: React.FC<{
     />
     {/* ISBN */}
     <input
+      id="bookIsbn"
+      name="bookIsbn"
       className="form-input mb-1"
       placeholder="ISBN"
       value={form.bookMeta?.isbn || ""}
@@ -62,6 +70,8 @@ const BookMetaBlock: React.FC<{
     />
     {/* Page Count */}
     <input
+      id="bookPageCount"
+      name="bookPageCount"
       className="form-input"
       type="number"
       placeholder="Page Count"

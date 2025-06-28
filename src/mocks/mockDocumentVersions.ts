@@ -4,7 +4,7 @@ import { DocumentVersion } from "../types/api";
 const mockDocumentVersions: DocumentVersion[] = [
   // doc1: Walking in Faith (English, French)
   {
-    id: 'v1',
+    id: 'dv1', // Changed from 'v1' to unique ID
     documentId: 'doc1',
     languageId: 'en',
     title: 'Walking in Faith',
@@ -12,7 +12,7 @@ const mockDocumentVersions: DocumentVersion[] = [
     updatedAt: new Date('2025-03-12T15:00:00Z'),
   },
   {
-    id: 'v2',
+    id: 'dv2', // Changed from 'v2' to unique ID
     documentId: 'doc1',
     languageId: 'fr',
     title: 'Marcher dans la Foi',
@@ -22,7 +22,7 @@ const mockDocumentVersions: DocumentVersion[] = [
 
   // doc2: Sunday Sermon Series (English)
   {
-    id: 'v1',
+    id: 'dv3', // Changed from 'v1' to unique ID
     documentId: 'doc2',
     languageId: 'en',
     title: 'Sunday Sermon Series',
@@ -30,9 +30,9 @@ const mockDocumentVersions: DocumentVersion[] = [
     updatedAt: new Date('2025-04-02T11:45:00Z'),
   },
 
-  // doc3: Annual Prayer Meeting (English)
+  // doc3: Annual Prayer Meeting (English, French, Spanish)
   {
-    id: 'v1',
+    id: 'dv4', // Changed from 'v1' to unique ID
     documentId: 'doc3',
     languageId: 'en',
     title: 'Annual Prayer Meeting',
@@ -40,7 +40,7 @@ const mockDocumentVersions: DocumentVersion[] = [
     updatedAt: new Date('2025-05-06T09:15:00Z'),
   },
   {
-    id: 'v2',
+    id: 'dv5', // Changed from 'v2' to unique ID
     documentId: 'doc3',
     languageId: 'fr',
     title: 'Réunion Annuelle de Prière',
@@ -48,7 +48,7 @@ const mockDocumentVersions: DocumentVersion[] = [
     updatedAt: new Date('2025-05-06T09:20:00Z'),
   },
   {
-    id: 'v3',
+    id: 'dv6', // Changed from 'v3' to unique ID
     documentId: 'doc3',
     languageId: 'es',
     title: 'Reunión Anual de Oración',
@@ -58,7 +58,7 @@ const mockDocumentVersions: DocumentVersion[] = [
 
   // doc4: Faith & Fellowship (English, French, Spanish)
   {
-    id: 'v1',
+    id: 'dv7', // Changed from 'v1' to unique ID
     documentId: 'doc4',
     languageId: 'en',
     title: 'Faith & Fellowship',
@@ -66,7 +66,7 @@ const mockDocumentVersions: DocumentVersion[] = [
     updatedAt: new Date('2025-06-02T12:00:00Z'),
   },
   {
-    id: 'v2',
+    id: 'dv8', // Changed from 'v2' to unique ID
     documentId: 'doc4',
     languageId: 'fr',
     title: 'Foi et Communion',
@@ -74,7 +74,7 @@ const mockDocumentVersions: DocumentVersion[] = [
     updatedAt: new Date('2025-06-02T12:10:00Z'),
   },
   {
-    id: 'v3',
+    id: 'dv9', // Changed from 'v3' to unique ID
     documentId: 'doc4',
     languageId: 'es',
     title: 'Fe y Comunión',

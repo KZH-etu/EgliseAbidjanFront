@@ -11,30 +11,40 @@ export const mockLanguages: Language[] = [
     id: 'en',
     name: 'English',
     type: LanguageType.INTERNATIONAL,
-    countryOfOrigin: 'United Kingdom'
+    countryOfOrigin: 'United Kingdom',
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: 'fr',
     name: 'Français',
     type: LanguageType.INTERNATIONAL,
-    countryOfOrigin: 'France'
+    countryOfOrigin: 'France',
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: 'es',
     name: 'Español',
     type: LanguageType.INTERNATIONAL,
-    countryOfOrigin: 'Spain'
+    countryOfOrigin: 'Spain',
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: 'ba',
     name: 'Baoulé',
     type: LanguageType.LOCAL,
-    countryOfOrigin: 'Côte d\'Ivoire'
+    countryOfOrigin: 'Côte d\'Ivoire',
+    createdAt: new Date(),
+    updatedAt: new Date()
   },
   {
     id: 'yo',
     name: 'Yoruba',
     type: LanguageType.LOCAL,
-    countryOfOrigin: 'Nigeria'
+    countryOfOrigin: 'Nigeria',
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 ];

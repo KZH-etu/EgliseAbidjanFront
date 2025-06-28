@@ -18,8 +18,10 @@ export default function LanguageForm({ form, setForm, onSubmit, onCancel }: Lang
       <div className="mb-2 font-semibold">Détails de la langue</div>
       <div className="flex flex-col gap-2 mb-4">
         <div className="flex items-center gap-2">
-          <label className="w-32">Nom:</label>
+          <label htmlFor="languageName" className="w-32">Nom:</label>
           <input
+            id="languageName"
+            name="languageName"
             className="form-input flex-1"
             placeholder="Nom de la langue"
             value={form.name || ""}
@@ -27,8 +29,10 @@ export default function LanguageForm({ form, setForm, onSubmit, onCancel }: Lang
           />
         </div>
         <div className="flex items-center gap-2">
-          <label className="w-32">Type:</label>
+          <label htmlFor="languageType" className="w-32">Type:</label>
           <select
+            id="languageType"
+            name="languageType"
             className="form-select flex-1"
             value={form.type || ""}
             onChange={(e) => setForm((f: any) => ({ ...f, type: e.target.value as LanguageType }))}
@@ -41,8 +45,10 @@ export default function LanguageForm({ form, setForm, onSubmit, onCancel }: Lang
         </div>
         {form.type === LanguageType.INTERNATIONAL && (
           <div className="flex items-center gap-2">
-            <label className="w-32">Pays d'origine:</label>
+            <label htmlFor="languageCountry" className="w-32">Pays d'origine:</label>
             <input
+              id="languageCountry"
+              name="languageCountry"
               className="form-input flex-1"
               placeholder="Pays d'origine"
               value={form.countryOfOrigin || ""}

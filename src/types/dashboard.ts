@@ -1,4 +1,4 @@
-import { } from "./api";
+import { SermonCardData } from "./api";
 
 export interface SermonStats {
   total: number;
@@ -7,7 +7,7 @@ export interface SermonStats {
     audio: number;
     text: number;
   };
-  // recent: DocumentCard[];
+  recent: SermonCardData[];
 }
 
 export interface DocumentsByLanguageResponse {

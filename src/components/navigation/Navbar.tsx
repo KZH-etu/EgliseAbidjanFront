@@ -14,7 +14,7 @@ const Navbar = () => {
     { name: t('nav.about'), path: '/about'},
     {
       name: t('nav.mediatheque'),
-      path: '/library',
+      path: '/library', // Updated to show all documents when clicking main link
       children: [
         { name: t('nav.audio'), path: '/library/audio', icon: <Headphones size={18} className="mr-1"/> },
         { name: t('nav.video'), path: '/library/video', icon:<Clapperboard size={18} className="mr-1"/> },
@@ -45,9 +45,25 @@ const Navbar = () => {
           {navLinks.map((link) => (
             link.children ? (
               <div key={link.name} className="relative group">
-                <button className="text-base font-medium text-neutral-800 hover:text-primary-500 transition-colors duration-200">
-                  {link.name}
-                </button>
+                {/* Make the main mediatheque link clickable */}
+                {link.path ? (
+                  <NavLink
+                    to={link.path}
+                    className={({ isActive }) => 
+                      `text-base font-medium transition-colors duration-200 ${
+                        isActive 
+                          ? 'text-primary-600' 
+                          : 'text-neutral-800 hover:text-primary-500'
+                      }`
+                    }
+                  >
+                    {link.name}
+                  </NavLink>
+                ) : (
+                  <button className="text-base font-medium text-neutral-800 hover:text-primary-500 transition-colors duration-200">
+                    {link.name}
+                  </button>
+                )}
                 <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                   <div className="bg-white rounded-lg shadow-lg py-2 min-w-[160px]">
                     {link.children.map((child) => (
@@ -62,7 +78,6 @@ const Navbar = () => {
                           }`
                         }
                       >
-                        {/* Ajout de l'icône si présente */}
                         {child.icon}
                         {child.name}
                       </NavLink>
@@ -114,9 +129,23 @@ const Navbar = () => {
           {navLinks.map((link) => (
             link.children ? (
               <div key={link.name} className="space-y-2">
-                <div className="text-base font-medium text-neutral-800 px-4">
-                  {link.name}
-                </div>
+                {link.path ? (
+                  <NavLink
+                    to={link.path}
+                    className={({ isActive }) => 
+                      `block py-2 text-base font-medium transition-colors duration-200 ${
+                        isActive ? 'text-primary-600' : 'text-neutral-800 hover:text-primary-500'
+                      }`
+                    }
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {link.name}
+                  </NavLink>
+                ) : (
+                  <div className="text-base font-medium text-neutral-800 px-4">
+                    {link.name}
+                  </div>
+                )}
                 <div className="pl-4 space-y-2">
                   {link.children.map((child) => (
                     <NavLink
@@ -129,7 +158,6 @@ const Navbar = () => {
                       }
                       onClick={() => setIsOpen(false)}
                     >
-                      {/* Ajout de l'icône si présente */}
                       {child.icon}
                       {child.name}
                     </NavLink>
